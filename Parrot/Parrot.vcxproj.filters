@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Src">
+      <UniqueIdentifier>{0D23880B-792C-887C-02A8-9E7C6EB0937C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Vendor">
+      <UniqueIdentifier>{935FDCD7-7F01-07AE-68BC-1A0254FD8DFE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Vendor\GLFW">
+      <UniqueIdentifier>{B2CED015-1E84-490B-A778-43E2132D400F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Vendor\GLFW\deps">
+      <UniqueIdentifier>{0DE04261-F9D8-61B3-220B-47380E6341BF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Vendor\GLFW\deps\glad">
+      <UniqueIdentifier>{34C3EE1F-A02F-AA1A-6923-4278D54ECC82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Vendor\GLFW\deps\mingw">
+      <UniqueIdentifier>{BE4F321E-AA49-5B70-93B6-F1807F4FC1DC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Vendor\GLFW\deps\vs2008">
+      <UniqueIdentifier>{8FD00DFA-FB07-5691-0412-BAB470C87C8A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Vendor\GLFW\include">
+      <UniqueIdentifier>{2588D201-91E9-AF0F-1A57-F6C186B7E6CE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Vendor\GLFW\include\GLFW">
+      <UniqueIdentifier>{8422718C-7047-C00C-9992-A59C8516BF2A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Vendor\GLFW\src">
+      <UniqueIdentifier>{C995381A-3521-A6DE-3E32-29D3AA3C02DF}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Src\Application.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Event.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Log.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Parrot.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Vector.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Window.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Key.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Src\Application.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Log.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Window.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

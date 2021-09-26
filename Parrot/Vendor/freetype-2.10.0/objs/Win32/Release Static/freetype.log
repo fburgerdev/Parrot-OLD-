@@ -1,0 +1,47 @@
+﻿  autofit.c
+  ftbase.c
+  ftbbox.c
+  ftbdf.c
+  ftbitmap.c
+  ftcid.c
+  ftfstype.c
+  ftgasp.c
+  ftglyph.c
+  ftgxval.c
+  ftinit.c
+  ftmm.c
+  ftotval.c
+  ftpatent.c
+  ftpfr.c
+  ftstroke.c
+  ftsynth.c
+  ftsystem.c
+  fttype1.c
+  ftwinfnt.c
+  bdf.c
+  ftcache.c
+  cff.c
+  type1cid.c
+  ftgzip.c
+  ftlzw.c
+  pcf.c
+  pfr.c
+  psaux.c
+  pshinter.c
+  psmodule.c
+  raster.c
+  sfnt.c
+  smooth.c
+  truetype.c
+  type1.c
+T:\AA_Florian\Dev\Parrot\Parrot\Vendor\freetype-2.10.0\src\sfnt\ttcolr.c(127,50): warning C4018: '>': signed/unsigned mismatch (compiling source file ..\..\..\src\sfnt\sfnt.c)
+T:\AA_Florian\Dev\Parrot\Parrot\Vendor\freetype-2.10.0\src\sfnt\ttcolr.c(136,40): warning C4018: '>': signed/unsigned mismatch (compiling source file ..\..\..\src\sfnt\sfnt.c)
+T:\AA_Florian\Dev\Parrot\Parrot\Vendor\freetype-2.10.0\src\sfnt\ttcpal.c(121,40): warning C4018: '>': signed/unsigned mismatch (compiling source file ..\..\..\src\sfnt\sfnt.c)
+T:\AA_Florian\Dev\Parrot\Parrot\Vendor\freetype-2.10.0\src\sfnt\ttcpal.c(153,50): warning C4018: '>': signed/unsigned mismatch (compiling source file ..\..\..\src\sfnt\sfnt.c)
+T:\AA_Florian\Dev\Parrot\Parrot\Vendor\freetype-2.10.0\src\sfnt\ttcpal.c(174,50): warning C4018: '>': signed/unsigned mismatch (compiling source file ..\..\..\src\sfnt\sfnt.c)
+T:\AA_Florian\Dev\Parrot\Parrot\Vendor\freetype-2.10.0\src\sfnt\ttcpal.c(195,57): warning C4018: '>': signed/unsigned mismatch (compiling source file ..\..\..\src\sfnt\sfnt.c)
+  type42.c
+T:\AA_Florian\Dev\Parrot\Parrot\Vendor\freetype-2.10.0\src\truetype\ttgxvar.c(2196): warning C4701: potentially uninitialized local variable 'fvar_head' used
+  winfnt.c
+  ftdebug.c
+  freetype.vcxproj -> T:\AA_Florian\Dev\Parrot\Parrot\Vendor\freetype-2.10.0\objs\Win32\Release Static\freetype.lib

@@ -1,0 +1,1 @@
+T:\AA_Florian\Dev\Parrot\Parrot\Vendor\freetype-2.10.0\objs\Win32\Release Static\freetype.lib
