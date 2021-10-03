@@ -130,9 +130,16 @@
     <ClCompile Include="Src\Sandbox.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Src\Images\Parrot.png" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Parrot\Parrot.vcxproj">
       <Project>{DD7697C9-C918-C29F-B2D3-D5F39E1449F0}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Src\CamControllerOrtho.hpp" />
+    <ClInclude Include="Src\CamControllerPers.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

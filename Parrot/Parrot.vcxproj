@@ -72,9 +72,11 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>Pch.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>$(ProjectDir)Vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>PT_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)Src;$(ProjectDir)Vendor;$(ProjectDir)Src\OpenGl;$(ProjectDir)Vendor\GLAD\include;$(ProjectDir)Vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -90,9 +92,11 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>Pch.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>$(ProjectDir)Vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>PT_LOG_NINFO;PT_LOG_NEVENT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)Src;$(ProjectDir)Vendor;$(ProjectDir)Src\OpenGl;$(ProjectDir)Vendor\GLAD\include;$(ProjectDir)Vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -112,9 +116,11 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>Pch.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>$(ProjectDir)Vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>PT_NLOG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)Src;$(ProjectDir)Vendor;$(ProjectDir)Src\OpenGl;$(ProjectDir)Vendor\GLAD\include;$(ProjectDir)Vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -133,22 +139,54 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Src\Application.h" />
-    <ClInclude Include="Src\Event.h" />
-    <ClInclude Include="Src\Key.h" />
-    <ClInclude Include="Src\Log.h" />
-    <ClInclude Include="Src\Parrot.h" />
-    <ClInclude Include="Src\Vector.h" />
-    <ClInclude Include="Src\Window.h" />
+    <ClInclude Include="Src\Application.hpp" />
+    <ClInclude Include="Src\Core.hpp" />
+    <ClInclude Include="Src\Event.hpp" />
+    <ClInclude Include="Src\Input.hpp" />
+    <ClInclude Include="Src\LayerStack.hpp" />
+    <ClInclude Include="Src\Log.hpp" />
+    <ClInclude Include="Src\OpenGl\GlDebug.hpp" />
+    <ClInclude Include="Src\OpenGl\IndexBuffer.hpp" />
+    <ClInclude Include="Src\OpenGl\Shader.hpp" />
+    <ClInclude Include="Src\OpenGl\Texture.hpp" />
+    <ClInclude Include="Src\OpenGl\VertexArray.hpp" />
+    <ClInclude Include="Src\OpenGl\VertexBuffer.hpp" />
+    <ClInclude Include="Src\OpenGl\VertexBufferLayout.hpp" />
+    <ClInclude Include="Src\Parrot.hpp" />
+    <ClInclude Include="Src\Pch.hpp" />
+    <ClInclude Include="Src\SceneObject.hpp" />
+    <ClInclude Include="Src\Renderer.hpp" />
+    <ClInclude Include="Src\Vector.hpp" />
+    <ClInclude Include="Src\Window.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Application.cpp" />
+    <ClCompile Include="Src\Event.cpp" />
+    <ClCompile Include="Src\LayerStack.cpp" />
     <ClCompile Include="Src\Log.cpp" />
+    <ClCompile Include="Src\OpenGl\IndexBuffer.cpp" />
+    <ClCompile Include="Src\OpenGl\Shader.cpp" />
+    <ClCompile Include="Src\OpenGl\Texture.cpp" />
+    <ClCompile Include="Src\OpenGl\VertexArray.cpp" />
+    <ClCompile Include="Src\OpenGl\VertexBuffer.cpp" />
+    <ClCompile Include="Src\Pch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Src\Renderer.cpp" />
     <ClCompile Include="Src\Window.cpp" />
+    <ClCompile Include="Vendor\Stb\stb_image.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Src\OpenGl\Shaders\Camera.Snippet" />
+    <None Include="Src\OpenGl\Shaders\Flat.GLSL" />
+    <None Include="Src\OpenGl\Shaders\Tex.GLSL" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Vendor\GLFW\GLFW.vcxproj">
       <Project>{154B857C-0182-860D-AA6E-6C109684020F}</Project>
+    </ProjectReference>
+    <ProjectReference Include="Vendor\GLAD\GLAD.vcxproj">
+      <Project>{5D4A857C-4981-860D-F26D-6C10DE83020F}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

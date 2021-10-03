@@ -1,28 +1,53 @@
-#include "Application.h"
-#include "Log.h"
-#include "GLFW/glfw3.h"
-#include "Window.h"
+#include "Pch.hpp"
+#include "Application.hpp"
+#include "Log.hpp"
+
+namespace Parrot
+{
+	static Application* s_Application;
+	
+	void InitKeyStrings();
+	void DisplayWindow();
+	void PushEvent(const Parrot::Event& e)
+	{
+		s_Application->OnEvent(e);
+	}
+}
+
+static void Pause()
+{
+	std::getchar();
+}
 
 static bool s_Run = true;
-static Parrot::Application* s_Application;
-
+static bool s_IsOk = true;
 int main()
 {
-	s_Application = Parrot::CreateApplication();
+	Parrot::InitKeyStrings();
+	Parrot::s_Application = Parrot::CreateApplication();
 	
 	Parrot::Log::StartScope("OnCreate");
-	s_Application->OnCreate();
+	Parrot::s_Application->OnCreate();
 	Parrot::Log::EndScope();
 
 	Parrot::Log::StartScope("OnUpdate");
 	while (s_Run)
-		s_Application->OnUpdate();
+	{
+		Parrot::s_Application->OnUpdate();
+		Parrot::DisplayWindow();
+	}
 	Parrot::Log::EndScope();
 
 	Parrot::Log::StartScope("OnTerminate");
-	s_Application->OnTerminate();
+	Parrot::s_Application->OnTerminate();
 	Parrot::Log::EndScope();
 
+	delete Parrot::s_Application;
+	if (s_IsOk)
+		Parrot::Log::LogInfo("Parrot terminated successfully! Press Enter to close console.");
+	else
+		Parrot::Log::LogError("Parrot terminated due to an fatal Error! Press Enter to close console.");
+	Pause();
 	return 0;
 }
 
@@ -31,7 +56,13 @@ void Parrot::Application::Terminate()
 	s_Run = false;
 }
 
-void PushEvent(const Parrot::Window::Event& e)
+void Parrot::Application::ThrowError()
 {
-	s_Application->OnEvent(e);
+	s_Run = false;
+	s_IsOk = false;
+}
+
+bool Parrot::Application::IsOk()
+{
+	return s_IsOk;
 }

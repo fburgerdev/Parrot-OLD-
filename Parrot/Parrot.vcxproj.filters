@@ -1,67 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Src">
-      <UniqueIdentifier>{0D23880B-792C-887C-02A8-9E7C6EB0937C}</UniqueIdentifier>
+    <Filter Include="OpenGl">
+      <UniqueIdentifier>{AA864AC8-9628-759E-7FE3-88F26B24FCEE}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Vendor">
-      <UniqueIdentifier>{935FDCD7-7F01-07AE-68BC-1A0254FD8DFE}</UniqueIdentifier>
+    <Filter Include="OpenGl\Old">
+      <UniqueIdentifier>{D8EF3C62-C4A7-7EAF-2DAF-570B198619A0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Vendor\GLFW">
-      <UniqueIdentifier>{B2CED015-1E84-490B-A778-43E2132D400F}</UniqueIdentifier>
+    <Filter Include="OpenGl\Old\BatchRenderer">
+      <UniqueIdentifier>{80E1D156-6C06-21D7-9551-066781D51FF5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Vendor\GLFW\deps">
-      <UniqueIdentifier>{0DE04261-F9D8-61B3-220B-47380E6341BF}</UniqueIdentifier>
+    <Filter Include="OpenGl\Old\Font">
+      <UniqueIdentifier>{DE5FFFA3-4AEB-6C68-53FC-EF5CBF06C968}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Vendor\GLFW\deps\glad">
-      <UniqueIdentifier>{34C3EE1F-A02F-AA1A-6923-4278D54ECC82}</UniqueIdentifier>
+    <Filter Include="OpenGl\Old\OpenGUI">
+      <UniqueIdentifier>{FE18AD82-EAFC-6DD8-535D-682B3F60585A}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Vendor\GLFW\deps\mingw">
-      <UniqueIdentifier>{BE4F321E-AA49-5B70-93B6-F1807F4FC1DC}</UniqueIdentifier>
+    <Filter Include="OpenGl\Old\Shader">
+      <UniqueIdentifier>{7EDC23BF-EAF2-2155-336A-AD769FBFF2DC}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Vendor\GLFW\deps\vs2008">
-      <UniqueIdentifier>{8FD00DFA-FB07-5691-0412-BAB470C87C8A}</UniqueIdentifier>
+    <Filter Include="OpenGl\Old\Shader\StandardShaders">
+      <UniqueIdentifier>{A8CD5905-143C-AF84-5D25-6A84C9D2A420}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Vendor\GLFW\include">
-      <UniqueIdentifier>{2588D201-91E9-AF0F-1A57-F6C186B7E6CE}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Vendor\GLFW\include\GLFW">
-      <UniqueIdentifier>{8422718C-7047-C00C-9992-A59C8516BF2A}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Vendor\GLFW\src">
-      <UniqueIdentifier>{C995381A-3521-A6DE-3E32-29D3AA3C02DF}</UniqueIdentifier>
+    <Filter Include="OpenGl\Shaders">
+      <UniqueIdentifier>{83B5F73E-6F83-EB44-5817-5C6B4484C7A9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Src\Application.h">
-      <Filter>Src</Filter>
+    <ClInclude Include="Src\Application.hpp" />
+    <ClInclude Include="Src\Core.hpp" />
+    <ClInclude Include="Src\Event.hpp" />
+    <ClInclude Include="Src\Log.hpp" />
+    <ClInclude Include="Src\OpenGl\GlDebug.hpp">
+      <Filter>OpenGl</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Event.h">
-      <Filter>Src</Filter>
+    <ClInclude Include="Src\OpenGl\IndexBuffer.hpp">
+      <Filter>OpenGl</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Log.h">
-      <Filter>Src</Filter>
+    <ClInclude Include="Src\OpenGl\Shader.hpp">
+      <Filter>OpenGl</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Parrot.h">
-      <Filter>Src</Filter>
+    <ClInclude Include="Src\OpenGl\Texture.hpp">
+      <Filter>OpenGl</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Vector.h">
-      <Filter>Src</Filter>
+    <ClInclude Include="Src\OpenGl\VertexArray.hpp">
+      <Filter>OpenGl</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Window.h">
-      <Filter>Src</Filter>
+    <ClInclude Include="Src\OpenGl\VertexBuffer.hpp">
+      <Filter>OpenGl</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Key.h" />
+    <ClInclude Include="Src\OpenGl\VertexBufferLayout.hpp">
+      <Filter>OpenGl</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Parrot.hpp" />
+    <ClInclude Include="Src\Pch.hpp" />
+    <ClInclude Include="Src\SceneObject.hpp" />
+    <ClInclude Include="Src\Renderer.hpp" />
+    <ClInclude Include="Src\Vector.hpp" />
+    <ClInclude Include="Src\Window.hpp" />
+    <ClInclude Include="Src\Input.hpp" />
+    <ClInclude Include="Src\LayerStack.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Src\Application.cpp">
-      <Filter>Src</Filter>
+    <ClCompile Include="Src\Application.cpp" />
+    <ClCompile Include="Src\Event.cpp" />
+    <ClCompile Include="Src\Log.cpp" />
+    <ClCompile Include="Src\OpenGl\IndexBuffer.cpp">
+      <Filter>OpenGl</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Log.cpp">
-      <Filter>Src</Filter>
+    <ClCompile Include="Src\OpenGl\Shader.cpp">
+      <Filter>OpenGl</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Window.cpp">
-      <Filter>Src</Filter>
+    <ClCompile Include="Src\OpenGl\Texture.cpp">
+      <Filter>OpenGl</Filter>
     </ClCompile>
+    <ClCompile Include="Src\OpenGl\VertexArray.cpp">
+      <Filter>OpenGl</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\OpenGl\VertexBuffer.cpp">
+      <Filter>OpenGl</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Pch.cpp" />
+    <ClCompile Include="Src\Renderer.cpp" />
+    <ClCompile Include="Src\Window.cpp" />
+    <ClCompile Include="Vendor\Stb\stb_image.cpp" />
+    <ClCompile Include="Src\LayerStack.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Src\OpenGl\Shaders\Flat.GLSL">
+      <Filter>OpenGl\Shaders</Filter>
+    </None>
+    <None Include="Src\OpenGl\Shaders\Tex.GLSL">
+      <Filter>OpenGl\Shaders</Filter>
+    </None>
+    <None Include="Src\OpenGl\Shaders\Camera.Snippet" />
   </ItemGroup>
 </Project>

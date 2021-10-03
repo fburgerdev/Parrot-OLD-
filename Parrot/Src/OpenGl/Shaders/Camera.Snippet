@@ -1,0 +1,27 @@
+<Camera>
+
+struct Camera
+{
+	struct OrthographicCamera
+	{
+		vec3 pos;
+		vec2 camDimFactor;
+	}
+	struct PerspectiveCamera
+	{
+		vec3 pos;
+		mat4 projMat;
+		mat3 viewMat;
+	}
+	OrthographicCamera orthographicCamera;
+	PerspectiveCamera perspectiveCamera;
+	int cameraType; // 0 <=> OrthographicCamera; 1 <=> PerspectiveCamera;
+
+	vec4 GetScreenPos(vec3 position)
+	{
+		if (u_isOrthographic == 0)
+			return vec4((position.xy - orthographicCamera.pos.xy) * u_camFactor, 0.0f, 1.0f);
+		else
+			return perspectiveCamera.projMat * vec4(perspectiveCamera.viewMat * (position - perspectiveCamera.pos), 1.0f);
+	}
+}
