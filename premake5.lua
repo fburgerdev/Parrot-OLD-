@@ -1,6 +1,6 @@
-outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
-TargetDir = "Bin/" ..outputdir.. "/%{prj.name}"
-ObjDir = "Bin/" ..outputdir.. "/Int/%{prj.name}"
+Outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+TargetDir = "Bin/" ..Outputdir.. "/%{prj.name}"
+ObjDir = "Bin/" ..Outputdir.. "/Int/%{prj.name}"
 
 CppDialect = "C++20"
 
@@ -23,24 +23,25 @@ project "Parrot"
 	objdir(ObjDir)
 	
 	files { "%{prj.name}/Src/**.hpp", "%{prj.name}/Src/**.cpp", "%{prj.name}/Src/**.GLSL"}
-	includedirs { "$(ProjectDir)Src/", "$(ProjectDir)Vendor/", "$(ProjectDir)Src/OpenGl", "$(ProjectDir)Vendor/GLAD/include", "$(ProjectDir)Vendor/GLFW/include"}
+	includedirs { "$(ProjectDir)Src/","$(ProjectDir)Vendor/", "$(ProjectDir)Vendor/GLAD/Include/", "$(ProjectDir)Vendor/GLFW/Include/"}
 	links { "Opengl32.lib", "GLFW", "GLAD" }
 
-	pchheader "Pch.hpp"
-	pchsource "Parrot/Src/Pch.cpp"
+	pchheader "Ptpch.hpp"
+	pchsource "Parrot/Src/Ptpch.cpp"
+
+	defines { "PT_OPENGL" }
 	filter "configurations:Debug"
 		runtime "Debug"
 		symbols "on"
 		defines { "PT_DEBUG" }
 	filter "configurations:Release"
-		defines { "PT_LOG_NINFO", "PT_LOG_NEVENT" }
 		runtime "Release"
 		optimize "on"
+		defines { "PT_OPTIMIZED" }
 	filter "configurations:Dist"
-		defines { "PT_NLOG" }
 		runtime "Release"
 		optimize "on"
-
+		defines { "PT_OPTIMIZED" }
 project "Sandbox"
 	location "%{prj.name}"
 	kind "ConsoleApp"
@@ -50,17 +51,21 @@ project "Sandbox"
 	targetdir(TargetDir)
 	objdir(ObjDir)
 
-	files { "%{prj.name}/Src/**" }
+	files { "%{prj.name}/Src/**.hpp", "%{prj.name}/Src/**.cpp", "%{prj.name}/Src/**.GLSL"}
 	includedirs { "$(ProjectDir)Src/", "Parrot/Src/"}
 	links { "Parrot" }
 
+	defines { "PT_OPENGL" }
 	filter "configurations:Debug"
 		runtime "Debug"
 		symbols "on"
+		defines { "PT_DEBUG" }
 	filter "configurations:Release"
 		runtime "Release"
 		optimize "on"
+		defines { "PT_OPTIMIZED" }
 	filter "configurations:Dist"
 		runtime "Release"
 		optimize "on"
+		defines { "PT_OPTIMIZED" }
 	

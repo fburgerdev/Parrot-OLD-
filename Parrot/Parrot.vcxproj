@@ -73,10 +73,10 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>Pch.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>Ptpch.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>PT_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)Src;$(ProjectDir)Vendor;$(ProjectDir)Src\OpenGl;$(ProjectDir)Vendor\GLAD\include;$(ProjectDir)Vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>PT_OPENGL;PT_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)Src;$(ProjectDir)Vendor;$(ProjectDir)Vendor\GLAD\Include;$(ProjectDir)Vendor\GLFW\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -93,10 +93,10 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>Pch.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>Ptpch.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>PT_LOG_NINFO;PT_LOG_NEVENT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)Src;$(ProjectDir)Vendor;$(ProjectDir)Src\OpenGl;$(ProjectDir)Vendor\GLAD\include;$(ProjectDir)Vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>PT_OPENGL;PT_OPTIMIZED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)Src;$(ProjectDir)Vendor;$(ProjectDir)Vendor\GLAD\Include;$(ProjectDir)Vendor\GLFW\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -117,10 +117,10 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>Pch.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>Ptpch.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>PT_NLOG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)Src;$(ProjectDir)Vendor;$(ProjectDir)Src\OpenGl;$(ProjectDir)Vendor\GLAD\include;$(ProjectDir)Vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>PT_OPENGL;PT_OPTIMIZED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)Src;$(ProjectDir)Vendor;$(ProjectDir)Vendor\GLAD\Include;$(ProjectDir)Vendor\GLFW\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -139,47 +139,52 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Src\Application.hpp" />
-    <ClInclude Include="Src\Core.hpp" />
-    <ClInclude Include="Src\Event.hpp" />
-    <ClInclude Include="Src\Input.hpp" />
-    <ClInclude Include="Src\LayerStack.hpp" />
-    <ClInclude Include="Src\Log.hpp" />
-    <ClInclude Include="Src\OpenGl\GlDebug.hpp" />
-    <ClInclude Include="Src\OpenGl\IndexBuffer.hpp" />
-    <ClInclude Include="Src\OpenGl\Shader.hpp" />
-    <ClInclude Include="Src\OpenGl\Texture.hpp" />
-    <ClInclude Include="Src\OpenGl\VertexArray.hpp" />
-    <ClInclude Include="Src\OpenGl\VertexBuffer.hpp" />
-    <ClInclude Include="Src\OpenGl\VertexBufferLayout.hpp" />
+    <ClInclude Include="Src\Core\Application.hpp" />
+    <ClInclude Include="Src\Core\HiddenFunctions.hpp" />
+    <ClInclude Include="Src\Core\Log.hpp" />
+    <ClInclude Include="Src\Core\Macros.hpp" />
+    <ClInclude Include="Src\Core\Time.hpp" />
+    <ClInclude Include="Src\GraphicsObjects\IndexBuffer.hpp" />
+    <ClInclude Include="Src\GraphicsObjects\OpenGl\GlDebug.hpp" />
+    <ClInclude Include="Src\GraphicsObjects\Shader.hpp" />
+    <ClInclude Include="Src\GraphicsObjects\Texture.hpp" />
+    <ClInclude Include="Src\GraphicsObjects\VertexArray.hpp" />
+    <ClInclude Include="Src\GraphicsObjects\VertexBuffer.hpp" />
+    <ClInclude Include="Src\Input\Event.hpp" />
+    <ClInclude Include="Src\Input\Input.hpp" />
+    <ClInclude Include="Src\Math\Arithmetic.hpp" />
+    <ClInclude Include="Src\Math\MathConstants.hpp" />
+    <ClInclude Include="Src\Math\Vector.hpp" />
     <ClInclude Include="Src\Parrot.hpp" />
-    <ClInclude Include="Src\Pch.hpp" />
-    <ClInclude Include="Src\SceneObject.hpp" />
-    <ClInclude Include="Src\Renderer.hpp" />
-    <ClInclude Include="Src\Vector.hpp" />
-    <ClInclude Include="Src\Window.hpp" />
+    <ClInclude Include="Src\Ptpch.hpp" />
+    <ClInclude Include="Src\Tracking\Stopwatch.hpp" />
+    <ClInclude Include="Src\Window\GLFW\Window_GLFW.hpp" />
+    <ClInclude Include="Src\Window\Window.hpp" />
+    <ClInclude Include="Src\Window\WindowAPI.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Src\Application.cpp" />
-    <ClCompile Include="Src\Event.cpp" />
-    <ClCompile Include="Src\LayerStack.cpp" />
-    <ClCompile Include="Src\Log.cpp" />
-    <ClCompile Include="Src\OpenGl\IndexBuffer.cpp" />
-    <ClCompile Include="Src\OpenGl\Shader.cpp" />
-    <ClCompile Include="Src\OpenGl\Texture.cpp" />
-    <ClCompile Include="Src\OpenGl\VertexArray.cpp" />
-    <ClCompile Include="Src\OpenGl\VertexBuffer.cpp" />
-    <ClCompile Include="Src\Pch.cpp">
+    <ClCompile Include="Src\Core\Application.cpp" />
+    <ClCompile Include="Src\Core\Log.cpp" />
+    <ClCompile Include="Src\Core\Time.cpp" />
+    <ClCompile Include="Src\GraphicsObjects\OpenGl\IndexBuffer.cpp" />
+    <ClCompile Include="Src\GraphicsObjects\OpenGl\Shader.cpp" />
+    <ClCompile Include="Src\GraphicsObjects\OpenGl\Texture.cpp" />
+    <ClCompile Include="Src\GraphicsObjects\OpenGl\VertexArray.cpp" />
+    <ClCompile Include="Src\GraphicsObjects\OpenGl\VertexBuffer.cpp" />
+    <ClCompile Include="Src\Input\Event.cpp" />
+    <ClCompile Include="Src\Input\Input.cpp" />
+    <ClCompile Include="Src\Math\Arithmetik.cpp" />
+    <ClCompile Include="Src\Ptpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Src\Renderer.cpp" />
-    <ClCompile Include="Src\Window.cpp" />
-    <ClCompile Include="Vendor\Stb\stb_image.cpp" />
+    <ClCompile Include="Src\Tracking\Stopwatch.cpp" />
+    <ClCompile Include="Src\Window\GLFW\Window_GLFW.cpp" />
+    <ClCompile Include="Src\Window\Window.cpp" />
+    <ClCompile Include="Src\Window\WindowAPI.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Src\OpenGl\Shaders\Camera.Snippet" />
-    <None Include="Src\OpenGl\Shaders\Flat.GLSL" />
-    <None Include="Src\OpenGl\Shaders\Tex.GLSL" />
+    <None Include="Src\Assets\Shaders\Flat.GLSL" />
+    <None Include="Src\Assets\Shaders\Tex.GLSL" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Vendor\GLFW\GLFW.vcxproj">

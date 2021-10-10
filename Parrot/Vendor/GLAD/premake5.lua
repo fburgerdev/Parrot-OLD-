@@ -2,7 +2,7 @@ project "GLAD"
 	kind "StaticLib"
 	language "C"
 
-	targetdir (TargetDit)
+	targetdir (TargetDir)
 	objdir (ObjDir)
 
 	systemversion "latest"
@@ -13,15 +13,13 @@ project "GLAD"
 		"include/GLAD/glad.h",
 		"include/KHR/khrplatform.h",
 		"src/glad.c"
-		
 	}
 	
 	
 	includedirs 
 	{
-		"include"
+		"Include"
 	}
-
 	ignoredefaultlibraries { "LIBCMT" }
 
 	filter "configurations:Debug"

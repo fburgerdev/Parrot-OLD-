@@ -8,13 +8,4 @@
   <ItemGroup>
     <ClCompile Include="Src\Sandbox.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="Src\Images\Parrot.png">
-      <Filter>Images</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Src\CamControllerOrtho.hpp" />
-    <ClInclude Include="Src\CamControllerPers.hpp" />
-  </ItemGroup>
 </Project>
