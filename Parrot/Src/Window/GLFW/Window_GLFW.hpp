@@ -1,6 +1,7 @@
 #pragma once
 #include "Window/WindowAPI.hpp"
 #include "GLFW/glfw3.h"
+#include "Utils/Stopwatch.hpp"
 
 namespace Parrot
 {
@@ -8,19 +9,36 @@ namespace Parrot
 	{
 	private:
 		GLFWwindow* m_Window;
-		const char* m_Title;
-		bool m_ShowFrames = true;
-	public:
-		Window_GLFW(const char* title, Math::Vec2u dim, const WindowAPI::Config& config);
+		std::string m_Title;
 
-		virtual void Maximize() override;
+		Math::Vec2i m_CursorPos;
+		Math::Vec2u m_WindowDim;
+
+		uint32_t m_Framerate;
+		bool m_ShowFrames = true;
+		Utils::Stopwatch m_FrameWatch;
+	public:
+		Window_GLFW(const std::string& name, Math::Vec2u dim);
+		~Window_GLFW();
+
+		virtual void Bind() override;
+
 		virtual void ShowFrames(bool state) override;
-		virtual void Resize(Math::Vec2u dim) override;
-		virtual Math::Vec2u GetSize() override;
-		virtual void Display() override;
+		virtual void SetTitle(const std::string& title) override;
+		virtual const std::string& GetTitle() override;
 
 		virtual void SetCursorPos(Math::Vec2i pos) override;
 		virtual Math::Vec2i GetCursorPos() override;
+
+		virtual void Maximize() override;
+		virtual void Minimize() override;
+
+		virtual void SetSize(Math::Vec2u dim) override;
+		virtual Math::Vec2u GetSize() override;
+
+		virtual void Framerate(uint32_t framerate) override;
+		virtual void Update() override;
+
 	private:
 		void UpdateTitleFrames();
 	};

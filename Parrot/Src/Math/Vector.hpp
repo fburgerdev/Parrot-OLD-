@@ -89,7 +89,7 @@ namespace Parrot
 			Vector3(const Vector2<T>& xy, T z)
 				: x(xy.x), y(xy.y), z(z) {}
 			Vector3(T x, const Vector2<T>& yz)
-				: x(x), y(yz.y), z(yz.z) {}
+				: x(x), y(yz.x), z(yz.y) {}
 			Vector3(T x, T y, T z)
 				: x(x), y(y), z(z) {}
 			Vector3(T scalar)
@@ -165,11 +165,11 @@ namespace Parrot
 			Vector4(const Vector3<T>& xyz, T w)
 				: x(xyz.x), y(xyz.y), z(xyz.z), w(w) {}
 			Vector4(T x, const Vector3<T>& yzw)
-				: x(x), y(yzw.y), z(yzw.z), w(yzw.w) {}
+				: x(x), y(yzw.x), z(yzw.y), w(yzw.z) {}
 			Vector4(const Vector2<T>& xy, const Vector2<T>& zw)
 				: xy(xy), zw(zw) {}
 			Vector4(T x, const Vector2<T>& yz, T w)
-				: x(x), y(yz.y), z(yz.z), w(w) {}
+				: x(x), y(yz.x), z(yz.y), w(w) {}
 			Vector4(T x, T y, T z, T w)
 				: x(x), y(y), z(z), w(w) {}
 			Vector4(T scalar)
@@ -272,21 +272,21 @@ namespace Parrot
 		typedef Vector3<int32_t> Vec3i;
 		typedef Vector4<int32_t> Vec4i;
 
-		typedef Vector2<int8_t> Vec2i_8;
-		typedef Vector3<int8_t> Vec3i_8;
-		typedef Vector4<int8_t> Vec4i_8;
+		//typedef Vector2<int8_t> Vec2i_8;
+		//typedef Vector3<int8_t> Vec3i_8;
+		//typedef Vector4<int8_t> Vec4i_8;
 
 		typedef Vector2<uint32_t> Vec2u;
 		typedef Vector3<uint32_t> Vec3u;
 		typedef Vector4<uint32_t> Vec4u;
 
-		typedef Vector2<uint8_t> Vec2u_8;
-		typedef Vector3<uint8_t> Vec3u_8;
-		typedef Vector4<uint8_t> Vec4u_8;
-
-		typedef Vector2<double> Vec2d;
-		typedef Vector3<double> Vec3d;
-		typedef Vector4<double> Vec4d;
+		//typedef Vector2<uint8_t> Vec2u_8;
+		//typedef Vector3<uint8_t> Vec3u_8;
+		//typedef Vector4<uint8_t> Vec4u_8;
+		
+		//typedef Vector2<double> Vec2d;
+		//typedef Vector3<double> Vec3d;
+		//typedef Vector4<double> Vec4d;
 
 		typedef Vector2<float> Vec2f;
 		typedef Vector3<float> Vec3f;

@@ -1,36 +1,7 @@
 #include "Parrot.hpp"
+#include "MainWindow.hpp"
 
-class Sandbox : public Parrot::Application
+Parrot::Window* Parrot::Application::CreateMainWindow()
 {
-public:
-	int a = 0;
-	virtual void OnCreate() override
-	{
-		Parrot::Time::Framerate(60);
-		Parrot::Window::ShowFrames(true);
-	}
-
-	virtual void OnEvent(const Parrot::Input::Event& e) override
-	{
-		if (e.type == Parrot::Input::Event::Type::WindowCloseRequestEvent)
-			Terminate();
-		if (e.type == Parrot::Input::Event::Type::KeyboardEvent)
-			e.Log();
-	}
-
-	virtual void OnUpdate() override
-	{
-		Parrot::Log::LogInfo("Cursor = %", Parrot::Window::GetCursorPos());
-		Parrot::Window::Display();
-	}
-
-	virtual void OnTerminate()
-	{
-
-	}
-};
-
-Parrot::Application* Parrot::CreateApplication()
-{
-	return new Sandbox();
+	return new Window("Main Window", Parrot::Math::Vec2u(500, 500));
 }

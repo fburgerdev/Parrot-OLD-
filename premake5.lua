@@ -1,14 +1,17 @@
-Outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+-- Directory paths
+Outputdir = "Win64-%{cfg.buildcfg}"
 TargetDir = "Bin/" ..Outputdir.. "/%{prj.name}"
 ObjDir = "Bin/" ..Outputdir.. "/Int/%{prj.name}"
 
 CppDialect = "C++20"
 
+-- Workspace
 workspace "Parrot"
 	architecture "x64"
-	configurations { "Debug", "Release", "Dist" }
+	configurations { "Debug", "Optimized", "Dist" }
 	startproject "Parrot"
 
+-- Includes
 include "Parrot/Vendor/GLFW"
 include "Parrot/Vendor/GLAD"
 
@@ -17,41 +20,45 @@ project "Parrot"
 	kind "Staticlib"
 	language "C++"
 	staticruntime "off"
-	cppdialect(CppDialect)
- 	
+
 	targetdir(TargetDir)
 	objdir(ObjDir)
+
+	cppdialect(CppDialect) 
 	
-	files { "%{prj.name}/Src/**.hpp", "%{prj.name}/Src/**.cpp", "%{prj.name}/Src/**.GLSL"}
-	includedirs { "$(ProjectDir)Src/","$(ProjectDir)Vendor/", "$(ProjectDir)Vendor/GLAD/Include/", "$(ProjectDir)Vendor/GLFW/Include/"}
+	files { "%{prj.name}/Src/**", "%{prj.name}/Vendor/Stb/*"}
+	includedirs { "$(ProjectDir)Src/","$(ProjectDir)Vendor/" }
+	includedirs { "$(ProjectDir)Vendor/GLAD/Include/", "$(ProjectDir)Vendor/GLFW/Include/" }
 	links { "Opengl32.lib", "GLFW", "GLAD" }
 
 	pchheader "Ptpch.hpp"
-	pchsource "Parrot/Src/Ptpch.cpp"
+	pchsource "%{prj.name}/Src/Ptpch.cpp"
 
-	defines { "PT_OPENGL" }
+	defines { "PT_OPENGL", "PT_GLFW" }
 	filter "configurations:Debug"
 		runtime "Debug"
 		symbols "on"
 		defines { "PT_DEBUG" }
-	filter "configurations:Release"
+	filter "configurations:Optimized"
 		runtime "Release"
 		optimize "on"
 		defines { "PT_OPTIMIZED" }
 	filter "configurations:Dist"
 		runtime "Release"
 		optimize "on"
-		defines { "PT_OPTIMIZED" }
+		defines { "PT_DIST" }
+
 project "Sandbox"
 	location "%{prj.name}"
 	kind "ConsoleApp"
 	language "C++"
-	cppdialect(CppDialect)
 
 	targetdir(TargetDir)
 	objdir(ObjDir)
 
-	files { "%{prj.name}/Src/**.hpp", "%{prj.name}/Src/**.cpp", "%{prj.name}/Src/**.GLSL"}
+	cppdialect(CppDialect)
+
+	files { "%{prj.name}/Src/**" }
 	includedirs { "$(ProjectDir)Src/", "Parrot/Src/"}
 	links { "Parrot" }
 
@@ -60,12 +67,12 @@ project "Sandbox"
 		runtime "Debug"
 		symbols "on"
 		defines { "PT_DEBUG" }
-	filter "configurations:Release"
+	filter "configurations:Optimized"
 		runtime "Release"
 		optimize "on"
 		defines { "PT_OPTIMIZED" }
 	filter "configurations:Dist"
 		runtime "Release"
 		optimize "on"
-		defines { "PT_OPTIMIZED" }
+		defines { "PT_DIST" }
 	

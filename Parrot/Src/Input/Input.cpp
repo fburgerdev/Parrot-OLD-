@@ -3,28 +3,25 @@
 
 namespace Parrot
 {
-	namespace Input
-	{
-		Mouse::MouseButtonState s_MouseButtons[3] = { Mouse::MouseButtonState::Released };
-		Keyboard::KeyState s_Keys[350] = { Keyboard::KeyState::Released };
+	static Mouse::ButtonState s_MouseButtons[3] = { Mouse::ButtonState::Released };
+	static Keyboard::KeyState s_Keys[350] = { Keyboard::KeyState::Released };
 
-		Mouse::MouseButtonState Mouse::GetButtonState(Mouse::MouseButton button)
-		{
-			return s_MouseButtons[(uint32_t)button];
-		}
+	Mouse::ButtonState Mouse::GetButtonState(Mouse::Button button)
+	{
+		return s_MouseButtons[(uint32_t)button];
+	}
 		
-		Keyboard::KeyState Keyboard::GetKeyState(Keyboard::Key key)
-		{
-			return s_Keys[(uint32_t)key];
-		}
+	Keyboard::KeyState Keyboard::GetKeyState(Keyboard::KeyCode key)
+	{
+		return s_Keys[(uint32_t)key];
 	}
 
-	void SetMouseButtonState(Input::Mouse::MouseButton button, Input::Mouse::MouseButtonState state)
+	void SetMouseButtonState(Mouse::Button button, Mouse::ButtonState state)
 	{
-		Input::s_MouseButtons[(uint32_t)button] = state;
+		s_MouseButtons[(uint32_t)button] = state;
 	}
-	void SetKeyboardKeyState(Input::Keyboard::Key key, Input::Keyboard::KeyState state)
+	void SetKeyboardKeyState(Keyboard::KeyCode keyCode, Keyboard::KeyState state)
 	{
-		Input::s_Keys[(uint32_t)key] = state;
+		s_Keys[(uint32_t)keyCode] = state;
 	}
 }

@@ -1,26 +1,48 @@
 #pragma once
+#include "Ptpch.hpp"
 #include "Math/Vector.hpp"
-
+#include "Scene/Scene.hpp"
 namespace Parrot
 {
 	class Window
 	{
-	public:
-		// Resizes the window to the largest possible size
-		// Trigggers the WindowResizeEvent!
-		static void Maximize();
-		// Shows the framerate in the window title
-		static void ShowFrames(bool state);
-		// Trigggers the WindowResizeEvent!
-		static void Resize(Math::Vec2u dim);
-		// Returns current size of the window
-		// Format: Vec2u = (width in pixels, height in pixels
-		static Math::Vec2u GetSize();
-		// Sends Framebuffer to the monitor and proccesses event
-		// Needs to be called regulary, otherwise the window won't reply
-		static void Display();
+	private:
+		std::string m_Name;
+		void* m_WindowAPI;
+		bool m_ShouldClose;
 
-		static void SetCursorPos(Math::Vec2i pos);
-		static Math::Vec2i GetCursorPos();
+		Scene* m_LoadedScene;
+	protected:
+		virtual void OnCreate() {};
+	public:
+		Window(const std::string& name, Math::Vec2u dim);
+		~Window();
+
+		bool ShouldClose();
+		void Close();
+
+		//void LoadScene(const std::string& name);
+		//Scene& LoadedScene();
+
+		//Scene& CreateScene(const std::string& name);
+		//void DestroyScene(const std::string& name);
+		//Scene& GetScene(const std::string& name);
+	public:
+	// WindowAPI
+		void ShowFrames(bool state);
+		void SetTitle(const std::string& title);
+		const std::string& GetTitle();
+		
+		void SetCursorPos(Math::Vec2i pos);
+		Math::Vec2i GetCursorPos();
+		
+		void Maximize();
+		void Minimize();
+
+		void SetSize(Math::Vec2u dim);
+		Math::Vec2u GetSize();
+		
+		void Framerate(uint32_t rate);
+		void Update();
 	};
 }

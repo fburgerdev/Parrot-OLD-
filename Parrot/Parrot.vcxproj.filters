@@ -1,155 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Assets">
-      <UniqueIdentifier>{3824E0A7-24C6-0A7E-0D81-1ED2F9C191CE}</UniqueIdentifier>
+    <Filter Include="Src">
+      <UniqueIdentifier>{0D23880B-792C-887C-02A8-9E7C6EB0937C}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Assets\Shaders">
-      <UniqueIdentifier>{1101E1D1-FDCE-D4D7-E662-45FED2CFB03C}</UniqueIdentifier>
+    <Filter Include="Src\Assets">
+      <UniqueIdentifier>{4FD9EC83-3B91-2ED1-A498-072D906FC9C1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core">
-      <UniqueIdentifier>{2EB4837C-1AEB-840D-C3D7-6A10AFED000F}</UniqueIdentifier>
+    <Filter Include="Src\Assets\Shaders">
+      <UniqueIdentifier>{28DD006D-14C1-C1C2-7D21-BC156924AC44}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GraphicsObjects">
-      <UniqueIdentifier>{C0C74473-2C53-B237-3564-352CA16E0E38}</UniqueIdentifier>
+    <Filter Include="Src\Assets\Textures">
+      <UniqueIdentifier>{02944049-6EF5-1D57-F762-640963C35416}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GraphicsObjects\OpenGl">
-      <UniqueIdentifier>{1439FBDE-0033-2431-E99F-BA41D5388A9D}</UniqueIdentifier>
+    <Filter Include="Src\Core">
+      <UniqueIdentifier>{8537E246-7104-3D52-9A1D-2BFA864972E0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Input">
-      <UniqueIdentifier>{953A660D-014F-8EBE-CAD0-311E36A48AEF}</UniqueIdentifier>
+    <Filter Include="Src\Debug">
+      <UniqueIdentifier>{43833523-AFED-E999-F82B-9B3F64D5C7EE}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Math">
-      <UniqueIdentifier>{AFF4887C-9B2B-8A0D-4418-7010302E060F}</UniqueIdentifier>
+    <Filter Include="Src\GraphicsObjects">
+      <UniqueIdentifier>{B7266072-2388-3D80-ACF5-83321856743F}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Tracking">
-      <UniqueIdentifier>{788A3C32-6457-973D-8D70-85E5799CCCCB}</UniqueIdentifier>
+    <Filter Include="Src\GraphicsObjects\OpenGl">
+      <UniqueIdentifier>{2B3C6591-174C-1162-8005-76806C3400FB}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Window">
-      <UniqueIdentifier>{3DEA79DA-298C-A4B0-1247-B804FE872B01}</UniqueIdentifier>
+    <Filter Include="Src\Input">
+      <UniqueIdentifier>{CC289523-3893-499A-81D1-FA3FED7A27EF}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Window\GLFW">
-      <UniqueIdentifier>{9C9301B7-0849-7AAC-913D-7483FDF170B0}</UniqueIdentifier>
+    <Filter Include="Src\Math">
+      <UniqueIdentifier>{0678E746-F244-4252-1B5E-30FA078A77E0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Scene">
+      <UniqueIdentifier>{EAE54324-5650-F89A-9F8E-A9400B38D6EF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Scene\Components">
+      <UniqueIdentifier>{BF048BE2-AB93-14AC-54B2-28A740202552}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Utils">
+      <UniqueIdentifier>{2D7A7124-99E4-259B-E222-D7404ECC03F0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Window">
+      <UniqueIdentifier>{549F86B6-4057-C803-A95E-A15F953563F4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Window\GLFW">
+      <UniqueIdentifier>{130FEE65-7F9A-5B2A-88AB-DE1EF4B5B72A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Vendor">
+      <UniqueIdentifier>{935FDCD7-7F01-07AE-68BC-1A0254FD8DFE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Vendor\Stb">
+      <UniqueIdentifier>{4B277327-37DF-B474-A0E6-8DD08CBD4F65}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Src\Core\Application.hpp">
-      <Filter>Core</Filter>
+    <ClInclude Include="Src\Debug\Log.hpp">
+      <Filter>Src\Debug</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Core\HiddenFunctions.hpp">
-      <Filter>Core</Filter>
+    <ClInclude Include="Src\GraphicsObject\IndexBuffer.hpp">
+      <Filter>Src\GraphicsObjects</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Core\Log.hpp">
-      <Filter>Core</Filter>
+    <ClInclude Include="Src\GraphicsObject\OpenGl\GlDebug.hpp">
+      <Filter>Src\GraphicsObjects\OpenGl</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Core\Macros.hpp">
-      <Filter>Core</Filter>
+    <ClInclude Include="Src\GraphicsObject\Shader.hpp">
+      <Filter>Src\GraphicsObjects</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Core\Time.hpp">
-      <Filter>Core</Filter>
+    <ClInclude Include="Src\GraphicsObject\SubTexture.hpp">
+      <Filter>Src\GraphicsObjects</Filter>
     </ClInclude>
-    <ClInclude Include="Src\GraphicsObjects\IndexBuffer.hpp">
-      <Filter>GraphicsObjects</Filter>
+    <ClInclude Include="Src\GraphicsObject\Texture.hpp">
+      <Filter>Src\GraphicsObjects</Filter>
     </ClInclude>
-    <ClInclude Include="Src\GraphicsObjects\OpenGl\GlDebug.hpp">
-      <Filter>GraphicsObjects\OpenGl</Filter>
+    <ClInclude Include="Src\GraphicsObject\VertexArray.hpp">
+      <Filter>Src\GraphicsObjects</Filter>
     </ClInclude>
-    <ClInclude Include="Src\GraphicsObjects\Shader.hpp">
-      <Filter>GraphicsObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\GraphicsObjects\Texture.hpp">
-      <Filter>GraphicsObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\GraphicsObjects\VertexArray.hpp">
-      <Filter>GraphicsObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\GraphicsObjects\VertexBuffer.hpp">
-      <Filter>GraphicsObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Input\Event.hpp">
-      <Filter>Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Input\Input.hpp">
-      <Filter>Input</Filter>
+    <ClInclude Include="Src\GraphicsObject\VertexBuffer.hpp">
+      <Filter>Src\GraphicsObjects</Filter>
     </ClInclude>
     <ClInclude Include="Src\Math\Arithmetic.hpp">
-      <Filter>Math</Filter>
+      <Filter>Src\Math</Filter>
     </ClInclude>
     <ClInclude Include="Src\Math\MathConstants.hpp">
-      <Filter>Math</Filter>
+      <Filter>Src\Math</Filter>
     </ClInclude>
     <ClInclude Include="Src\Math\Vector.hpp">
-      <Filter>Math</Filter>
+      <Filter>Src\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Parrot.hpp" />
-    <ClInclude Include="Src\Ptpch.hpp" />
-    <ClInclude Include="Src\Tracking\Stopwatch.hpp">
-      <Filter>Tracking</Filter>
+    <ClInclude Include="Src\Parrot.hpp">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Ptpch.hpp">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Utils\Stopwatch.hpp">
+      <Filter>Src\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Utils\StrFuncs.hpp">
+      <Filter>Src\Utils</Filter>
     </ClInclude>
     <ClInclude Include="Src\Window\GLFW\Window_GLFW.hpp">
-      <Filter>Window\GLFW</Filter>
+      <Filter>Src\Window\GLFW</Filter>
     </ClInclude>
     <ClInclude Include="Src\Window\Window.hpp">
-      <Filter>Window</Filter>
+      <Filter>Src\Window</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Window\WindowAPI.hpp">
-      <Filter>Window</Filter>
+    <ClInclude Include="Vendor\Stb\stb_image.h">
+      <Filter>Vendor\Stb</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\Application.hpp" />
+    <ClInclude Include="Src\Scene\Scene.hpp" />
+    <ClInclude Include="Src\Scene\SceneObject.hpp" />
+    <ClInclude Include="Src\Input\Event.hpp" />
+    <ClInclude Include="Src\Input\Input.hpp" />
+    <ClInclude Include="Src\Core\Defines.hpp" />
+    <ClInclude Include="Src\Window\WindowAPI.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Src\Core\Application.cpp">
-      <Filter>Core</Filter>
+    <ClCompile Include="Src\Debug\Log.cpp">
+      <Filter>Src\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Core\Log.cpp">
-      <Filter>Core</Filter>
+    <ClCompile Include="Src\GraphicsObject\OpenGl\IndexBuffer.cpp">
+      <Filter>Src\GraphicsObjects\OpenGl</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Core\Time.cpp">
-      <Filter>Core</Filter>
+    <ClCompile Include="Src\GraphicsObject\OpenGl\Shader.cpp">
+      <Filter>Src\GraphicsObjects\OpenGl</Filter>
     </ClCompile>
-    <ClCompile Include="Src\GraphicsObjects\OpenGl\IndexBuffer.cpp">
-      <Filter>GraphicsObjects\OpenGl</Filter>
+    <ClCompile Include="Src\GraphicsObject\OpenGl\Texture.cpp">
+      <Filter>Src\GraphicsObjects\OpenGl</Filter>
     </ClCompile>
-    <ClCompile Include="Src\GraphicsObjects\OpenGl\Shader.cpp">
-      <Filter>GraphicsObjects\OpenGl</Filter>
+    <ClCompile Include="Src\GraphicsObject\OpenGl\VertexArray.cpp">
+      <Filter>Src\GraphicsObjects\OpenGl</Filter>
     </ClCompile>
-    <ClCompile Include="Src\GraphicsObjects\OpenGl\Texture.cpp">
-      <Filter>GraphicsObjects\OpenGl</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\GraphicsObjects\OpenGl\VertexArray.cpp">
-      <Filter>GraphicsObjects\OpenGl</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\GraphicsObjects\OpenGl\VertexBuffer.cpp">
-      <Filter>GraphicsObjects\OpenGl</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Input\Event.cpp">
-      <Filter>Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Input\Input.cpp">
-      <Filter>Input</Filter>
+    <ClCompile Include="Src\GraphicsObject\OpenGl\VertexBuffer.cpp">
+      <Filter>Src\GraphicsObjects\OpenGl</Filter>
     </ClCompile>
     <ClCompile Include="Src\Math\Arithmetik.cpp">
-      <Filter>Math</Filter>
+      <Filter>Src\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Ptpch.cpp" />
-    <ClCompile Include="Src\Tracking\Stopwatch.cpp">
-      <Filter>Tracking</Filter>
+    <ClCompile Include="Src\Ptpch.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Utils\Stopwatch.cpp">
+      <Filter>Src\Utils</Filter>
     </ClCompile>
     <ClCompile Include="Src\Window\GLFW\Window_GLFW.cpp">
-      <Filter>Window\GLFW</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Window\Window.cpp">
-      <Filter>Window</Filter>
+      <Filter>Src\Window\GLFW</Filter>
     </ClCompile>
     <ClCompile Include="Src\Window\WindowAPI.cpp">
-      <Filter>Window</Filter>
+      <Filter>Src\Window</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Src\Assets\Shaders\Flat.GLSL">
-      <Filter>Assets\Shaders</Filter>
-    </None>
-    <None Include="Src\Assets\Shaders\Tex.GLSL">
-      <Filter>Assets\Shaders</Filter>
-    </None>
+    <ClCompile Include="Vendor\Stb\stb_image.cpp">
+      <Filter>Vendor\Stb</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Application.cpp" />
+    <ClCompile Include="Src\Input\Event.cpp" />
+    <ClCompile Include="Src\Input\Input.cpp" />
+    <ClCompile Include="Src\Window\Window.cpp" />
   </ItemGroup>
 </Project>
