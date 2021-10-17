@@ -3,24 +3,51 @@
 
 namespace Parrot
 {
-	uint32_t Log::s_CurrLine = 1;
-	
-	static std::string s_NewLineTabs;
-	static uint8_t s_NewLineSpaces;
+	// defined in "InternalLog.cpp"
+	std::string& HIDDEN_LogTabs();
 
-	std::string& Log::NewLineTabs()
+	void Log::StartScope(const char* name)
 	{
-		return s_NewLineTabs;
+		s_SpaceCount = 0;
+		IndentToCurrentLog();
+		std::cout << ConsoleColor::White << "(SCOPE) " << name << '\n';
+		HIDDEN_LogTabs().push_back('\t');
 	}
-	uint8_t& Log::NewLineSpaces()
+	void Log::EndScope()
 	{
-		return s_NewLineSpaces;
+		if (HIDDEN_LogTabs().empty())
+			return;
+		HIDDEN_LogTabs().pop_back();
+	}
+	void Log::EndAllScopes()
+	{
+		if (HIDDEN_LogTabs().empty())
+			return;
+		HIDDEN_LogTabs().clear();
 	}
 
-	void IndentConsoleLine()
+	void Log::NewLog()
 	{
-		std::cout << s_NewLineTabs.c_str() << '\t';
-		for (uint8_t i = 0; i < s_NewLineSpaces; i++)
+		std::cout << ConsoleColor::White << '(' << s_CurrLine++ << ")\t" << HIDDEN_LogTabs();
+	}
+
+	void Log::IndentToCurrentLog()
+	{
+		std::cout << HIDDEN_LogTabs() << '\t';
+		for (uint32_t i = 0; i < s_SpaceCount; i++)
 			std::cout << ' ';
 	}
+
+	void Log::Message(const char* format)
+	{
+		while (*format != '\0')
+		{
+			std::cout << *format;
+			if (*format++ == '\n')
+				IndentToCurrentLog();
+		}
+	}
+
+	uint32_t Log::s_CurrLine = 1;
+	uint32_t Log::s_SpaceCount = 0;
 }

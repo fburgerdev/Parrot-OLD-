@@ -130,7 +130,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Src\Sandbox.cpp" />
+    <ClCompile Include="Src\OnCreate.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Parrot\Parrot.vcxproj">
@@ -138,7 +138,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Src\MainWindow.hpp" />
+    <ClInclude Include="Src\Scenes\MainScene\MainScene.hpp" />
+    <ClInclude Include="Src\Scenes\MainScene\SceneObjects\Cam.hpp" />
+    <ClInclude Include="Src\Scenes\MainScene\SceneObjects\Quad.hpp" />
+    <ClInclude Include="Src\Windows\MainWindow.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

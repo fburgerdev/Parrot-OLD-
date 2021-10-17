@@ -139,18 +139,18 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Src\Application\Application.hpp" />
-    <ClInclude Include="Src\Scene\Scene.hpp" />
-    <ClInclude Include="Src\Scene\SceneObject.hpp" />
-    <ClInclude Include="Src\Core\Defines.hpp" />
+    <ClInclude Include="Src\ClientInterface\Application.hpp" />
+    <ClInclude Include="Src\Utils\Filepath.hpp" />
+    <ClInclude Include="Src\Debug\InternalLog.hpp" />
+    <ClInclude Include="Src\Renderer\GraphicsObject\GraphicsAPI.hpp" />
+    <ClInclude Include="Src\Renderer\MeshRenderer\MeshVertex.hpp" />
+    <ClInclude Include="Src\ClientInterface\Scene\Components\Component.hpp" />
+    <ClInclude Include="Src\ClientInterface\Scene\Components\Mesh.hpp" />
+    <ClInclude Include="Src\ClientInterface\Scene\Components\Transform.hpp" />
+    <ClInclude Include="Src\ClientInterface\Scene\Scene.hpp" />
+    <ClInclude Include="Src\ClientInterface\Scene\SceneObject.hpp" />
+    <ClInclude Include="Src\Core\Macros.hpp" />
     <ClInclude Include="Src\Debug\Log.hpp" />
-    <ClInclude Include="Src\GraphicsObject\IndexBuffer.hpp" />
-    <ClInclude Include="Src\GraphicsObject\OpenGl\GlDebug.hpp" />
-    <ClInclude Include="Src\GraphicsObject\Shader.hpp" />
-    <ClInclude Include="Src\GraphicsObject\SubTexture.hpp" />
-    <ClInclude Include="Src\GraphicsObject\Texture.hpp" />
-    <ClInclude Include="Src\GraphicsObject\VertexArray.hpp" />
-    <ClInclude Include="Src\GraphicsObject\VertexBuffer.hpp" />
     <ClInclude Include="Src\Input\Event.hpp" />
     <ClInclude Include="Src\Input\Input.hpp" />
     <ClInclude Include="Src\Math\Arithmetic.hpp" />
@@ -160,29 +160,27 @@
     <ClInclude Include="Src\Ptpch.hpp" />
     <ClInclude Include="Src\Utils\Stopwatch.hpp" />
     <ClInclude Include="Src\Utils\StrFuncs.hpp" />
-    <ClInclude Include="Src\Window\GLFW\Window_GLFW.hpp" />
-    <ClInclude Include="Src\Window\Window.hpp" />
-    <ClInclude Include="Src\Window\WindowAPI.hpp" />
+    <ClInclude Include="Src\WindowAPI\GLFW\Window_GLFW.hpp" />
+    <ClInclude Include="Src\ClientInterface\Window.hpp" />
+    <ClInclude Include="Src\WindowAPI\WindowAPI.hpp" />
     <ClInclude Include="Vendor\Stb\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Src\Application\Application.cpp" />
+    <ClCompile Include="Src\ClientInterface\Application.cpp" />
+    <ClCompile Include="Src\Utils\Filepath.cpp" />
+    <ClCompile Include="Src\Debug\InternalLog.cpp" />
     <ClCompile Include="Src\Debug\Log.cpp" />
-    <ClCompile Include="Src\GraphicsObject\OpenGl\IndexBuffer.cpp" />
-    <ClCompile Include="Src\GraphicsObject\OpenGl\Shader.cpp" />
-    <ClCompile Include="Src\GraphicsObject\OpenGl\Texture.cpp" />
-    <ClCompile Include="Src\GraphicsObject\OpenGl\VertexArray.cpp" />
-    <ClCompile Include="Src\GraphicsObject\OpenGl\VertexBuffer.cpp" />
-    <ClCompile Include="Src\Input\Event.cpp" />
     <ClCompile Include="Src\Input\Input.cpp" />
-    <ClCompile Include="Src\Math\Arithmetik.cpp" />
+    <ClCompile Include="Src\Math\Arithmetic.cpp" />
     <ClCompile Include="Src\Ptpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Src\ClientInterface\Scene\Scene.cpp" />
+    <ClCompile Include="Src\ClientInterface\Scene\SceneObject.cpp" />
     <ClCompile Include="Src\Utils\Stopwatch.cpp" />
-    <ClCompile Include="Src\Window\GLFW\Window_GLFW.cpp" />
-    <ClCompile Include="Src\Window\Window.cpp" />
-    <ClCompile Include="Src\Window\WindowAPI.cpp" />
+    <ClCompile Include="Src\WindowAPI\GLFW\Window_GLFW.cpp" />
+    <ClCompile Include="Src\ClientInterface\Window.cpp" />
+    <ClCompile Include="Src\WindowAPI\WindowAPI.cpp" />
     <ClCompile Include="Vendor\Stb\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>

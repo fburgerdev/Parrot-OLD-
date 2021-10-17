@@ -57,27 +57,6 @@
     <ClInclude Include="Src\Debug\Log.hpp">
       <Filter>Src\Debug</Filter>
     </ClInclude>
-    <ClInclude Include="Src\GraphicsObject\IndexBuffer.hpp">
-      <Filter>Src\GraphicsObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\GraphicsObject\OpenGl\GlDebug.hpp">
-      <Filter>Src\GraphicsObjects\OpenGl</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\GraphicsObject\Shader.hpp">
-      <Filter>Src\GraphicsObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\GraphicsObject\SubTexture.hpp">
-      <Filter>Src\GraphicsObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\GraphicsObject\Texture.hpp">
-      <Filter>Src\GraphicsObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\GraphicsObject\VertexArray.hpp">
-      <Filter>Src\GraphicsObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\GraphicsObject\VertexBuffer.hpp">
-      <Filter>Src\GraphicsObjects</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Math\Arithmetic.hpp">
       <Filter>Src\Math</Filter>
     </ClInclude>
@@ -99,43 +78,35 @@
     <ClInclude Include="Src\Utils\StrFuncs.hpp">
       <Filter>Src\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Window\GLFW\Window_GLFW.hpp">
+    <ClInclude Include="Src\WindowAPI\GLFW\Window_GLFW.hpp">
       <Filter>Src\Window\GLFW</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Window\Window.hpp">
+    <ClInclude Include="Src\ClientInterface\Window.hpp">
       <Filter>Src\Window</Filter>
     </ClInclude>
     <ClInclude Include="Vendor\Stb\stb_image.h">
       <Filter>Vendor\Stb</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Application\Application.hpp" />
-    <ClInclude Include="Src\Scene\Scene.hpp" />
-    <ClInclude Include="Src\Scene\SceneObject.hpp" />
+    <ClInclude Include="Src\ClientInterface\Application.hpp" />
+    <ClInclude Include="Src\ClientInterface\Scene\Scene.hpp" />
+    <ClInclude Include="Src\ClientInterface\Scene\SceneObject.hpp" />
     <ClInclude Include="Src\Input\Event.hpp" />
     <ClInclude Include="Src\Input\Input.hpp" />
-    <ClInclude Include="Src\Core\Defines.hpp" />
-    <ClInclude Include="Src\Window\WindowAPI.hpp" />
+    <ClInclude Include="Src\Core\Macros.hpp" />
+    <ClInclude Include="Src\WindowAPI\WindowAPI.hpp" />
+    <ClInclude Include="Src\ClientInterface\Scene\Components\Component.hpp" />
+    <ClInclude Include="Src\ClientInterface\Scene\Components\Transform.hpp" />
+    <ClInclude Include="Src\ClientInterface\Scene\Components\Mesh.hpp" />
+    <ClInclude Include="Src\Renderer\MeshRenderer\MeshVertex.hpp" />
+    <ClInclude Include="Src\Renderer\GraphicsObject\GraphicsAPI.hpp" />
+    <ClInclude Include="Src\Utils\Filepath.hpp" />
+    <ClInclude Include="Src\Debug\InternalLog.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Debug\Log.cpp">
       <Filter>Src\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="Src\GraphicsObject\OpenGl\IndexBuffer.cpp">
-      <Filter>Src\GraphicsObjects\OpenGl</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\GraphicsObject\OpenGl\Shader.cpp">
-      <Filter>Src\GraphicsObjects\OpenGl</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\GraphicsObject\OpenGl\Texture.cpp">
-      <Filter>Src\GraphicsObjects\OpenGl</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\GraphicsObject\OpenGl\VertexArray.cpp">
-      <Filter>Src\GraphicsObjects\OpenGl</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\GraphicsObject\OpenGl\VertexBuffer.cpp">
-      <Filter>Src\GraphicsObjects\OpenGl</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Math\Arithmetik.cpp">
+    <ClCompile Include="Src\Math\Arithmetic.cpp">
       <Filter>Src\Math</Filter>
     </ClCompile>
     <ClCompile Include="Src\Ptpch.cpp">
@@ -144,18 +115,21 @@
     <ClCompile Include="Src\Utils\Stopwatch.cpp">
       <Filter>Src\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Window\GLFW\Window_GLFW.cpp">
+    <ClCompile Include="Src\WindowAPI\GLFW\Window_GLFW.cpp">
       <Filter>Src\Window\GLFW</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Window\WindowAPI.cpp">
+    <ClCompile Include="Src\WindowAPI\WindowAPI.cpp">
       <Filter>Src\Window</Filter>
     </ClCompile>
     <ClCompile Include="Vendor\Stb\stb_image.cpp">
       <Filter>Vendor\Stb</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Application\Application.cpp" />
-    <ClCompile Include="Src\Input\Event.cpp" />
+    <ClCompile Include="Src\ClientInterface\Application.cpp" />
     <ClCompile Include="Src\Input\Input.cpp" />
-    <ClCompile Include="Src\Window\Window.cpp" />
+    <ClCompile Include="Src\ClientInterface\Window.cpp" />
+    <ClCompile Include="Src\ClientInterface\Scene\Scene.cpp" />
+    <ClCompile Include="Src\ClientInterface\Scene\SceneObject.cpp" />
+    <ClCompile Include="Src\Utils\Filepath.cpp" />
+    <ClCompile Include="Src\Debug\InternalLog.cpp" />
   </ItemGroup>
 </Project>

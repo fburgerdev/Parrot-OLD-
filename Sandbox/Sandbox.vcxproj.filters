@@ -6,9 +6,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Src\Sandbox.cpp" />
+    <ClCompile Include="Src\OnCreate.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Src\MainWindow.hpp" />
+    <ClInclude Include="Src\Scenes\MainScene\SceneObjects\Cam.hpp" />
+    <ClInclude Include="Src\Scenes\MainScene\SceneObjects\Quad.hpp" />
+    <ClInclude Include="Src\Scenes\MainScene\MainScene.hpp" />
+    <ClInclude Include="Src\Windows\MainWindow.hpp" />
   </ItemGroup>
 </Project>

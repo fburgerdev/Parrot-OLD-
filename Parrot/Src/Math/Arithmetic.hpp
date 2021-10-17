@@ -1,10 +1,7 @@
 #pragma once
 
-namespace Parrot
+namespace Math
 {
-	namespace Math
-	{
-		float QuakeInverseSquareRoot(float number);
-		float QuakeSquareRoot(float number);
-	}
+	float QuakeInverseSquareRoot(float number);
+	float QuakeSquareRoot(float number);
 }

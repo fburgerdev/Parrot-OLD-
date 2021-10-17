@@ -4,7 +4,7 @@
 
 namespace Parrot
 {
-	class Log
+	class InternalLog
 	{
 	public:
 		struct ConsoleColor
@@ -15,17 +15,17 @@ namespace Parrot
 			static constexpr const char* Yellow = "\033[93m";
 			static constexpr const char* Red = "\033[91m";
 		};
-	#ifndef PT_NLOG
+#ifndef PT_NLOG
 		static void StartScope(const char* name);
 		static void EndScope();
 		static void EndAllScopes();
 
-		template<class... FArgs> 
-		static void LogInfo(const char* format,FArgs... fArgs)
+		template<class... FArgs>
+		static void LogInfo(const char* format, FArgs... fArgs)
 		{
 			NewLog();
-			std::cout << ConsoleColor::Green << "[INFO] ";
-			s_SpaceCount = 7;
+			std::cout << ConsoleColor::Green << "[INTERNAL INFO] ";
+			s_SpaceCount = 16;
 			Message(format, fArgs...);
 			std::cout << '\n';
 		}
@@ -33,8 +33,8 @@ namespace Parrot
 		static void LogEvent(const char* format, FArgs... fArgs)
 		{
 			NewLog();
-			std::cout << ConsoleColor::Blue << "[EVENT] ";
-			s_SpaceCount = 8;
+			std::cout << ConsoleColor::Blue << "[INTERNAL EVENT] ";
+			s_SpaceCount = 17;
 			Message(format, fArgs...);
 			std::cout << '\n';
 		}
@@ -42,8 +42,8 @@ namespace Parrot
 		static void LogWarning(const char* format, FArgs... fArgs)
 		{
 			NewLog();
-			std::cout << ConsoleColor::Yellow << "[WARNING] ";
-			s_SpaceCount = 9;
+			std::cout << ConsoleColor::Yellow << "[INTERNAL WARNING] ";
+			s_SpaceCount = 18;
 			Message(format, fArgs...);
 			std::cout << '\n';
 		}
@@ -51,8 +51,8 @@ namespace Parrot
 		static void LogError(const char* format, FArgs... fArgs)
 		{
 			NewLog();
-			std::cout << ConsoleColor::Red << "[ERROR] ";
-			s_SpaceCount = 8;
+			std::cout << ConsoleColor::Red << "[INTERNAL ERROR] ";
+			s_SpaceCount = 17;
 			Message(format, fArgs...);
 			std::cout << '\n';
 		}
@@ -70,7 +70,7 @@ namespace Parrot
 			std::cout << s_NUnderlined << '\n';
 			PT_DEBUGBREAK();
 		}
-	#else
+#else
 		static void StartScope(const char* name) {}
 		static void EndScope() {}
 		static void EndAllScopes() {}

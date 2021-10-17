@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include <vector>
 #include <queue>
+#include <stack>
 #include <deque>
 
 #include <assert.h>
