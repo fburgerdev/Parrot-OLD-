@@ -8,3 +8,8 @@ General structure:
   - each Scene holds several SceneObjects
   - each SceneObject holds several Components (Transform-Component is mandatory)
   - SceneObjects can hold a scriptable Component that make them highly customizable
+
+Supported Render API's:
+  - OpenGL
+Supported Window API's:
+  - GLFW
