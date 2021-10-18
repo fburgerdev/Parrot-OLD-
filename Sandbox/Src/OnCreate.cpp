@@ -2,7 +2,7 @@
 
 namespace Parrot
 {
-	void Application_OnCreate()
+	void Application::OnCreate()
 	{
 		new MainWindow("Main Window", { 1080, 720 });
 		new MainWindow("Window 2", { 300, 200 });

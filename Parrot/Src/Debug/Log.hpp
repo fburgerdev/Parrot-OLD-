@@ -1,5 +1,4 @@
 #pragma once
-#include "Ptpch.hpp"
 #include "Core/Macros.hpp"
 
 namespace Parrot

@@ -1,7 +1,6 @@
 #pragma once
-#include "Ptpch.hpp"
-#include "Math/Vector.hpp"
 #include "ClientInterface/Window.hpp"
+#include "Math/Vector.hpp"
 
 namespace Parrot
 {

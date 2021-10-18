@@ -1,5 +1,5 @@
 #pragma once
-#include "Ptpch.hpp"
+#include <string>
 
 namespace Parrot
 {
@@ -8,9 +8,11 @@ namespace Parrot
 		class Filepath
 		{
 		public:
-			static void Init(const std::string& root);
+			static void SetRoot(const std::string& root);
 
 			Filepath(const std::string& filepath);
+
+			std::string FullPath() const;
 			std::string_view Extension() const;
 			std::string_view Filename() const;
 		private:

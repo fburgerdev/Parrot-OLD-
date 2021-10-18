@@ -5,7 +5,7 @@ namespace Parrot
 {
 	namespace Utils
 	{
-		void Filepath::Init(const std::string& root)
+		void Filepath::SetRoot(const std::string& root)
 		{
 			s_Root = root;
 		}
@@ -13,15 +13,20 @@ namespace Parrot
 		Filepath::Filepath(const std::string& filepath)
 			: m_Filepath(filepath) {}
 
+		std::string Filepath::FullPath() const
+		{
+			return std::string(s_Root + m_Filepath);
+		}
+
 		std::string_view Filepath::Extension() const
 		{
-			uint32_t offset = m_Filepath.find_first_of('.') + 1;
+			size_t offset = m_Filepath.find_first_of('.') + 1;
 			return std::string_view(m_Filepath.c_str() + offset, m_Filepath.size() - offset);
 		}
 
 		std::string_view Filepath::Filename() const
 		{
-			uint32_t offset = m_Filepath.find_last_of('/') + 1;
+			size_t offset = m_Filepath.find_last_of('/') + 1;
 			return std::string_view(m_Filepath.c_str() + offset, m_Filepath.size() - offset);
 		}
 

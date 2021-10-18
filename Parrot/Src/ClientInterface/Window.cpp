@@ -1,8 +1,7 @@
 #include "Ptpch.hpp"
+#include "Application.hpp"
 #include "Window.hpp"
 #include "WindowAPI/WindowAPI.hpp"
-#include "Application.hpp"
-#include "Scene/Scene.hpp"
 
 namespace Parrot
 {

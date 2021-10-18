@@ -13,7 +13,7 @@ namespace Parrot
 
 	static void Init()
 	{
-		Utils::Filepath::Init("../Parrot/");
+		Utils::Filepath::SetRoot("../Parrot/");
 		InternalLog::LogInfo("Parrot initialized!");
 	}
 	static void Terminate()
@@ -58,9 +58,6 @@ namespace Parrot
 	{
 		s_Scenes.erase(tag);
 	}
-
-	// defined by client
-	extern void Application_OnCreate();
 }
 
 using namespace Parrot;
@@ -69,7 +66,7 @@ int main()
 	s_ApplicationTime.Start();
 	Init();
 	InternalLog::StartScope("OnCreate");
-	Parrot::Application_OnCreate();
+	Application::OnCreate();
 	InternalLog::EndScope();
 	InternalLog::StartScope("Runtime");
 	InternalLog::LogAssert(s_MainWindow, "\"Application_OnCreate()\" needs to create at least one Window!");
