@@ -122,11 +122,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\GLAD\glad.h" />
-    <ClInclude Include="include\KHR\khrplatform.h" />
+    <ClInclude Include="Include\GLAD\glad.h" />
+    <ClInclude Include="Include\KHR\khrplatform.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\glad.c" />
+    <ClCompile Include="Src\glad.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

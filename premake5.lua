@@ -27,7 +27,6 @@ project "Parrot"
 	cppdialect(CppDialect) 
 	
 	files { "%{prj.name}/Src/**", "%{prj.name}/Vendor/Stb/*"}
-	-- files { "%{prj.name}/Vendor/glm/glm/**.hpp", "%{prj.name}/Vendor/glm/glm/**.h", "%{prj.name}/Vendor/glm/glm/**.cpp","%{prj.name}/Vendor/glm/glm/**.c" }
 	includedirs { "$(ProjectDir)", "$(ProjectDir)Src/" }
 	includedirs { "$(ProjectDir)Vendor/GLAD/Include/", "$(ProjectDir)Vendor/GLFW/Include/" }
 	links { "Opengl32.lib", "GLFW", "GLAD" }
@@ -76,4 +75,4 @@ project "Sandbox"
 		runtime "Release"
 		optimize "on"
 		defines { "PT_DIST" }
-	
+	ignoredefaultlibraries { "LIBCMT" }

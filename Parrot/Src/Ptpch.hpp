@@ -6,6 +6,9 @@
 #include <ostream>
 #include <sstream>
 
+// Files
+#include <filesystem>
+
 // Data structures
 #include <map>
 #include <unordered_map>

@@ -22,13 +22,13 @@ namespace Parrot
 		{
 			return new VertexArray_OPENGL(vb, layout);
 		}
-		TextureAPI* CreateTextureAPI(const Utils::Filepath& filepath, const TextureAPI::Config& config)
+		TextureAPI* CreateTextureAPI(const PtTex& ptTex)
 		{
-			return new Texture_OPENGL(filepath, config);
+			return new Texture_OPENGL(ptTex);
 		}
-		ShaderAPI* CreateShaderAPI(const Utils::Filepath& filepath)
+		ShaderAPI* CreateShaderAPI(const PtShader& ptShader)
 		{
-			return new Shader_OPENGL(filepath);
+			return new Shader_OPENGL(ptShader);
 		}
 	#endif // PT_OPENGL
 }

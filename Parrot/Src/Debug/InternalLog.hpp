@@ -14,16 +14,16 @@ namespace Parrot
 			static constexpr const char* Yellow = "\033[93m";
 			static constexpr const char* Red = "\033[91m";
 		};
-#ifndef PT_NLOG
 		static void StartScope(const char* name);
 		static void EndScope();
 		static void EndAllScopes();
+#ifndef PT_NLOG
 
 		template<class... FArgs>
 		static void LogInfo(const char* format, FArgs... fArgs)
 		{
 			NewLog();
-			std::cout << ConsoleColor::Green << "[INTERNAL INFO] ";
+			std::cout << ConsoleColor::Green << "[INFO] ";
 			s_SpaceCount = 16;
 			Message(format, fArgs...);
 			std::cout << '\n';
@@ -32,7 +32,7 @@ namespace Parrot
 		static void LogEvent(const char* format, FArgs... fArgs)
 		{
 			NewLog();
-			std::cout << ConsoleColor::Blue << "[INTERNAL EVENT] ";
+			std::cout << ConsoleColor::Blue << "[EVENT] ";
 			s_SpaceCount = 17;
 			Message(format, fArgs...);
 			std::cout << '\n';
@@ -41,7 +41,7 @@ namespace Parrot
 		static void LogWarning(const char* format, FArgs... fArgs)
 		{
 			NewLog();
-			std::cout << ConsoleColor::Yellow << "[INTERNAL WARNING] ";
+			std::cout << ConsoleColor::Yellow << "[WARNING] ";
 			s_SpaceCount = 18;
 			Message(format, fArgs...);
 			std::cout << '\n';
@@ -50,7 +50,7 @@ namespace Parrot
 		static void LogError(const char* format, FArgs... fArgs)
 		{
 			NewLog();
-			std::cout << ConsoleColor::Red << "[INTERNAL ERROR] ";
+			std::cout << ConsoleColor::Red << "[ERROR] ";
 			s_SpaceCount = 17;
 			Message(format, fArgs...);
 			std::cout << '\n';
@@ -70,9 +70,6 @@ namespace Parrot
 			PT_DEBUGBREAK();
 		}
 #else
-		static void StartScope(const char* name) {}
-		static void EndScope() {}
-		static void EndAllScopes() {}
 
 		template<class... FArgs>
 		static void LogInfo(const char* format, FArgs... fArgs) {}
@@ -91,15 +88,12 @@ namespace Parrot
 		static void Message(const char* format);
 
 		template<class Arg>
-		static inline void PrintParameter(Arg parameter) { std::cout << parameter; }
-		template<> static inline void PrintParameter<const char*>(const char* parameter) { Message(parameter); }
-		template<> static inline void PrintParameter<char*>(char* parameter) { Message(parameter); }
-		template<> static inline void PrintParameter<std::string&>(std::string& parameter) { Message(parameter.c_str()); }
-		template<> static inline void PrintParameter<const std::string&>(const std::string& parameter) { Message(parameter.c_str()); }
-
+		static inline void PrintParameter(const Arg& parameter) { std::cout << parameter; }
+		template<> static inline void PrintParameter<const char*>(const char* const& parameter) { Message(parameter); }
+		template<> static inline void PrintParameter<std::string>(const std::string& parameter) { Message(parameter.c_str()); }
 
 		template<class Arg, class... FArgs>
-		static void Message(const char* format, Arg arg, FArgs... fArgs)
+		static void Message(const char* format, const Arg& arg, const FArgs&... fArgs)
 		{
 			while (*format != '\0')
 			{

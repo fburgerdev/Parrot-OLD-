@@ -10,17 +10,15 @@ project "GLAD"
 
 	files
 	{
-		"include/GLAD/glad.h",
-		"include/KHR/khrplatform.h",
-		"src/glad.c"
+		"Include/GLAD/glad.h",
+		"Include/KHR/khrplatform.h",
+		"Src/glad.c"
 	}
-	
 	
 	includedirs 
 	{
 		"Include"
 	}
-	ignoredefaultlibraries { "LIBCMT" }
 
 	filter "configurations:Debug"
 		runtime "Debug"

@@ -1,30 +1,11 @@
 #pragma once
 #include <iostream>
 #include "Arithmetic.hpp"
-//#include <Vendor/glm/glm/glm.hpp>
-//
-//namespace Parrot
-//{
-//	namespace Math
-//	{ 
-//		typedef glm::vec2 Vec2f;
-//		typedef glm::vec3 Vec3f;
-//		typedef glm::vec4 Vec4f;
-//
-//		typedef glm::ivec2 Vec2i;
-//		typedef glm::ivec3 Vec3i;
-//		typedef glm::ivec4 Vec4i;
-//
-//		typedef glm::uvec2 Vec2u;
-//		typedef glm::uvec3 Vec3u;
-//		typedef glm::uvec4 Vec4u;
-//	}
-//}
+
 namespace Parrot
 {
 	namespace Math
 	{
-		//Structs---------------------------------------------------------------------------------------------------------------
 		template<class T>
 		struct Vector2
 		{
@@ -35,7 +16,6 @@ namespace Parrot
 				struct { T x, y; };
 			};
 
-			// Assignment
 			Vector2(const Vector2<T>& other)
 				: x(other.x), y(other.y) {};
 			Vector2(T x, T y)
@@ -46,13 +26,10 @@ namespace Parrot
 				: x(), y() {}
 			void operator=(const Vector2<T>& other) { x = other.x; y = other.y; }
 
-			// Cast
 			template<class T2> operator Vector2<T2>() const { return Vector2<T2>((T2)x, (T2)y); }
 
-			// Accessing
 			T& operator[](uint8_t index) { if (index == 0) return x; else return y; }
 
-			// Arithmetic operators
 			void operator+=(const Vector2<T>& other) { x += other.x, y += other.y; }
 			void operator-=(const Vector2<T>& other) { x -= other.x, y -= other.y; }
 			Vector2<T> operator+(const Vector2<T>& other) const { return Vector2<T>(x + other.x, y + other.y); }
@@ -66,7 +43,6 @@ namespace Parrot
 			Vector2<T> operator*(const Vector2<T>& other) const { return Vector2<T>(x * other.x, y * other.y); }
 			Vector2<T> operator/(const Vector2<T>& other) const { return Vector2<T>(x / other.x, y / other.y); }
 
-			// Advanced arithmetic
 			void Zeros() { x = 0; y = 0; }
 			inline double LengthSquared() const { return x * x + y * y; }
 			inline double Length() const { return sqrt(LengthSquared()); }
@@ -74,7 +50,6 @@ namespace Parrot
 			void Normalize() { double length = Length(); x /= length; y /= length; }
 			void NormalizeFast() { float inv = QuakeInverseSquareRoot(LengthSquared()); x *= inv; y *= inv; }
 
-			// Comparison
 			inline bool operator==(const Vector2<T>& other) { return x == other.x && y == other.y; }
 			inline bool operator!=(const Vector2<T>& other) { return x != other.x || y != other.y; }
 			inline bool operator<(const Vector2<T>& other) { return x < other.x&& y < other.y; }
@@ -101,7 +76,6 @@ namespace Parrot
 				struct { T r; Vector2<T> gb; };
 			};
 
-			// Assignment
 			Vector3(const Vector3<T>& other)
 				: x(other.x), y(other.y), z(other.z) {};
 			Vector3(const Vector2<T>& xy, T z)
@@ -116,13 +90,10 @@ namespace Parrot
 				: x(), y(), z() {}
 			void operator=(const Vector3<T>& other) { x = other.x; y = other.y; z = other.z; }
 
-			// Cast
 			template<class T2> operator Vector3<T2>() const { return Vector3<T2>((T2)x, (T2)y, (T2)z); }
 
-			// Accessing
 			T& operator[](uint8_t index) { if (index == 0) return x; else if (index == 1)return y; else return z; }
 
-			// Arithmetic operators
 			void operator+=(const Vector3<T>& other) { x += other.x, y += other.y; z += other.z; }
 			void operator-=(const Vector3<T>& other) { x -= other.x, y -= other.y; z -= other.z; }
 			Vector3<T> operator+(const Vector3<T>& other) const { return Vector3<T>(x + other.x, y + other.y, z + other.z); }
@@ -136,7 +107,6 @@ namespace Parrot
 			Vector3<T> operator*(const Vector3<T>& other) const { return Vector3<T>(x * other.x, y * other.y, z * other.z); }
 			Vector3<T> operator/(const Vector3<T>& other) const { return Vector3<T>(x / other.x, y / other.y, z / other.z); }
 
-			// Advanced arithmetic
 			void Zeros() { x = 0; y = 0; z = 0; }
 			inline double LengthSquared() const { return x * x + y * y + z * z; }
 			inline double Length() const { return sqrt(LengthSquared()); }
@@ -144,7 +114,6 @@ namespace Parrot
 			void Normalize() { double length = Length(); x /= length; y /= length; z /= length; }
 			void NormalizeFast() { float inv = QuakeInverseSquareRoot(LengthSquared()); x *= inv; y *= inv; z *= inv; }
 
-			// Comparison
 			inline bool operator==(const Vector3<T>& other) { return x == other.x && y == other.y && z == other.z; }
 			inline bool operator!=(const Vector3<T>& other) { return x != other.x || y != other.y || z != other.z; }
 			inline bool operator<(const Vector3<T>& other) { return x < other.x&& y < other.y&& z < other.z; }
@@ -177,7 +146,6 @@ namespace Parrot
 				struct { T r;  Vector3<T> gba; };
 			};
 
-			// Assignment
 			Vector4(const Vector4<T>& other)
 				: x(other.x), y(other.y), z(other.z), w(other.w) {};
 			Vector4(const Vector3<T>& xyz, T w)
@@ -196,13 +164,10 @@ namespace Parrot
 				: x(), y(), z(), w() {}
 			void operator=(const Vector4<T>& other) { x = other.x; y = other.y; z = other.z; w = other.w; }
 
-			// Cast
 			template<class T2> operator Vector4<T2>() const { return Vector4<T2>((T2)x, (T2)y, (T2)z, (T2)w); }
 
-			// Accessing
 			T& operator[](uint8_t index) { if (index == 0) return x; else if (index == 1)return y; else if (index == 2) return z; else return w; }
 
-			// Arithmetic operators
 			void operator+=(const Vector4<T>& other) { x += other.x, y += other.y; z += other.z; w += other.w; }
 			void operator-=(const Vector4<T>& other) { x -= other.x, y -= other.y; z -= other.z; w -= other.w; }
 			Vector4<T> operator+(const Vector4<T>& other) const { return Vector4<T>(x + other.x, y + other.y, z + other.z, w + other.w); }
@@ -216,7 +181,6 @@ namespace Parrot
 			Vector4<T> operator*(const Vector4<T>& other) const { return Vector4<T>(x * other.x, y * other.y, z * other.z, w * other.w); }
 			Vector4<T> operator/(const Vector4<T>& other) const { return Vector4<T>(x / other.x, y / other.y, z / other.z, w / other.w); }
 
-			// Advanced arithmetic
 			void Zeros() { x = 0; y = 0; z = 0, w = 0; }
 			inline double LengthSquared() const { return x * x + y * y + z * z + w * w; }
 			inline double Length() const { return sqrt(LengthSquared()); }
@@ -224,7 +188,6 @@ namespace Parrot
 			void Normalize() { double length = Length(); x /= length; y /= length; z /= length; w /= length; }
 			void NormalizeFast() { float inv = QuakeInverseSquareRoot(LengthSquared()); x *= inv; y *= inv; z *= inv; w *= inv; }
 
-			// Comparison
 			inline bool operator==(const Vector4<T>& other) { return x == other.x && y == other.y && z == other.z && w == other.w; }
 			inline bool operator!=(const Vector4<T>& other) { return x != other.x || y != other.y || z != other.z || w != other.w; }
 			inline bool operator<(const Vector4<T>& other) { return x < other.x&& y < other.y&& z < other.z&& w < other.w; }
@@ -235,8 +198,6 @@ namespace Parrot
 			friend std::ostream& operator<<(std::ostream& stream, const Vector4<T>& vector) { stream << "Vec4(" << vector.x << ", " << vector.y << ", " << vector.z << ", " << vector.w << ")"; return stream; }
 		};
 
-		// Vector methods-------------------------------------------------------------------------------------------------------
-		// Normalized
 		template<class T>
 		Vector2<T> Normalized(const Vector2<T>& vector)
 		{
@@ -261,14 +222,12 @@ namespace Parrot
 			return output;
 		}
 
-		// CrossProduct
 		template<class T>
 		Vector3<T> CrossProduct(const Vector3<T>& v1, const Vector3<T>& v2)
 		{
 			return Vector3<T>(v1.y * v2.z - v1.z * v2.y, v1.z * v2.x - v1.x * v2.z, v1.x * v2.y - v1.y * v2.x);
 		}
 
-		// DotProduct
 		template<class T>
 		T DotProduct(const Vector2<T>& v1, const Vector2<T>& v2)
 		{
@@ -285,26 +244,13 @@ namespace Parrot
 			return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w * v2.w;
 		}
 
-		// Typedefs-------------------------------------------------------------------------------------------------------------
 		typedef Vector2<int32_t> Vec2i;
 		typedef Vector3<int32_t> Vec3i;
 		typedef Vector4<int32_t> Vec4i;
 
-		//typedef Vector2<int8_t> Vec2i_8;
-		//typedef Vector3<int8_t> Vec3i_8;
-		//typedef Vector4<int8_t> Vec4i_8;
-
 		typedef Vector2<uint32_t> Vec2u;
 		typedef Vector3<uint32_t> Vec3u;
 		typedef Vector4<uint32_t> Vec4u;
-
-		//typedef Vector2<uint8_t> Vec2u_8;
-		//typedef Vector3<uint8_t> Vec3u_8;
-		//typedef Vector4<uint8_t> Vec4u_8;
-
-		//typedef Vector2<double> Vec2d;
-		//typedef Vector3<double> Vec3d;
-		//typedef Vector4<double> Vec4d;
 
 		typedef Vector2<float> Vec2f;
 		typedef Vector3<float> Vec3f;

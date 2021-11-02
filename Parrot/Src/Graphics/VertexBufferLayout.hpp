@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include <GLAD/glad.h>
+#include "Vendor/GLAD/include/glad/glad.h"
 
 namespace Parrot
 {
@@ -32,9 +32,6 @@ namespace Parrot
 
 	class VertexBufferLayout
 	{
-	private:
-		std::vector<VertexBufferElement> elements;
-		unsigned int stride = 0;
 	public:
 		template<typename T>
 		void Push(uint32_t count);
@@ -45,5 +42,8 @@ namespace Parrot
 
 		const std::vector<VertexBufferElement> GetElements() const { return elements; }
 		unsigned int  GetStride() const { return stride; }
+	private:
+		std::vector<VertexBufferElement> elements;
+		unsigned int stride = 0;
 	};
 }

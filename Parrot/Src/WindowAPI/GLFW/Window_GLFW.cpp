@@ -85,7 +85,7 @@ namespace Parrot
 				e.type = Event::Type::WindowLostFocus;
 			s_WindowLookup[window]->OnEvent(e);
 		});
-	    glfwSwapInterval(0);
+	    glfwSwapInterval(1);
 	}
 
 	Window_GLFW::~Window_GLFW()

@@ -14,6 +14,7 @@ public:
 	{
 		if (e.type == Event::Type::WindowCloseRequestEvent)
 			Close();
+		//Log::LogInfo("OnEvent");
 	}
 
 	~MainWindow()

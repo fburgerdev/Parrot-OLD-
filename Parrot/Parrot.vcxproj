@@ -139,6 +139,12 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Assets\AssetManager.hpp" />
+    <ClInclude Include="Src\Assets\Formats\PtMesh.hpp" />
+    <ClInclude Include="Src\Assets\Formats\PtScene.hpp" />
+    <ClInclude Include="Src\Assets\Formats\PtShader.hpp" />
+    <ClInclude Include="Src\Assets\Formats\PtTex.hpp" />
+    <ClInclude Include="Src\Assets\Formats\PtWindow.hpp" />
     <ClInclude Include="Src\ClientInterface\Application.hpp" />
     <ClInclude Include="Src\ClientInterface\Scene\Components\Component.hpp" />
     <ClInclude Include="Src\ClientInterface\Scene\Components\Mesh.hpp" />
@@ -166,12 +172,17 @@
     <ClInclude Include="Src\Renderer\MeshRenderer\MeshVertex.hpp" />
     <ClInclude Include="Src\Utils\Filepath.hpp" />
     <ClInclude Include="Src\Utils\Stopwatch.hpp" />
-    <ClInclude Include="Src\Utils\StrFuncs.hpp" />
     <ClInclude Include="Src\WindowAPI\GLFW\Window_GLFW.hpp" />
     <ClInclude Include="Src\WindowAPI\WindowAPI.hpp" />
     <ClInclude Include="Vendor\Stb\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Assets\AssetManager.cpp" />
+    <ClCompile Include="Src\Assets\Formats\PtMesh.cpp" />
+    <ClCompile Include="Src\Assets\Formats\PtScene.cpp" />
+    <ClCompile Include="Src\Assets\Formats\PtShader.cpp" />
+    <ClCompile Include="Src\Assets\Formats\PtTex.cpp" />
+    <ClCompile Include="Src\Assets\Formats\PtWindow.cpp" />
     <ClCompile Include="Src\ClientInterface\Application.cpp" />
     <ClCompile Include="Src\ClientInterface\Scene\Scene.cpp" />
     <ClCompile Include="Src\ClientInterface\Scene\SceneObject.cpp" />
@@ -194,6 +205,11 @@
     <ClCompile Include="Src\WindowAPI\GLFW\Window_GLFW.cpp" />
     <ClCompile Include="Src\WindowAPI\WindowAPI.cpp" />
     <ClCompile Include="Vendor\Stb\stb_image.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Src\Assets\Defaults\MainWindow.PTWNDW" />
+    <None Include="Src\Assets\Defaults\MainWindow.WNDW" />
+    <None Include="Src\Assets\Defaults\Quad.MSH" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Vendor\GLFW\GLFW.vcxproj">

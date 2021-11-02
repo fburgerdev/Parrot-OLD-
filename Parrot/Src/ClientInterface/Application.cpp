@@ -1,7 +1,7 @@
 #include "Ptpch.hpp"
 #include "Application.hpp"
 #include "Debug/InternalLog.hpp"
-#include "Utils/Filepath.hpp"
+#include "Assets/AssetManager.hpp"
 
 namespace Parrot
 {
@@ -13,12 +13,15 @@ namespace Parrot
 
 	static void Init()
 	{
-		Utils::Filepath::SetRoot("../Parrot/");
-		InternalLog::LogInfo("Parrot initialized!");
+		Utils::Filepath::SetRoot("../Parrot/Src/Assets/Defaults/");
+		AssetManager::LoadAsset(Utils::Filepath("Quad.PTMESH"));
+		InternalLog::LogInfo("Default Assets loaded successfully!");
+
+		InternalLog::LogInfo("Parrot initialized successfully!");
 	}
 	static void Terminate()
 	{
-		InternalLog::LogInfo("Parrot terminated!");
+		InternalLog::LogInfo("Parrot terminated successfully!");
 	}
 
 	// application member
@@ -69,7 +72,7 @@ int main()
 	Application::OnCreate();
 	InternalLog::EndScope();
 	InternalLog::StartScope("Runtime");
-	InternalLog::LogAssert(s_MainWindow, "\"Application_OnCreate()\" needs to create at least one Window!");
+	InternalLog::LogAssert(s_MainWindow, "\"Application::OnCreate()\" needs to create at least one Window!");
 	while (s_MainWindow && !s_MainWindow->ShouldClose())
 	{
 		for (auto& window : s_Windows)

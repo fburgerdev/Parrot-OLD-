@@ -15,6 +15,7 @@ namespace Parrot
 			std::string FullPath() const;
 			std::string_view Extension() const;
 			std::string_view Filename() const;
+			std::string_view FilenameNExt() const;
 		private:
 			static std::string s_Root;
 			std::string m_Filepath;

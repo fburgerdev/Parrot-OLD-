@@ -1,36 +1,15 @@
 #include "Ptpch.hpp"
 #include "Shader_OPENGL.hpp"
-#include "Utils/StrFuncs.hpp"
 #include "Debug/InternalLog.hpp"
 
 namespace Parrot
 {
-	Shader_OPENGL::Shader_OPENGL(const Utils::Filepath& filepath)
-		: m_ID(0), m_Filepath(filepath)
+	Shader_OPENGL::Shader_OPENGL(const PtShader& ptShader)
+		: m_Filepath(ptShader.GetFilepath()), m_ID(0)
 	{
-		InternalLog::LogAssert(Utils::StrIsEqual("GLSL", filepath.Extension().data()), "Couldn't identify shader format in \"%\"! Shaders currently only support \".GLSL\".", filepath.Filename());
-
-		std::ifstream stream(filepath.FullPath().c_str());
-		InternalLog::LogAssert(stream.is_open(), "Shader File with path \"%\" couldn't be loaded! Check if the path is correct and the file isn't corrupted.", filepath.FullPath());
-		std::stringstream ss[2];
-		std::string line;
-		int32_t index = -1;
-		while (std::getline(stream, line))
-		{
-			if (line.find("#") != std::string::npos)
-			{
-				if (line.find("vertex") != std::string::npos)
-					index = 0;
-				else if (line.find("fragment") != std::string::npos)
-					index = 1;
-			}
-			if (index != -1)
-				ss[index] << line << '\n';
-		}
-
 		m_ID = glCreateProgram();
-		uint32_t vs = CompileShader(GL_VERTEX_SHADER, ss[0].str());
-		uint32_t fs = CompileShader(GL_FRAGMENT_SHADER, ss[1].str());
+		uint32_t vs = CompileShader(GL_VERTEX_SHADER, ptShader.GetData().vertexSrc);
+		uint32_t fs = CompileShader(GL_FRAGMENT_SHADER, ptShader.GetData().fragmentSrc);
 		glAttachShader(m_ID, vs);
 		glAttachShader(m_ID, fs);
 		glLinkProgram(m_ID);
@@ -52,6 +31,40 @@ namespace Parrot
 	{
 		glUseProgram(0);
 	}
+
+    void Shader_OPENGL::SetUniformInt(const std::string& identifier, int32_t val)
+    {
+        glUniform1i(GetUniformLocation(identifier), val);
+    }
+    void Shader_OPENGL::SetUniformVec2i(const std::string& identifier, Math::Vec2i val)
+    {
+        glUniform2i(GetUniformLocation(identifier), val.x, val.y);
+    }
+    void Shader_OPENGL::SetUniformVec3i(const std::string& identifier, Math::Vec3i val)
+    {
+        glUniform3i(GetUniformLocation(identifier), val.x, val.y, val.z);
+    }
+    void Shader_OPENGL::SetUniformVec4i(const std::string& identifier, Math::Vec4i val)
+    {
+        glUniform4i(GetUniformLocation(identifier), val.x, val.y, val.z, val.w);
+    }
+
+    void Shader_OPENGL::SetUniformFloat(const std::string& identifier, float val)
+    {
+        glUniform1f(GetUniformLocation(identifier), val);
+    }
+    void Shader_OPENGL::SetUniformVec2f(const std::string& identifier, Math::Vec2f val)
+    {
+        glUniform2f(GetUniformLocation(identifier), val.x, val.y);
+    }
+    void Shader_OPENGL::SetUniformVec3f(const std::string& identifier, Math::Vec3f val)
+    {
+        glUniform3f(GetUniformLocation(identifier), val.x, val.y, val.z);
+    }
+    void Shader_OPENGL::SetUniformVec4f(const std::string& identifier, Math::Vec4f val)
+    {
+        glUniform4f(GetUniformLocation(identifier), val.x, val.y, val.z, val.w);
+    }
 
 	uint32_t Shader_OPENGL::CompileShader(int32_t shaderType, const std::string& source)
 	{
@@ -122,4 +135,15 @@ namespace Parrot
         InternalLog::LogInfo("% Shader \"%\" compilation successful!", shaderType == GL_VERTEX_SHADER ? "Vertex" : "Fragment", m_Filepath.Filename());
         return id;
 	}
+    uint32_t Shader_OPENGL::GetUniformLocation(const std::string& identifier)
+    {
+        if (m_ULocationCache.find(identifier) != m_ULocationCache.end())
+            return m_ULocationCache[identifier];
+        int32_t location = glGetUniformLocation(m_ID, identifier.c_str());
+        if (location == -1)
+            InternalLog::LogWarning("Uniform \"%s\" doesn't exist in shader \"%s\"", identifier.c_str(), m_Filepath.FilenameNExt());
+
+        m_ULocationCache[identifier] = location;
+        return location;
+    }
 }

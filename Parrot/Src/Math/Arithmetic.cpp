@@ -17,7 +17,7 @@ namespace Parrot
 			return y * (1.5f - (number * 0.5f * y * y));
 		}
 
-		float QuakeSquareRoot(float number)
+		inline float QuakeSquareRoot(float number)
 		{
 			return QuakeInverseSquareRoot(number * number);
 		}
