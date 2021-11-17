@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-#include "Vendor/GLAD/include/glad/glad.h"
 
 namespace Parrot
 {

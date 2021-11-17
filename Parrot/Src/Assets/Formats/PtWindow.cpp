@@ -1,17 +1,40 @@
 #include "Ptpch.hpp"
 #include "PtWindow.hpp"
+#include "Assets/AssetManager.hpp"
+#include "Utils/FileRead.hpp"
 #include "Debug/InternalLog.hpp"
+#include "Core/LogMessages.hpp"
 
 namespace Parrot
 {
 	PtWindow::PtWindow(const Utils::Filepath& filepath)
 		: m_Filepath(filepath)
 	{
-		std::ifstream stream(filepath.FullPath());
-		InternalLog::LogAssert(stream.is_open(), "File \"%\" could not be opened. Either the file doesn't exist or it is already opened by another process.", filepath.FullPath());
+		std::ifstream stream(filepath.GetFullPath());
+		InternalLog::LogAssert(stream.is_open(), StreamNotOpenErrorMsg, filepath.GetFullPath());
 		
-		std::getline(stream, m_Data.defaultScene);
-		stream.read((char*)&m_Data.size, sizeof(Math::Vec2u));
+		std::string line;
+		std::string key;
+		std::string arg;
+		while (std::getline(stream, line))
+		{
+			Utils::GetKey(line, key);
+			if (key == "Scene")
+			{
+				Utils::GetArg(line, arg);
+				Utils::Filename filename(arg);
+				if (!AssetManager::IsAssetLoaded(filename))
+					AssetManager::LoadAsset(filename);
+				m_Data.scene = filename.GetName();
+			}
+			else if (key == "Style")
+				Utils::GetArg(line, m_Data.style);
+			else if (key == "Size")
+			{
+				Utils::GetArg(line, arg);
+				m_Data.size = Utils::ArgToVec2u(arg);
+			}
+		}
 		stream.close();
 	}
 

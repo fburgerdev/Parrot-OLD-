@@ -5,14 +5,11 @@
 
 namespace Parrot
 {
-	class Application
-	{
-	public:
-		static void OnCreate();
-	public:
-		static Window& GetWindow(const std::string& tag);
-		static Scene& GetScene(const std::string& tag);
+	namespace Application
+	{		
+		Window& GetWindow(const std::string& tag);
+		Window& MainWindow();
 
-		static Utils::Timestep AbsTime();
-	};
+		Utils::Timestep AbsTime();
+	}
 }

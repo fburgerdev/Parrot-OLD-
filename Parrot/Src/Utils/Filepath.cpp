@@ -5,35 +5,48 @@ namespace Parrot
 {
 	namespace Utils
 	{
-		void Filepath::SetRoot(const std::string& root)
-		{
-			s_Root = root;
-		}
-
 		Filepath::Filepath(const std::string& filepath)
-			: m_Filepath(filepath) {}
-
-		std::string Filepath::FullPath() const
+			: m_Directory(filepath.substr(0, filepath.find_last_of('\\') + 1)), m_Filename(filepath.substr(m_Directory.String().length(), filepath.length() - m_Directory.String().length())) {}
+		Filepath::Filepath(const Filepath& filepath)
+			: m_Directory(filepath.m_Directory), m_Filename(filepath.m_Filename) {}
+		std::string Filepath::GetFullPath() const
 		{
-			return s_Root + m_Filepath;
+			return m_Directory.String() + m_Filename.String();
+		}
+		const Directory& Filepath::GetDirectory() const
+		{
+			return m_Directory;
+		}
+		const Filename& Filepath::GetFilename() const
+		{
+			return m_Filename;
 		}
 
-		std::string_view Filepath::Extension() const
+
+		Directory::Directory(const std::string& directory)
+			: m_String(directory) {}
+		Directory::Directory(const Directory& directory)
+			: m_String(directory.m_String) {}
+		const std::string& Directory::String() const
 		{
-			size_t offset = m_Filepath.find_first_of('.') + 1;
-			return std::string_view(m_Filepath.c_str() + offset, m_Filepath.size() - offset);
+			return m_String;
 		}
-		std::string_view Filepath::Filename() const
+		
+		Filename::Filename(const std::string& filename)
+			: m_String(filename), m_NameLength(filename.find_last_of('.')) {}
+		Filename::Filename(const Filename& filename)
+			: m_String(filename.m_String), m_NameLength(filename.m_NameLength) {}
+		const std::string& Filename::String() const
 		{
-			size_t offset = m_Filepath.find_last_of('/') + 1;
-			return std::string_view(m_Filepath.c_str() + offset, m_Filepath.size() - offset);
+			return m_String;
 		}
-		std::string_view Filepath::FilenameNExt() const
+		std::string_view Filename::GetExtension() const
 		{
-			size_t start = m_Filepath.find_last_of('/') + 1;
-			size_t end = m_Filepath.find_first_of('.');
-			return std::string_view(m_Filepath.c_str() + start, end - start);
+			return std::string_view(m_String.c_str() + m_NameLength + 1, m_String.length() - m_NameLength - 1);
 		}
-		std::string Filepath::s_Root;
+		std::string_view Filename::GetName() const
+		{
+			return std::string_view(m_String.c_str(), m_NameLength);
+		}
 	}
 }

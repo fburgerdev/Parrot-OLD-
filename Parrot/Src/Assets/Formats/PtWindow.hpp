@@ -9,8 +9,9 @@ namespace Parrot
 	public:
 		struct Data
 		{
-			std::string defaultScene;
-			Math::Vec2u size;
+			std::string scene;
+			Math::Vec2u size = Math::Vec2u(1080, 720);
+			std::string style = "default";
 		};
 	public:
 		PtWindow(const Utils::Filepath& filepath);

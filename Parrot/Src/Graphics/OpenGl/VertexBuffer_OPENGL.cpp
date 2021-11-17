@@ -4,7 +4,7 @@
 
 namespace Parrot
 {
-	VertexBuffer_OPENGL::VertexBuffer_OPENGL(const void* vertices, uint32_t size, bool isStatic)
+	VertexBuffer_OPENGL::VertexBuffer_OPENGL(const void* vertices, size_t size, bool isStatic)
 		: m_ID(0), m_IsStatic(isStatic)
 	{
 		glGenBuffers(1, &m_ID);
@@ -28,7 +28,7 @@ namespace Parrot
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
-	void VertexBuffer_OPENGL::OverwriteData(const void* vertices, uint32_t size, uint32_t offset)
+	void VertexBuffer_OPENGL::OverwriteData(const void* vertices, size_t size, size_t offset)
 	{
 		if (m_IsStatic)
 			glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);

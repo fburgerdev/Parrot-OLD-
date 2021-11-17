@@ -13,6 +13,8 @@ namespace Parrot
 			static constexpr const char* Blue = "\033[96m";
 			static constexpr const char* Yellow = "\033[93m";
 			static constexpr const char* Red = "\033[91m";
+			static constexpr const char* Underlined = "\033[4m";
+			static constexpr const char* NUnderlined = "\033[24m";
 		};
 		static void StartScope(const char* name);
 		static void EndScope();
@@ -24,7 +26,7 @@ namespace Parrot
 		{
 			NewLog();
 			std::cout << ConsoleColor::Green << "[INFO] ";
-			s_SpaceCount = 16;
+			s_SpaceCount = 7;
 			Message(format, fArgs...);
 			std::cout << '\n';
 		}
@@ -33,7 +35,7 @@ namespace Parrot
 		{
 			NewLog();
 			std::cout << ConsoleColor::Blue << "[EVENT] ";
-			s_SpaceCount = 17;
+			s_SpaceCount = 8;
 			Message(format, fArgs...);
 			std::cout << '\n';
 		}
@@ -42,7 +44,7 @@ namespace Parrot
 		{
 			NewLog();
 			std::cout << ConsoleColor::Yellow << "[WARNING] ";
-			s_SpaceCount = 18;
+			s_SpaceCount = 10;
 			Message(format, fArgs...);
 			std::cout << '\n';
 		}
@@ -51,22 +53,20 @@ namespace Parrot
 		{
 			NewLog();
 			std::cout << ConsoleColor::Red << "[ERROR] ";
-			s_SpaceCount = 17;
+			s_SpaceCount = 8;
 			Message(format, fArgs...);
 			std::cout << '\n';
 		}
 		template<class... FArgs>
 		static void LogAssert(bool success, const char* format, FArgs... fArgs)
 		{
-			static constexpr const char* s_Underlined = "\033[4m";
-			static constexpr const char* s_NUnderlined = "\033[24m";
 			if (success)
 				return;
 			NewLog();
-			std::cout << ConsoleColor::Red << s_Underlined << "[FATAL ERROR] ";
-			s_SpaceCount = 11;
+			std::cout << ConsoleColor::Red << ConsoleColor::Underlined << "[FATAL ERROR] ";
+			s_SpaceCount = 14;
 			Message(format, fArgs...);
-			std::cout << s_NUnderlined << '\n';
+			std::cout << ConsoleColor::NUnderlined << std::endl;
 			PT_DEBUGBREAK();
 		}
 #else
@@ -104,11 +104,13 @@ namespace Parrot
 				}
 				std::cout << *format;
 				if (*format++ == '\n')
+				{
+					std::cout << ConsoleColor::NUnderlined;
 					IndentToCurrentLog();
+				}
 			}
 		}
 	private:
-		static uint32_t s_CurrLine;
 		static uint32_t s_SpaceCount;
 	};
 }

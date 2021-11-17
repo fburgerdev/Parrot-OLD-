@@ -1,20 +1,27 @@
 #include "Ptpch.hpp"
-#include "Input.hpp"
+#include "InternalInput.hpp"
 
 namespace Parrot
 {
-	static Mouse::ButtonState s_MouseButtons[3] = { Mouse::ButtonState::Released };
-	static Keyboard::KeyState s_Keys[350] = { Keyboard::KeyState::Released };
-	void HIDDEN_SetMouseButtonState(Mouse::Button button, Mouse::ButtonState state) { s_MouseButtons[(uint32_t)button] = state; }
-	void HIDDEN_SetKeyboardKeyState(Keyboard::KeyCode keyCode, Keyboard::KeyState state) { s_Keys[(uint32_t)keyCode] = state; }
-
-	Mouse::ButtonState Mouse::GetButtonState(Mouse::Button button)
+	static MouseButtonState s_MouseButtons[3] = { MouseButtonState::Released };
+	static KeyState s_Keys[350] = { KeyState::Released };
+	
+	MouseButtonState GetButtonState(MouseButton button)
 	{
 		return s_MouseButtons[(uint32_t)button];
 	}
 		
-	Keyboard::KeyState Keyboard::GetKeyState(Keyboard::KeyCode key)
+	KeyState GetKeyState(KeyCode key)
 	{
 		return s_Keys[(uint32_t)key];
+	}
+
+	void SetMouseButtonState(MouseButton button, MouseButtonState state)
+	{
+		s_MouseButtons[(uint32_t)button] = state;
+	}
+	void SetKeyboardKeyState(KeyCode keyCode, KeyState state)
+	{
+		s_Keys[(uint32_t)keyCode] = state;
 	}
 }

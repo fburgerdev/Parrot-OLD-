@@ -5,20 +5,41 @@ namespace Parrot
 {
 	namespace Utils
 	{
+		class Directory
+		{
+		public:
+			Directory(const std::string& directory);
+			Directory(const Directory& directory);
+
+			const std::string& String() const;
+		private:
+			std::string m_String;
+		};
+		class Filename
+		{
+		public:
+			Filename(const std::string& filename);
+			Filename(const Filename& filename);
+
+			const std::string& String() const;
+			std::string_view GetExtension() const;
+			std::string_view GetName() const;
+		private:
+			std::string m_String;
+			size_t m_NameLength;
+		};
 		class Filepath
 		{
 		public:
-			static void SetRoot(const std::string& root);
-
 			Filepath(const std::string& filepath);
+			Filepath(const Filepath& filepath);
 
-			std::string FullPath() const;
-			std::string_view Extension() const;
-			std::string_view Filename() const;
-			std::string_view FilenameNExt() const;
+			std::string GetFullPath() const;
+			const Directory& GetDirectory() const;
+			const Filename& GetFilename() const;
 		private:
-			static std::string s_Root;
-			std::string m_Filepath;
+			Directory m_Directory;
+			Filename m_Filename;
 		};
 	}
 }

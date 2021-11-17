@@ -5,16 +5,17 @@ namespace Parrot
 {
 	// defined in "InternalLog.cpp"
 	const std::string& HIDDEN_GetLogTabs();
+	uint32_t& HIDDEN_GetLineNumber();
 
 	void Log::NewLog()
 	{
-		std::cout << ConsoleColor::White << '(' << s_CurrLine++ << ")\t" << HIDDEN_GetLogTabs();
+		std::cout << ConsoleColor::White << '(' << HIDDEN_GetLineNumber()++ << ")\t" << HIDDEN_GetLogTabs();
 	}
 
 	void Log::IndentToCurrentLog()
 	{
 		std::cout << HIDDEN_GetLogTabs() << '\t';
-		for (uint32_t i = 0; i < s_SpaceCount; i++)
+		for (uint32_t i = 0; i < s_SpaceCount; ++i)
 			std::cout << ' ';
 	}
 
@@ -28,6 +29,5 @@ namespace Parrot
 		}
 	}
 
-	uint32_t Log::s_CurrLine = 1;
 	uint32_t Log::s_SpaceCount = 0;
 }

@@ -1,5 +1,6 @@
 #include "Ptpch.hpp"
 #include "VertexArray_OPENGL.hpp"
+#include <GLAD/glad.h>
 
 namespace Parrot
 {
@@ -10,7 +11,7 @@ namespace Parrot
 		vb->Bind();
 		auto& elements = layout.GetElements();
 		uint64_t offset = 0;
-		for (unsigned int i = 0; i < elements.size(); i++)
+		for (unsigned int i = 0; i < elements.size(); ++i)
 		{
 			const auto& element = elements[i];
 			glEnableVertexAttribArray(i);

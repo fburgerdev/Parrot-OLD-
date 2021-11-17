@@ -1,32 +1,34 @@
 #pragma once
-#include "Ptpch.hpp"
-#include "Components/Transform.hpp"
-#include "Components/Mesh.hpp"
+#include <string>
+#include <unordered_map>
+#include "Components.hpp"
+#include "Assets/Formats/PtSceneObject.hpp"
 
 namespace Parrot
-{
+{	
+	class Scene;
 	class SceneObject
 	{
 	public:
-		Transform transform;
-	public:
-		SceneObject(const std::string& tag);
-		virtual ~SceneObject();
+		SceneObject(Scene& scene, const PtSceneObject& ptSceneObj);
+		~SceneObject();
 
 		const std::string& GetTag() const;
-		
+		Scene& GetScene();
+
+		bool ContainsComponent(ComponentType type);
 		template<class _Type, class... _Args>
-		_Type& AddComponent(_Args... args);
-		template<>
-		Mesh& AddComponent<Mesh>(Mesh::DefaultMesh defaultMesh)
-		{
-			Mesh* mesh = new Mesh(defaultMesh);
-			m_Components[Component::Type::Mesh] = mesh;
-			return *mesh;
-		}
+		_Type& AddComponent(const _Args&... args);
+		template<class _Type>
+		_Type& GetComponent();
+
+		std::unordered_map<std::string, Script*>& GetScripts();
+	public:
+		Transform transform;
 	private:
 		std::string m_Tag;
-
-		std::unordered_map<Component::Type, Component*> m_Components;
+		Scene& m_Scene;
+		std::unordered_map<ComponentType, void*> m_Components;
+		std::unordered_map<std::string, Script*> m_Scripts;
 	};
 }

@@ -1,28 +1,27 @@
 #include "Ptpch.hpp"
 #include "Texture_OPENGL.hpp"
+#include <GLAD/glad.h>
 
 namespace Parrot
 {
-	Texture_OPENGL::Texture_OPENGL(const PtTex& ptTex)
+	Texture_OPENGL::Texture_OPENGL(const uint8_t* buffer, const Math::Vec2u& size, const TextureAPI::Settings& settings)
 		: m_ID(0)
 	{
-		const PtTex::Settings& settings = ptTex.GetData().settings;
-
 		glGenTextures(1, &m_ID);
 		glBindTexture(GL_TEXTURE_2D, m_ID);
 		glEnable(GL_TEXTURE_2D);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, ptTex.GetData().size.x, ptTex.GetData().size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, ptTex.GetData().buffer);
-		if (settings.mipmap != PtTex::Settings::Mipmap::None)
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.x, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+		if (settings.mipmap != TextureAPI::Settings::Mipmap::None)
 			glGenerateMipmap(GL_TEXTURE_2D);
 
 		int32_t minFilter;
-		if (settings.mipmap == PtTex::Settings::Mipmap::None)
+		if (settings.mipmap == TextureAPI::Settings::Mipmap::None)
 			minFilter = (int32_t)settings.minFilter;
-		else if (settings.minFilter == PtTex::Settings::Filter::Linear && settings.mipmap == PtTex::Settings::Mipmap::Linear)
+		else if (settings.minFilter == TextureAPI::Settings::Filter::Linear && settings.mipmap == TextureAPI::Settings::Mipmap::Linear)
 			minFilter = GL_LINEAR_MIPMAP_LINEAR;
-		else if (settings.minFilter == PtTex::Settings::Filter::Linear && settings.mipmap == PtTex::Settings::Mipmap::Nearest)
+		else if (settings.minFilter == TextureAPI::Settings::Filter::Linear && settings.mipmap == TextureAPI::Settings::Mipmap::Nearest)
 			minFilter = GL_LINEAR_MIPMAP_NEAREST;
-		else if (settings.minFilter == PtTex::Settings::Filter::Nearest && settings.mipmap == PtTex::Settings::Mipmap::Linear)
+		else if (settings.minFilter == TextureAPI::Settings::Filter::Nearest && settings.mipmap == TextureAPI::Settings::Mipmap::Linear)
 			minFilter = GL_NEAREST_MIPMAP_LINEAR;
 		else
 			minFilter = GL_NEAREST_MIPMAP_NEAREST;

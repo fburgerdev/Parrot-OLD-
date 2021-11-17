@@ -5,14 +5,16 @@ namespace Parrot
 {
 	// both used by internal logging and client logging
 	static std::string s_Tabs;
+	static uint32_t s_lineNumber = 1;
 	const std::string& HIDDEN_GetLogTabs() { return s_Tabs; }
+	uint32_t& HIDDEN_GetLineNumber() { return s_lineNumber; }
 
-#ifdef N_LOG
+#ifndef PT_NLOG
 	void InternalLog::StartScope(const char* name)
 	{
 		s_SpaceCount = 0;
 		IndentToCurrentLog();
-		std::cout << ConsoleColor::White << "(SCOPE) " << name << '\n';
+		std::cout << ConsoleColor::White << "[SCOPE] " << name << '\n';
 		s_Tabs.push_back('\t');
 	}
 	void InternalLog::EndScope()
@@ -35,13 +37,13 @@ namespace Parrot
 
 	void InternalLog::NewLog()
 	{
-		std::cout << ConsoleColor::White << '(' << s_CurrLine++ << ")\t" << s_Tabs;
+		std::cout << ConsoleColor::White << '(' << s_lineNumber++ << ")\t" << s_Tabs;
 	}
 
 	void InternalLog::IndentToCurrentLog()
 	{
 		std::cout << s_Tabs << '\t';
-		for (uint32_t i = 0; i < s_SpaceCount; i++)
+		for (uint32_t i = 0; i < s_SpaceCount; ++i)
 			std::cout << ' ';
 	}
 
@@ -55,6 +57,5 @@ namespace Parrot
 		}
 	}
 
-	uint32_t InternalLog::s_CurrLine = 1;
 	uint32_t InternalLog::s_SpaceCount = 0;
 }

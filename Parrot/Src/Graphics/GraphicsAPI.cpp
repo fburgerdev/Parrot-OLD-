@@ -14,7 +14,7 @@ namespace Parrot
 		{
 			return new IndexBuffer_OPENGL(indices, count, isStatic);
 		}
-		VertexBufferAPI* CreateVertexBufferAPI(const void* vertices, uint32_t size, bool isStatic)
+		VertexBufferAPI* CreateVertexBufferAPI(const void* vertices, size_t size, bool isStatic)
 		{
 			return new VertexBuffer_OPENGL(vertices, size, isStatic);
 		}
@@ -22,13 +22,13 @@ namespace Parrot
 		{
 			return new VertexArray_OPENGL(vb, layout);
 		}
-		TextureAPI* CreateTextureAPI(const PtTex& ptTex)
+		TextureAPI* CreateTextureAPI(const uint8_t* buffer, Math::Vec2u size, const TextureAPI::Settings& settings)
 		{
-			return new Texture_OPENGL(ptTex);
+			return new Texture_OPENGL(buffer, size, settings);
 		}
-		ShaderAPI* CreateShaderAPI(const PtShader& ptShader)
+		ShaderAPI* CreateShaderAPI(const std::string& vertexSrc, const std::string& fragmentSrc)
 		{
-			return new Shader_OPENGL(ptShader);
+			return new Shader_OPENGL(vertexSrc, fragmentSrc);
 		}
 	#endif // PT_OPENGL
 }

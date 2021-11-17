@@ -1,5 +1,4 @@
 #pragma once 
-#include <unordered_map>
 #include "Formats/PtTex.hpp"
 #include "Formats/PtShader.hpp"
 #include "Formats/PtMesh.hpp"
@@ -8,25 +7,33 @@
 
 namespace Parrot
 {
-	class AssetManager
+	// the asset manager handles asset lifetime and gives the opportunity to access assets globaly
+	namespace AssetManager
 	{
-	public:
-		static void ConvertToAsset(const Utils::Filepath& src, const Utils::Filepath& dst);
-		static void ConvertToAssetIfNExist(const Utils::Filepath& src, const Utils::Filepath& dst);
+		// lists all supported custom file formats
+		enum class Format : int8_t
+		{
+			Unknown = -1, Mesh, Shader, Texture, Scene, Window
+		};
+		
+		// directory handling
+		const Utils::Directory& GetAssetDir();
 
-		static void LoadAsset(const Utils::Filepath& filepath);
-		static void UnloadAsset(const Utils::Filepath& filepath);
+		// asset lifetime
+		bool LoadAsset(const Utils::Filename& filename);
+		bool IsAssetLoaded(const Utils::Filename& filename);
+		void UnloadAsset(const Utils::Filename& filename);
 
-		static const PtTex& GetTexture(const std::string& name);
-		static const PtShader& GetShader(const std::string& name);
-		static const PtMesh& GetMesh(const std::string& name);
-		static const PtWindow& GetWindow(const std::string& name);
-		static const PtScene& GetScene(const std::string& name);
-	private:
-		static std::unordered_map<std::string, PtTex*> s_Textures;
-		static std::unordered_map<std::string, PtShader*> s_Shaders;
-		static std::unordered_map<std::string, PtMesh*> s_Meshes;
-		static std::unordered_map<std::string, PtWindow*> s_Windows;
-		static std::unordered_map<std::string, PtScene*> s_Scenes;
-	};
+		// asset accessing
+		PtTex& GetTextureAsset(const Utils::Filename& filename);
+		PtTex& GetTextureAsset(const std::string& name);
+		PtShader& GetShaderAsset(const Utils::Filename& filenamee);
+		PtShader& GetShaderAsset(const std::string& name);
+		PtMesh& GetMeshAsset(const Utils::Filename& filename);
+		PtMesh& GetMeshAsset(const std::string& name);
+		PtWindow& GetWindowAsset(const Utils::Filename& filename);
+		PtWindow& GetWindowAsset(const std::string& name);
+		PtScene& GetSceneAsset(const Utils::Filename& filename);
+		PtScene& GetSceneAsset(const std::string& name);
+	}
 }

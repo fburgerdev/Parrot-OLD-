@@ -1,5 +1,7 @@
 #pragma once
 #include "Utils/Filepath.hpp"
+#include "PtSceneObject.hpp"
+#include <vector>
 
 namespace Parrot
 {
@@ -8,7 +10,8 @@ namespace Parrot
 	public:
 		struct Data
 		{
-
+			size_t objCount = 0;
+			PtSceneObject* objs = nullptr;
 		};
 	public:
 		PtScene(const Utils::Filepath& filepath);

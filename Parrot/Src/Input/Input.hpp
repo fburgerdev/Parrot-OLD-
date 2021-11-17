@@ -3,32 +3,23 @@
 
 namespace Parrot
 {
-	class Mouse
+	enum class MouseButton : uint32_t
 	{
-	public:
-		enum class Button : uint32_t
-		{
-			Left = 0, Right, Middle
-		};
-		enum class ButtonState : uint32_t
-		{
-			Released = 0, Pressed
-		};
-		static ButtonState GetButtonState(Button button);
+		Left = 0, Right, Middle
+	};
+	enum class MouseButtonState : uint32_t
+	{
+		Released = 0, Pressed
 	};
 
-	class Keyboard
-	{
-	public:
-		enum class KeyCode : uint32_t;
-		enum class KeyState : uint32_t
-		{
-			Released = 0, Pressed, Repeated
-		};
-		static KeyState GetKeyState(KeyCode keyCode);
-	};
+	MouseButtonState GetMouseButton(MouseButtonState button);
 
-	enum class Keyboard::KeyCode : uint32_t
+	enum class KeyState : uint32_t
+	{
+		Released = 0, Pressed, Repeated
+	}; 
+	
+	enum class KeyCode : uint32_t
 	{
 		KEY_SPACE = 32,
 		KEY_APOSTROPHE = 39,
@@ -149,4 +140,6 @@ namespace Parrot
 		KEY_RIGHT_SUPER = 347,
 		KEY_MENU = 348
 	};
+
+	KeyState GetKeyState(KeyCode keyCode);
 }

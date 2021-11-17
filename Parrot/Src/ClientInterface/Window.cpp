@@ -1,26 +1,28 @@
 #include "Ptpch.hpp"
-#include "Application.hpp"
 #include "Window.hpp"
+#include "InternalApplication.hpp"
 #include "WindowAPI/WindowAPI.hpp"
+#include "Assets/AssetManager.hpp"
+#include "Debug/InternalLog.hpp"
 
 namespace Parrot
 {
-	// defined in "Application.cpp"
-	void HIDDEN_ApplicationAddWindow(const std::string& tag, Window* window);
-	void HIDDEN_ApplicationRemoveWindow(const std::string& tag);
-	
-	// class
-	Window::Window(const std::string& tag, Math::Vec2u size)
-		: m_Tag(tag), m_WindowAPI(CreateWindowAPI(tag, size, this)), m_ShouldClose(false), m_LoadedScene(nullptr)
+	Window::Window(const PtWindow& ptWindow)
+		: m_Tag(ptWindow.GetFilepath().GetFilename().GetName()), m_WindowAPI(CreateWindowAPI(m_Tag, ptWindow.GetData().size)), m_ShouldClose(false), m_Scene(nullptr)
 	{
-		HIDDEN_ApplicationAddWindow(tag, this);
+		Application::AddWindow(m_Tag, this);
+		m_Scene = new Scene(*this, AssetManager::GetSceneAsset(ptWindow.GetData().scene));
 	}
 	
 	Window::~Window()
 	{
 		UnloadScene();
-		HIDDEN_ApplicationRemoveWindow(m_Tag);
-		delete reinterpret_cast<WindowAPI*>(m_WindowAPI);
+		Application::RemoveWindow(m_Tag);
+		delete m_WindowAPI;
+	}
+	const std::string& Window::GetTag() const
+	{
+		return m_Tag;
 	}
 
 	bool Window::ShouldClose() const
@@ -32,78 +34,30 @@ namespace Parrot
 		m_ShouldClose = true;
 	}
 
-	Scene& Window::LoadScene(const std::string& tag)
+	Scene& Window::LoadScene(const PtScene& scene)
 	{
-		Scene& scene = Application::GetScene(tag);
-		LoadScene(scene);
-		return scene;
+		UnloadScene();
+		m_Scene = new Scene(*this, scene);
+		return *m_Scene;
 	}
-	void Window::LoadScene(Scene& scene)
+	bool Window::IsSceneLoaded()
 	{
-		if (m_LoadedScene)
-			UnloadScene();
-		m_LoadedScene = &scene;
+		return m_Scene != nullptr;
+	}
+	Scene& Window::GetLoadedScene()
+	{
+		InternalLog::LogAssert(m_Scene, "No Scene loaded in window \"%\"!", m_Tag);
+		return *m_Scene;
 	}
 	void Window::UnloadScene()
 	{
-		if (!m_LoadedScene)
+		if (!m_Scene)
 			return;
-		m_LoadedScene = nullptr;
+		delete m_Scene;
 	}
 
-	// WindowAPI
-	void Window::SetTitle(const std::string& title)
+	WindowAPI& Window::GetWindowAPI()
 	{
-		reinterpret_cast<WindowAPI*>(m_WindowAPI)->Bind();
-		reinterpret_cast<WindowAPI*>(m_WindowAPI)->SetTitle(title);
-	}
-	const std::string& Window::GetTitle() const
-	{
-		reinterpret_cast<WindowAPI*>(m_WindowAPI)->Bind();
-		return reinterpret_cast<WindowAPI*>(m_WindowAPI)->GetTitle();
-	}
-
-	void Window::SetCursorPos(Math::Vec2i pos)
-	{
-		reinterpret_cast<WindowAPI*>(m_WindowAPI)->Bind();
-		reinterpret_cast<WindowAPI*>(m_WindowAPI)->SetCursorPos(pos);
-	}
-	Math::Vec2i Window::GetCursorPos() const
-	{
-		reinterpret_cast<WindowAPI*>(m_WindowAPI)->Bind();
-		return reinterpret_cast<WindowAPI*>(m_WindowAPI)->GetCursorPos();
-	}
-
-	void Window::Maximize() 
-	{
-		reinterpret_cast<WindowAPI*>(m_WindowAPI)->Bind();
-		reinterpret_cast<WindowAPI*>(m_WindowAPI)->Maximize();
-	}
-	void Window::Minimize()
-	{
-		reinterpret_cast<WindowAPI*>(m_WindowAPI)->Bind();
-		reinterpret_cast<WindowAPI*>(m_WindowAPI)->Minimize();
-	}
-
-	void Window::SetSize(Math::Vec2u dim)
-	{
-		reinterpret_cast<WindowAPI*>(m_WindowAPI)->Bind();
-		reinterpret_cast<WindowAPI*>(m_WindowAPI)->SetSize(dim);
-	}
-	Math::Vec2u Window::GetSize() const
-	{
-		reinterpret_cast<WindowAPI*>(m_WindowAPI)->Bind();
-		return reinterpret_cast<WindowAPI*>(m_WindowAPI)->GetSize();
-	}
-
-	void Window::Update()
-	{
-		reinterpret_cast<WindowAPI*>(m_WindowAPI)->Bind();
-		if (m_LoadedScene)
-		{
-			m_LoadedScene->UpdateObjs();
-			m_LoadedScene->Render();
-		}
-		reinterpret_cast<WindowAPI*>(m_WindowAPI)->Update();
+		return *m_WindowAPI;
 	}
 }

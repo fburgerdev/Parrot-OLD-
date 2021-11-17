@@ -1,46 +1,30 @@
 #pragma once
-#include <string>
-#include "Math/Vector.hpp"
-#include "Input/Event.hpp"
 #include "Scene/Scene.hpp"
+#include "Assets/Formats/PtWindow.hpp"
+#include "WindowAPI/WindowAPI.hpp"
 
 namespace Parrot
 {
 	class Window
 	{
 	public:
-		// potential client override
-		virtual void OnEvent(Event e) {};
+		Window(const PtWindow& ptWindow);
+		~Window();
 
-		Window(const std::string& tag, Math::Vec2u size);
-		virtual ~Window();
-
-		const std::string& GetTag() const { return m_Tag; }
+		const std::string& GetTag() const;
 		bool ShouldClose() const;
 		void Close();
 
-		Scene& LoadScene(const std::string& tag);
-		void LoadScene(Scene& scene);
+		Scene& LoadScene(const PtScene& scene);
+		Scene& GetLoadedScene();
+		bool IsSceneLoaded();
 		void UnloadScene();
 
-		// WindowAPI
-		void SetTitle(const std::string& title);
-		const std::string& GetTitle() const;
-		
-		void SetCursorPos(Math::Vec2i pos);
-		Math::Vec2i GetCursorPos() const;
-		
-		void Maximize();
-		void Minimize();
-
-		void SetSize(Math::Vec2u dim);
-		Math::Vec2u GetSize() const;
-		
-		void Update();
+		WindowAPI& GetWindowAPI();
 	private:
 		std::string m_Tag;
-		void* m_WindowAPI;
-		Scene* m_LoadedScene;
+		WindowAPI* m_WindowAPI;
+		Scene* m_Scene;
 		bool m_ShouldClose;
 	};
 }

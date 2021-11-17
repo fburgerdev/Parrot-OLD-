@@ -15,20 +15,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Src\Scenes\MainScene\MainScene.hpp">
-      <Filter>Scenes\MainScene</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Scenes\MainScene\SceneObjects\Cam.hpp">
-      <Filter>Scenes\MainScene\SceneObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Scenes\MainScene\SceneObjects\Quad.hpp">
-      <Filter>Scenes\MainScene\SceneObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Windows\MainWindow.hpp">
-      <Filter>Windows</Filter>
-    </ClInclude>
+    <ClCompile Include="Src\OnCreate.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Src\OnCreate.cpp" />
+    <ClInclude Include="Src\Controller3D.hpp" />
   </ItemGroup>
 </Project>

@@ -19,9 +19,6 @@
     <Filter Include="Src\ClientInterface\Scene">
       <UniqueIdentifier>{C93D203E-3500-54C8-7EB0-E254EAB12CA6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\ClientInterface\Scene\Components">
-      <UniqueIdentifier>{3E53A1F3-2A3A-63EB-D38A-C908BF50DC51}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\Core">
       <UniqueIdentifier>{8537E246-7104-3D52-9A1D-2BFA864972E0}</UniqueIdentifier>
     </Filter>
@@ -72,6 +69,9 @@
     <ClInclude Include="Src\Assets\Formats\PtScene.hpp">
       <Filter>Src\Assets\Formats</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Assets\Formats\PtSceneObject.hpp">
+      <Filter>Src\Assets\Formats</Filter>
+    </ClInclude>
     <ClInclude Include="Src\Assets\Formats\PtShader.hpp">
       <Filter>Src\Assets\Formats</Filter>
     </ClInclude>
@@ -81,17 +81,14 @@
     <ClInclude Include="Src\Assets\Formats\PtWindow.hpp">
       <Filter>Src\Assets\Formats</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Assets\InternalAssetManager.hpp">
+      <Filter>Src\Assets</Filter>
+    </ClInclude>
     <ClInclude Include="Src\ClientInterface\Application.hpp">
       <Filter>Src\ClientInterface</Filter>
     </ClInclude>
-    <ClInclude Include="Src\ClientInterface\Scene\Components\Component.hpp">
-      <Filter>Src\ClientInterface\Scene\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\ClientInterface\Scene\Components\Mesh.hpp">
-      <Filter>Src\ClientInterface\Scene\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\ClientInterface\Scene\Components\Transform.hpp">
-      <Filter>Src\ClientInterface\Scene\Components</Filter>
+    <ClInclude Include="Src\ClientInterface\Scene\Components.hpp">
+      <Filter>Src\ClientInterface\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Src\ClientInterface\Scene\Scene.hpp">
       <Filter>Src\ClientInterface\Scene</Filter>
@@ -101,6 +98,9 @@
     </ClInclude>
     <ClInclude Include="Src\ClientInterface\Window.hpp">
       <Filter>Src\ClientInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Core\LogMessages.hpp">
+      <Filter>Src\Core</Filter>
     </ClInclude>
     <ClInclude Include="Src\Core\Macros.hpp">
       <Filter>Src\Core</Filter>
@@ -138,23 +138,35 @@
     <ClInclude Include="Src\Input\Input.hpp">
       <Filter>Src\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Math\Arithmetic.hpp">
-      <Filter>Src\Math</Filter>
+    <ClInclude Include="Src\Input\InternalInput.hpp">
+      <Filter>Src\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\InternalParrot.hpp">
+      <Filter>Src</Filter>
     </ClInclude>
     <ClInclude Include="Src\Math\MathConstants.hpp">
+      <Filter>Src\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Math\Matrix.hpp">
       <Filter>Src\Math</Filter>
     </ClInclude>
     <ClInclude Include="Src\Math\Vector.hpp">
       <Filter>Src\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Parrot.hpp">
+    <ClInclude Include="Src\ParrotScript.hpp">
       <Filter>Src</Filter>
     </ClInclude>
     <ClInclude Include="Src\Ptpch.hpp">
       <Filter>Src</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Renderer\MeshRenderer\MeshRenderer.hpp">
+      <Filter>Src\Renderer\MeshRenderer</Filter>
+    </ClInclude>
     <ClInclude Include="Src\Renderer\MeshRenderer\MeshVertex.hpp">
       <Filter>Src\Renderer\MeshRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Utils\FileRead.hpp">
+      <Filter>Src\Utils</Filter>
     </ClInclude>
     <ClInclude Include="Src\Utils\Filepath.hpp">
       <Filter>Src\Utils</Filter>
@@ -171,6 +183,7 @@
     <ClInclude Include="Vendor\Stb\stb_image.h">
       <Filter>Vendor\Stb</Filter>
     </ClInclude>
+    <ClInclude Include="Src\ClientInterface\InternalApplication.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Assets\AssetManager.cpp">
@@ -193,6 +206,9 @@
     </ClCompile>
     <ClCompile Include="Src\ClientInterface\Application.cpp">
       <Filter>Src\ClientInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ClientInterface\Scene\Components.cpp">
+      <Filter>Src\ClientInterface\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Src\ClientInterface\Scene\Scene.cpp">
       <Filter>Src\ClientInterface\Scene</Filter>
@@ -230,11 +246,11 @@
     <ClCompile Include="Src\Input\Input.cpp">
       <Filter>Src\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Math\Arithmetic.cpp">
-      <Filter>Src\Math</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Ptpch.cpp">
       <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Renderer\MeshRenderer\MeshRenderer.cpp">
+      <Filter>Src\Renderer\MeshRenderer</Filter>
     </ClCompile>
     <ClCompile Include="Src\Utils\Filepath.cpp">
       <Filter>Src\Utils</Filter>
@@ -253,10 +269,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Src\Assets\Defaults\MainWindow.PTWNDW">
+    <None Include="Src\Assets\Defaults\Cube.MSH">
       <Filter>Src\Assets\Defaults</Filter>
     </None>
-    <None Include="Src\Assets\Defaults\MainWindow.WNDW">
+    <None Include="Src\Assets\Defaults\Default.SHDR">
       <Filter>Src\Assets\Defaults</Filter>
     </None>
     <None Include="Src\Assets\Defaults\Quad.MSH">
