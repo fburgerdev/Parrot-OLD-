@@ -2,6 +2,7 @@
 #include "Math/Vector.hpp"
 #include "Utils/Filepath.hpp"
 #include "Graphics/GraphicsAPI.hpp"
+#include "Core/PtObj.hpp"
 
 namespace Parrot
 {
@@ -17,7 +18,7 @@ namespace Parrot
 			: pos(), normal(), texCoords() {}
 	};
 
-	class PtMesh
+	class PtMesh : public PtObj
 	{
 	public:
 		struct Data
@@ -32,13 +33,8 @@ namespace Parrot
 
 		const Utils::Filepath& GetFilepath() const;
 		const Data& GetData() const;
-		void BindMesh() const;
 	private:
 		Utils::Filepath m_Filepath;
 		Data m_Data;
-
-		mutable VertexBufferAPI* m_Vb = nullptr;
-		mutable IndexBufferAPI* m_Ib = nullptr; // only used if mesh is made out of quads (isQuadGeometry == true)
-		mutable VertexArrayAPI* m_Va = nullptr;
 	};
 }

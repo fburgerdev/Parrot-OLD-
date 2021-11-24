@@ -1,16 +1,14 @@
 #pragma once
-#include "WindowAPI/WindowAPI.hpp"
+#include "Window/Window.hpp"
 #include "GLFW/glfw3.h"
 
 namespace Parrot
 {
-	class Window_GLFW : public WindowAPI
+	class Window_GLFW : public Window
 	{
 	public:
-		Window_GLFW(const std::string& title, const Math::Vec2u& dim);
+		Window_GLFW(const PtWindow& ptWindow);
 		~Window_GLFW();
-
-		virtual void Bind() const override;
 
 		virtual void SetTitle(const std::string& title) override;
 		virtual const std::string& GetTitle() const override;
@@ -24,17 +22,15 @@ namespace Parrot
 		virtual void SetSize(const Math::Vec2u& dim) override;
 		virtual Math::Vec2u GetSize() const override;
 
-		virtual void Update() override;
+		virtual void Refresh() override;
+
+		virtual void GainFocus() override;
 
 		virtual void Clear() override;
-
-		virtual bool PollEvent(Event& e) override;
+		virtual void Bind() const override;
 	private:
 		GLFWwindow* m_Window;
-		std::stack<Event> m_Events;
 		std::string m_Title;
-
-		Math::Vec2i m_CursorPos;
-		Math::Vec2u m_WindowDim;
+		//bool m_IsFocused;
 	};
 }

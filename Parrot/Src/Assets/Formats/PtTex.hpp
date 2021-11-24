@@ -2,10 +2,11 @@
 #include "Utils/Filepath.hpp"
 #include "Math/Vector.hpp"
 #include "Graphics/GraphicsAPI.hpp"
+#include "Core/PtObj.hpp"
 
 namespace Parrot
 {
-	class PtTex
+	class PtTex : public PtObj
 	{
 		struct Data
 		{
@@ -19,11 +20,8 @@ namespace Parrot
 		
 		const Utils::Filepath& GetFilepath() const;
 		const Data& GetData() const;
-		void BindTexture() const;
 	private:
 		Utils::Filepath m_Filepath;
 		Data m_Data;
-
-		mutable TextureAPI* m_TextureAPI = nullptr;
 	};
 }

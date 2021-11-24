@@ -1,6 +1,7 @@
 #include "Ptpch.hpp"
 #include "Components.hpp"
 #include "Debug/InternalLog.hpp"
+#include "SceneObj.hpp"
 #include <cmath>
 
 namespace Parrot
@@ -18,14 +19,34 @@ namespace Parrot
 	Math::Mat4f Transform::Mat() const
 	{ 
 		Math::Mat4f out;
-		out.Identity();
-		out = Math::Translate(out, pos) * Math::RotationMat(rot);
-		Math::Scale(out, scale);
+
+		float sina = sin(rot.z);
+		float cosa = cos(rot.z);
+		float sinb = sin(rot.x);
+		float cosb = cos(rot.x);
+		float sinc = sin(rot.y);
+		float cosc = cos(rot.y);
+		out[0][0] = cosa * cosb * scale.x;
+		out[0][1] = sina * cosb * scale.x;
+		out[0][2] = -sinb * scale.x;
+		out[1][0] = (cosa * sinb * sinc - sina * cosc) * scale.y;
+		out[1][1] = (sina * sinb * sinc + cosa * cosc) * scale.y;
+		out[1][2] = cosb * sinc * scale.y;
+		out[2][0] = (cosa * sinb * cosc + sina * sinc) * scale.z;
+		out[2][1] = (sina * sinb * cosc - cosa * sinc) * scale.z;
+		out[2][2] = cosb * cosc * scale.z;
+		out[3][3] = 1;
+		memcpy(out[3], &pos, sizeof(float) * 3);
 		return out;
 	}
 
-	Renderobject::Renderobject(const PtMesh& ptMesh, const PtShader& ptShader)
-		: ptMesh(ptMesh), ptShader(ptShader)
+	Renderobj::Renderobj(const PtMesh& ptMesh, const PtShader& ptShader, const PtTex& ptTex)
+		: ptMesh(ptMesh), ptShader(ptShader), ptTex(ptTex)
+	{
+
+	}
+	Renderobj::Renderobj(const Renderobj& other)
+		: ptMesh(other.ptMesh), ptShader(other.ptShader), ptTex(other.ptTex)
 	{
 
 	}
@@ -35,6 +56,12 @@ namespace Parrot
 	{
 
 	}
+	Camera::Camera(const Transform& transform, const Camera& other)
+		: m_Transform(transform), foV(other.foV), zRange(other.zRange)
+	{
+
+	}
+
 	Math::Vec3f Camera::Dir() const
 	{
 		return (Math::RotationMat(m_Transform.rot) * Math::Vec4f(0, 0, 1, 0)).xyz;
@@ -82,8 +109,8 @@ namespace Parrot
 		return proj * view;
 	}
 
-	Script::Script(SceneObject& obj)
-		: sceneObject(obj)
+	Script::Script(SceneObj& obj)
+		: sceneObj(obj)
 	{
 
 	}
@@ -91,5 +118,4 @@ namespace Parrot
 	{
 
 	}
-
 }

@@ -3,6 +3,6 @@
 
 namespace Parrot
 {
-	void SetMouseButtonState(MouseButton button, MouseButtonState state);
-	void SetKeyboardKeyState(KeyCode keyCode, KeyState state);
+	void Internal_SetMouseButtonState(MouseButton button, MouseButtonState state);
+	void Internal_SetKeyboardKeyState(KeyCode keyCode, KeyState state);
 }

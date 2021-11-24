@@ -3,6 +3,7 @@
 #include "Math/Matrix.hpp"
 #include "Assets/Formats/PtMesh.hpp"
 #include "Assets/Formats/PtShader.hpp"
+#include "Assets/Formats/PtTex.hpp"
 #include "Input/Event.hpp"
 
 namespace Parrot
@@ -20,19 +21,22 @@ namespace Parrot
 		Math::Vec3f scale;
 	};
 
-	class Renderobject
+	class Renderobj
 	{
 	public:
-		Renderobject(const PtMesh& ptMesh, const PtShader& ptShader);
+		Renderobj(const PtMesh& ptMesh, const PtShader& ptShader, const PtTex& ptTex);
+		Renderobj(const Renderobj& other);
 	public:
 		const PtMesh& ptMesh;
 		const PtShader& ptShader;
+		const PtTex& ptTex;
 	};
 
 	class Camera
 	{
 	public:
 		Camera(const Transform& transform, float foV, Math::Vec2f zRange = { 0.01f, 1000.0f });
+		Camera(const Transform& transform, const Camera& other);
 
 		Math::Vec3f Dir() const;
 		Math::Vec3f DirUp() const;
@@ -46,18 +50,18 @@ namespace Parrot
 		const Transform& m_Transform;
 	};
 
-	class SceneObject;
+	class SceneObj;
 	class Script
 	{
 	public:
-		Script(SceneObject& obj);
+		Script(SceneObj& obj);
 		virtual ~Script();
 
 		virtual void OnCreate() {};
 		virtual void OnUpdate() {};
 		virtual void OnEvent(Event e) {};
 	public:
-		SceneObject& sceneObject;
+		SceneObj& sceneObj;
 	};
-	typedef Script* (*ScriptCreationFunc)(SceneObject&);
+	typedef Script* (*ScriptCreationFunc)(SceneObj&);
 }

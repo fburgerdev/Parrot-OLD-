@@ -3,12 +3,12 @@
 #include "Utils/FileRead.hpp"
 #include "Debug/InternalLog.hpp"
 #include "Core/LogMessages.hpp"
-#include "ClientInterface/Application.hpp"
+#include "Core/InternalApplication.hpp"
 
 namespace Parrot
 {
 	PtShader::PtShader(const Utils::Filepath& filepath)
-		: m_Filepath(filepath)
+		: PtObj(PtObjType::PtShader), m_Filepath(filepath)
 	{
 		std::ifstream stream(filepath.GetFullPath());
 		InternalLog::LogAssert(stream.is_open(), StreamNotOpenErrorMsg, filepath.GetFullPath());
@@ -39,18 +39,7 @@ namespace Parrot
 	}
 	PtShader::~PtShader()
 	{
-		if (m_ShaderAPI)
-			delete m_ShaderAPI;
-	}
 
-	const ShaderAPI& PtShader::GetShaderAPI()
-	{
-		if (!m_ShaderAPI)
-		{
-			Application::MainWindow().GetWindowAPI().Bind();
-			m_ShaderAPI = CreateShaderAPI(m_Data.vertexSrc, m_Data.fragmentSrc);
-		}
-		return *m_ShaderAPI;
 	}
 	const Utils::Filepath& PtShader::GetFilepath() const
 	{

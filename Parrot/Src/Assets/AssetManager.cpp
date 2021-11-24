@@ -3,7 +3,8 @@
 #include "InternalAssetManager.hpp"
 #include "Debug/InternalLog.hpp"
 #include "Core/LogMessages.hpp"
-//#include "Vendor/STB/stb_image.h"
+
+#include "Vendor/STB/stb_image.h"
 
 #define PT_MESH_EXT "MSH"
 #define PT_SHADER_EXT "SHDR"
@@ -35,33 +36,11 @@ namespace Parrot
 			return Format::Unknown;
 		}
 
-		// maps all filenames in the asset directory to their actual location so we don't have to mess with filepaths later on
-		void InitAssetDir(const Utils::Directory& assetDirectory)
-		{
-			s_AssetDirectory = assetDirectory;
-			for (const auto& dirEntry : std::filesystem::recursive_directory_iterator(assetDirectory.String()))
-			{
-				Utils::Filepath filepath(dirEntry.path().string());
-				if (GetFormatFromExtension(filepath.GetFilename().GetExtension()) != Format::Unknown)
-					s_FilenameToPath[filepath.GetFilename().String()] = std::move(filepath.GetFullPath());
-			}
-		}
-
 		const Utils::Directory& GetAssetDir()
 		{
 			return s_AssetDirectory;
 		}
 
-		void LoadAllFromDir()
-		{
-			for (auto& pair : s_FilenameToPath)
-			{
-				Utils::Filename filename(pair.first);
-				Format format = GetFormatFromExtension(filename.GetExtension());
-				if (!IsAssetLoaded(filename))
-					LoadAsset(filename);
-			}
-		}
 		bool LoadAsset(const Utils::Filename& filename)
 		{
 			Format format = GetFormatFromExtension(filename.GetExtension());
@@ -175,60 +154,82 @@ namespace Parrot
 			return *(PtScene*)s_LoadedAssets[filename.String()];
 		}
 
-		void ConvertToAsset(const Utils::Filepath& src, const Utils::Filepath& dst)
+		// maps all filenames in the asset directory to their actual location so we don't have to mess with filepaths later on
+		void Internal_InitAssetDir(const Utils::Directory& assetDirectory)
 		{
-			/*	const std::string srcExt = src.GetFilename().GetExtension();
-				const std::string dstExt = dst.GetFilename().GetExtension();
-				if (srcExt == "png" || srcExt == "jpg")
-				{
-					PT_GUARD_CALL(if (dstExt != PT_TEXTURE_EXT)
-					{
-						InternalLog::LogWarning("Asset conversion \"%\"->\"%\" failed, because the src format doesn't match the dst format! Use the dst format \".%\" to create textures.", src.GetFilename().String(), PT_TEXTURE_EXT, dst.GetFilename().String());
-						return;
-					})
-					int32_t colorChannels = 4;
-					stbi_set_flip_vertically_on_load(true);
-					int32_t width, height, BPP;
-					uint8_t* buffer = stbi_load(src.GetFullPath().c_str(), &width, &height, &BPP, colorChannels);
-					PT_GUARD_CALL(if (!buffer)
-					{
-						InternalLog::LogWarning("Texture with path \"%\" couldn't be loaded. Check if the filepath is correct and the file isn't corrupted.", src.GetFullPath());
-						return;
-					})
-
-					std::ofstream stream(dst.GetFullPath(), std::ios::binary);
-					TextureAPI::Settings settings;
-					Math::Vec2u size((uint32_t)width, (uint32_t)height);
-					stream.write((const char*)&settings, sizeof(TextureAPI::Settings));
-					stream.write((const char*)&size, sizeof(Math::Vec2u));
-					stream.write((const char*)buffer, (size_t)size.x * (size_t)size.y * 4);
-					stream.close();
-					delete[] buffer;
-				}
-				else if (srcExt == "GLSL")
-				{
-					PT_GUARD_CALL(if (dstExt != PT_SHADER_EXT)
-					{
-						InternalLog::LogWarning("Asset conversion \"%\"->\"%\" failed, because the src format doesn't match the dst format! Use the dst format \".%\" to create shaders.", src.GetFilename().String(), PT_SHADER_EXT, dst.GetFilename().String());
-						return;
-					})
-					std::ifstream ifstream(src.GetFullPath(), std::ios::binary);
-					std::ofstream ofstream(dst.GetFullPath(), std::ios::binary);
-					ofstream << ifstream.rdbuf();
-					ifstream.close();
-					ofstream.close();
-				}
-				else
-				{
-					InternalLog::LogWarning("Src extension in \"%\" isn't supported! Supported formats are \"jpg\", \"png\" and \"GLSL\"", src.GetFilename().String());
-				}*/
+			s_AssetDirectory = assetDirectory;
+			for (const auto& dirEntry : std::filesystem::recursive_directory_iterator(assetDirectory.String()))
+			{
+				Utils::Filepath filepath(dirEntry.path().string());
+				if (GetFormatFromExtension(filepath.GetFilename().GetExtension()) != Format::Unknown)
+					s_FilenameToPath[filepath.GetFilename().String()] = std::move(filepath.GetFullPath());
+			}
+		}
+		void Internal_LoadAllFromDir()
+		{
+			for (auto& pair : s_FilenameToPath)
+			{
+				Utils::Filename filename(pair.first);
+				Format format = GetFormatFromExtension(filename.GetExtension());
+				if (!IsAssetLoaded(filename))
+					LoadAsset(filename);
+			}
 		}
 
-		void ConvertToAssetIfNExist(const Utils::Filepath& src, const Utils::Filepath& dst)
+		void Internal_ConvertToAsset(const Utils::Filepath& src, const Utils::Directory& dst)
 		{
-			if (std::filesystem::exists(dst.GetFullPath()))
-				return;
-			ConvertToAsset(src, dst);
+			std::string_view srcExt = src.GetFilename().GetExtension();
+			if (srcExt == "png" || srcExt == "jpg")
+			{
+				int32_t colorChannels = 4;
+				stbi_set_flip_vertically_on_load(true);
+				int32_t width, height, BPP;
+				uint8_t* buffer = stbi_load(src.GetFullPath().c_str(), &width, &height, &BPP, colorChannels);
+				PT_GUARD_CALL(if (!buffer)
+				{
+					InternalLog::LogWarning("Texture with path \"%\" couldn't be loaded. Check if the filepath is correct and the file isn't corrupted.", src.GetFullPath());
+					return;
+				})
+
+				std::string outPath = s_AssetDirectory.String();
+				outPath += dst.String();
+				outPath += src.GetFilename().GetName();
+				outPath += '.';
+				outPath += PT_TEXTURE_EXT;
+
+				std::ofstream stream(outPath, std::ios::binary);
+				TextureAPI::Settings settings;
+				Math::Vec2u size((uint32_t)width, (uint32_t)height);
+				stream.write((const char*)&settings, sizeof(TextureAPI::Settings));
+				stream.write((const char*)&size, sizeof(Math::Vec2u));
+				stream.write((const char*)buffer, (size_t)size.x * (size_t)size.y * 4);
+				stream.close();
+				delete[] buffer;
+			}
+			/*	else if (srcExt == "GLSL")
+			{
+				PT_GUARD_CALL(if (dstExt != PT_SHADER_EXT)
+				{
+					InternalLog::LogWarning("Asset conversion \"%\"->\"%\" failed, because the src format doesn't match the dst format! Use the dst format \".%\" to create shaders.", src.GetFilename().String(), PT_SHADER_EXT, dst.GetFilename().String());
+					return;
+				})
+				std::ifstream ifstream(src.GetFullPath(), std::ios::binary);
+				std::ofstream ofstream(dst.GetFullPath(), std::ios::binary);
+				ofstream << ifstream.rdbuf();
+				ifstream.close();
+				ofstream.close();
+			}*/
+			else
+			{
+				InternalLog::LogWarning("Src extension in \"%\" isn't supported! Supported formats are \"jpg\", \"png\" and \"GLSL\"", src.GetFilename().String());
+			}
 		}
+
+		//void ConvertToAssetIfNExist(const Utils::Filepath& src, const Utils::Filepath& dst)
+		//{
+		//	if (std::filesystem::exists(dst.GetFullPath()))
+		//		return;
+		//	ConvertToAsset(src, dst);
+		//}
 	}
 }

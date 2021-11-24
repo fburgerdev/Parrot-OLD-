@@ -11,14 +11,12 @@ namespace Parrot
 	{
 		Released = 0, Pressed
 	};
-
-	MouseButtonState GetMouseButton(MouseButtonState button);
+	MouseButtonState GetMouseButtonState(MouseButton button);
 
 	enum class KeyState : uint32_t
 	{
 		Released = 0, Pressed, Repeated
 	}; 
-	
 	enum class KeyCode : uint32_t
 	{
 		KEY_SPACE = 32,

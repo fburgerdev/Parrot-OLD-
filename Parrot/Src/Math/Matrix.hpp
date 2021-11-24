@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include <iomanip>
-#include "MathConstants.hpp"
+#include "Constants.hpp"
 
 namespace Parrot
 {
@@ -12,7 +12,7 @@ namespace Parrot
 		class SqrMat
 		{
 		public:
-			SqrMat() { Zeros(); }
+			SqrMat() { memset(m_Data, 0, sizeof(T) * Dim * Dim); }
 			SqrMat(const T* data) { memcpy(m_Data, data, sizeof(T) * Dim * Dim); }
 			SqrMat(const SqrMat<T, Dim>& other) { memcpy(m_Data, other.m_Data, sizeof(T) * Dim * Dim); }
 
@@ -126,7 +126,7 @@ namespace Parrot
 			return out;
 		}
 
-		// YZX Euler rotation
+		// yaw pitch roll Euler rotation
 		template<class T>
 		SqrMat<T, 4> RotationMat(const Math::Vector3<T>& rot)
 		{
@@ -154,7 +154,6 @@ namespace Parrot
 
 			return out;
 		}
-
 		template<class T>
 		SqrMat<T, 4>&  Translate(SqrMat<T, 4>& mat, const Math::Vector3<T>& translation)
 		{
@@ -179,10 +178,11 @@ namespace Parrot
 		}
 		template<class T>
 		SqrMat<T, 4>& Rotate(SqrMat<T, 4>& mat, const Math::Vector3<T>& rot)
-		{																
+		{				
 			mat = RotationMat(rot) * mat;
 			return mat;
 		}
+
 		
 		typedef SqrMat<int32_t, 2> Mat2i;
 		typedef SqrMat<int32_t, 3> Mat3i;

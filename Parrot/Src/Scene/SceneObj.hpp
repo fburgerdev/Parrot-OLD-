@@ -2,21 +2,21 @@
 #include <string>
 #include <unordered_map>
 #include "Components.hpp"
-#include "Assets/Formats/PtSceneObject.hpp"
+#include "Assets/Formats/PtSceneObj.hpp"
 
 namespace Parrot
 {	
 	class Scene;
-	class SceneObject
+	class SceneObj : public PtObj
 	{
 	public:
-		SceneObject(Scene& scene, const PtSceneObject& ptSceneObj);
-		~SceneObject();
+		SceneObj(Scene& scene, const PtSceneObj& ptSceneObj);
+		~SceneObj();
 
 		const std::string& GetTag() const;
 		Scene& GetScene();
 
-		bool ContainsComponent(ComponentType type);
+		bool HasComponent(ComponentType type);
 		template<class _Type, class... _Args>
 		_Type& AddComponent(const _Args&... args);
 		template<class _Type>

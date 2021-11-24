@@ -1,17 +1,18 @@
 #pragma once
 #include "Utils/Filepath.hpp"
-#include "PtSceneObject.hpp"
+#include "PtSceneObj.hpp"
 #include <vector>
+#include "Core/PtObj.hpp"
 
 namespace Parrot
 {
-	class PtScene
+	class PtScene : public PtObj
 	{
 	public:
 		struct Data
 		{
 			size_t objCount = 0;
-			PtSceneObject* objs = nullptr;
+			PtSceneObj* objs = nullptr;
 		};
 	public:
 		PtScene(const Utils::Filepath& filepath);

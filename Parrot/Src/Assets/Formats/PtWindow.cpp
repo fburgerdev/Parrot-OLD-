@@ -8,7 +8,7 @@
 namespace Parrot
 {
 	PtWindow::PtWindow(const Utils::Filepath& filepath)
-		: m_Filepath(filepath)
+		: PtObj(PtObjType::PtWindow), m_Filepath(filepath)
 	{
 		std::ifstream stream(filepath.GetFullPath());
 		InternalLog::LogAssert(stream.is_open(), StreamNotOpenErrorMsg, filepath.GetFullPath());
@@ -19,6 +19,8 @@ namespace Parrot
 		while (std::getline(stream, line))
 		{
 			Utils::GetKey(line, key);
+			if (line.find("//") != line.npos)
+				line = line.substr(0, line.find("//"));
 			if (key == "Scene")
 			{
 				Utils::GetArg(line, arg);
@@ -37,11 +39,11 @@ namespace Parrot
 		}
 		stream.close();
 	}
-
 	const Utils::Filepath& PtWindow::GetFilepath() const
 	{
 		return m_Filepath;
 	}
+
 	const PtWindow::Data& PtWindow::GetData() const
 	{
 		return m_Data;

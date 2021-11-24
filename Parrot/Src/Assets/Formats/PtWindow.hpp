@@ -1,10 +1,11 @@
 #pragma once
 #include "Utils/Filepath.hpp"
 #include "Math/Vector.hpp"
+#include "Core/PtObj.hpp"
 
 namespace Parrot
 {
-	class PtWindow
+	class PtWindow : public PtObj
 	{
 	public:
 		struct Data

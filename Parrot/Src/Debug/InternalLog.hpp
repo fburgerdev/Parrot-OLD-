@@ -5,7 +5,7 @@ namespace Parrot
 {
 	class InternalLog
 	{
-	public:
+	private:
 		struct ConsoleColor
 		{
 			static constexpr const char* White = "\033[0m";
@@ -16,6 +16,7 @@ namespace Parrot
 			static constexpr const char* Underlined = "\033[4m";
 			static constexpr const char* NUnderlined = "\033[24m";
 		};
+	public:
 		static void StartScope(const char* name);
 		static void EndScope();
 		static void EndAllScopes();
@@ -89,6 +90,7 @@ namespace Parrot
 
 		template<class Arg>
 		static inline void PrintParameter(const Arg& parameter) { std::cout << parameter; }
+		template<> static inline void PrintParameter<char*>(char* const& parameter) { Message(parameter); }
 		template<> static inline void PrintParameter<const char*>(const char* const& parameter) { Message(parameter); }
 		template<> static inline void PrintParameter<std::string>(const std::string& parameter) { Message(parameter.c_str()); }
 

@@ -133,7 +133,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Src\ContextManagerScript.hpp" />
     <ClInclude Include="Src\Controller3D.hpp" />
+    <ClInclude Include="Src\CubeScript.hpp" />
+    <ClInclude Include="Src\DefaultMeshCreation.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\OnCreate.cpp" />

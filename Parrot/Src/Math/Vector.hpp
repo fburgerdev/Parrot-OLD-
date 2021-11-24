@@ -66,12 +66,15 @@ namespace Parrot
 			{
 				struct { T x, y, z; };
 				struct { T r, g, b; };
+				struct { T yaw, pitch, roll; };
 
 				struct { Vector2<T> rg; T b; };
 				struct { Vector2<T> xy; T z; };
+				struct { Vector2<T> yaw_pitch; T roll; };
 
 				struct { T x; Vector2<T> yz; };
 				struct { T r; Vector2<T> gb; };
+				struct { T yaw; Vector2<T> pitch_roll; };
 			};
 
 			Vector3(const Vector3<T>& other)

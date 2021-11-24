@@ -1,11 +1,20 @@
 #include "InternalParrot.hpp"
 #include "Controller3D.hpp"
+#include "CubeScript.hpp"
+#include "ContextManagerScript.hpp"
+#include "Math/Arithmetic.hpp"
 
-void Parrot::Application::OnCreate()
+#include "DefaultMeshCreation.hpp"
+
+void Parrot::Application::Internal_OnCreate()
 {
-	Application::AddScript("Controller3D", [](SceneObject& obj) { return (Script*)new Controller3D(obj); });
+	CreateDefaultMeshes();
+	Application::Internal_AddScript("Controller3D", [](SceneObj& obj) { return (Script*)new Controller3D(obj); });
+	Application::Internal_AddScript("CubeScript", [](SceneObj& obj) { return (Script*)new CubeScript(obj); });
+	Application::Internal_AddScript("ContextManagerScript", [](SceneObj& obj) { return (Script*)new ContextManagerScript(obj); });
 
-	AssetManager::InitAssetDir(Utils::Directory("..\\TestAssets\\"));
-	AssetManager::LoadAsset(Utils::Filename("MainWindow.WNDW"));
-	new Window(AssetManager::GetWindowAsset("MainWindow"));
+	AssetManager::Internal_InitAssetDir(Utils::Directory("..\\TestAssets\\"));
+	AssetManager::LoadAsset(Utils::Filename("Main.WNDW"));
+	AssetManager::LoadAsset(Utils::Filename("PopUp.WNDW"));
+	CreateWindow(AssetManager::GetWindowAsset("Main"));
 }

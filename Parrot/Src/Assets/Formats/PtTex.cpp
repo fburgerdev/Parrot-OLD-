@@ -2,12 +2,12 @@
 #include "PtTex.hpp"
 #include "Debug/InternalLog.hpp"
 #include "Core/LogMessages.hpp"
-#include "ClientInterface/Application.hpp"
+#include "Core/InternalApplication.hpp"
 
 namespace Parrot
 {
 	PtTex::PtTex(const Utils::Filepath& filepath)
-		: m_Filepath(filepath)
+		: PtObj(PtObjType::PtTex), m_Filepath(filepath)
 	{
 		std::ifstream stream(filepath.GetFullPath(), std::ios::binary);
 		InternalLog::LogAssert(stream.is_open(), StreamNotOpenErrorMsg, filepath.GetFullPath());
@@ -20,23 +20,12 @@ namespace Parrot
 	PtTex::~PtTex()
 	{
 		delete[] m_Data.buffer;
-		if (m_TextureAPI)
-			delete m_TextureAPI;
-	}
-
-	void PtTex::BindTexture() const
-	{
-		if (!m_TextureAPI)
-		{
-			Application::MainWindow().GetWindowAPI().Bind();
-			m_TextureAPI = CreateTextureAPI(m_Data.buffer, m_Data.size, m_Data.settings);
-		}
-		m_TextureAPI->Bind();
 	}
 	const Utils::Filepath& PtTex::GetFilepath() const
 	{
 		return m_Filepath;
 	}
+
 	const PtTex::Data& PtTex::GetData() const
 	{
 		return m_Data;
