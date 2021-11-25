@@ -2,7 +2,7 @@
 #include <string>
 #include <unordered_map>
 #include "Components.hpp"
-#include "Assets/Formats/PtSceneObj.hpp"
+#include "Assets/Formats/SceneObjAsset.hpp"
 
 namespace Parrot
 {	
@@ -10,7 +10,7 @@ namespace Parrot
 	class SceneObj : public PtObj
 	{
 	public:
-		SceneObj(Scene& scene, const PtSceneObj& ptSceneObj);
+		SceneObj(Scene& scene, const Asset::SceneObjAsset& SceneObjAsset);
 		~SceneObj();
 
 		const std::string& GetTag() const;
@@ -22,13 +22,13 @@ namespace Parrot
 		template<class _Type>
 		_Type& GetComponent();
 
-		std::unordered_map<std::string, Script*>& GetScripts();
+		std::unordered_map<std::string, Component::Script*>& GetScripts();
 	public:
-		Transform transform;
+		Component::Transform transform;
 	private:
 		std::string m_Tag;
 		Scene& m_Scene;
 		std::unordered_map<ComponentType, void*> m_Components;
-		std::unordered_map<std::string, Script*> m_Scripts;
+		std::unordered_map<std::string, Component::Script*> m_Scripts;
 	};
 }

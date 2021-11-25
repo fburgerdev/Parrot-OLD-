@@ -11,15 +11,15 @@ namespace Parrot
 	static GLFWwindow* s_MainWindow = nullptr;
 	static std::unordered_map<GLFWwindow*, Scene*> s_WindowSceneMap;
 
-	Window_GLFW::Window_GLFW(const PtWindow& ptWindow)
-		: Window(ptWindow), m_Window(nullptr), m_Title(ptWindow.GetFilepath().GetFilename().GetName())//, m_IsFocused(true)
+	Window_GLFW::Window_GLFW(const Asset::WindowAsset& WindowAsset)
+		: Window(WindowAsset), m_Window(nullptr), m_Title(WindowAsset.GetFilepath().GetFilename().GetName())//, m_IsFocused(true)
 	{
 		if (s_WindowSceneMap.empty())
 		{
 			InternalLog::LogAssert(glfwInit(), "GLFW initialization failed!");
 			InternalLog::LogInfo("GLFW initialization successful!");
 		}
-		m_Window = glfwCreateWindow(ptWindow.GetData().size.x, ptWindow.GetData().size.y, m_Title.c_str(), nullptr, s_MainWindow);
+		m_Window = glfwCreateWindow(WindowAsset.GetData().size.x, WindowAsset.GetData().size.y, m_Title.c_str(), nullptr, s_MainWindow);
 		InternalLog::LogAssert(m_Window, "Window \"%\" creation failed!", m_Title);
 		InternalLog::LogInfo("Window \"%\" creation successful!", m_Title);
 		Bind();

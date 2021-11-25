@@ -7,16 +7,20 @@
 
 namespace Parrot
 {
-	Scene::Scene(Window& window, const PtScene& ptScene)
-		: PtObj(PtObjType::Scene), m_Tag(ptScene.GetFilepath().GetFilename().GetName()), m_Window(window), m_OnCreateCalled(false)
+	Scene::Scene(Window& window, const Asset::SceneAsset& SceneAsset)
+		: PtObj(PtObjType::Scene), m_Tag(SceneAsset.GetFilepath().GetFilename().GetName()), m_Window(window)
 	{
-		for (uint32_t i = 0; i < ptScene.GetData().objCount; ++i)
+		for (uint32_t i = 0; i < SceneAsset.GetData().objCount; ++i)
 		{
-			const PtSceneObj& ptObj = ptScene.GetData().objs[i];
+			const Asset::SceneObjAsset& ptObj = SceneAsset.GetData().objs[i];
 			SceneObj* obj = new SceneObj(*this, ptObj);
 			m_SceneObjs[ptObj.tag] = obj;
 			for (auto& pair : obj->GetScripts())
 				m_Scripts.push_back(pair.second);
+		}
+		for (Component::Script* script : m_Scripts)
+		{
+			script->OnCreate();
 		}
 	}
 	Scene::~Scene()
@@ -44,7 +48,31 @@ namespace Parrot
 	}
 	void Scene::RaiseEvent(Event e)
 	{
-		for (Script* script : m_Scripts)
+		for (Component::Script* script : m_Scripts)
 			script->OnEvent(e);
+	}
+
+	void Scene::UpdateObjs()
+	{
+		for (Component::Script* script : m_Scripts)
+			script->OnUpdate();
+	}
+	void Scene::Render()
+	{
+		for (auto& pair : m_SceneObjs)
+		{
+			if (pair.second->HasComponent(ComponentType::Camera))
+			{
+				MeshRenderer::StartCoroutine(pair.second->GetComponent<Component::Camera>());
+				break;
+			}
+		}
+		for (auto& pair : m_SceneObjs)
+		{
+			if (pair.second->HasComponent(ComponentType::Renderobj))
+			{
+				MeshRenderer::Push(pair.second->transform, pair.second->GetComponent<Component::Renderobj>());
+			}
+		}
 	}
 }

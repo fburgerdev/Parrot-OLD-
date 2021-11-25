@@ -2,7 +2,7 @@
 #include "AssetManager.hpp"
 #include "InternalAssetManager.hpp"
 #include "Debug/InternalLog.hpp"
-#include "Core/LogMessages.hpp"
+#include "Core/Msgs.hpp"
 
 #include "Vendor/STB/stb_image.h"
 
@@ -21,19 +21,19 @@ namespace Parrot
 		static std::unordered_map<std::string, std::string> s_FilenameToPath;
 		static std::unordered_map<std::string, void*> s_LoadedAssets;
 
-		Format GetFormatFromExtension(std::string_view ext)
+		AssetFormat GetAssetFormatFromExt(std::string_view ext)
 		{
 			if (ext == PT_MESH_EXT)
-				return Format::Mesh;
+				return AssetFormat::Mesh;
 			else if (ext == PT_SHADER_EXT)
-				return Format::Shader;
+				return AssetFormat::Shader;
 			else if (ext == PT_TEXTURE_EXT)
-				return Format::Texture;
+				return AssetFormat::Texture;
 			else if (ext == PT_SCENE_EXT)
-				return Format::Scene;
+				return AssetFormat::Scene;
 			else if (ext == PT_WINDOW_EXT)
-				return Format::Window;
-			return Format::Unknown;
+				return AssetFormat::Window;
+			return AssetFormat::Unknown;
 		}
 
 		const Utils::Directory& GetAssetDir()
@@ -43,9 +43,9 @@ namespace Parrot
 
 		bool LoadAsset(const Utils::Filename& filename)
 		{
-			Format format = GetFormatFromExtension(filename.GetExtension());
+			AssetFormat format = GetAssetFormatFromExt(filename.GetExtension());
 			PT_GUARD_CALL(
-			if (format == Format::Unknown)
+			if (format == AssetFormat::Unknown)
 			{
 				InternalLog::LogWarning("Trying to load asset of unknown format \"%\"! Try using one of these formats \"%\"", filename.GetExtension(), PT_EXT_LIST);
 				return false;
@@ -63,20 +63,20 @@ namespace Parrot
 
 			switch (format)
 			{
-			case Format::Mesh:
-				s_LoadedAssets[filename.String()] = new PtMesh(s_FilenameToPath[filename.String()]);
+			case AssetFormat::Mesh:
+				s_LoadedAssets[filename.String()] = new Asset::MeshAsset(s_FilenameToPath[filename.String()]);
 				return true;
-			case Format::Shader:
-				s_LoadedAssets[filename.String()] = new PtShader(s_FilenameToPath[filename.String()]);
+			case AssetFormat::Shader:
+				s_LoadedAssets[filename.String()] = new Asset::ShaderAsset(s_FilenameToPath[filename.String()]);
 				return true;
-			case Format::Texture:
-				s_LoadedAssets[filename.String()] = new PtTex(s_FilenameToPath[filename.String()]);
+			case AssetFormat::Texture:
+				s_LoadedAssets[filename.String()] = new Asset::TexAsset(s_FilenameToPath[filename.String()]);
 				return true;
-			case Format::Scene:
-				s_LoadedAssets[filename.String()] = new PtScene(s_FilenameToPath[filename.String()]);
+			case AssetFormat::Scene:
+				s_LoadedAssets[filename.String()] = new Asset::SceneAsset(s_FilenameToPath[filename.String()]);
 				return true;
-			case Format::Window:
-				s_LoadedAssets[filename.String()] = new PtWindow(s_FilenameToPath[filename.String()]);
+			case AssetFormat::Window:
+				s_LoadedAssets[filename.String()] = new Asset::WindowAsset(s_FilenameToPath[filename.String()]);
 				return true;
 			default:
 				return false;
@@ -98,60 +98,60 @@ namespace Parrot
 			s_LoadedAssets.erase(filename.String());
 		}
 
-		PtTex& GetTextureAsset(const std::string& name)
+		Asset::TexAsset& GetTexAsset(const std::string& name)
 		{
 			std::string filename = name + '.' + PT_TEXTURE_EXT;
-			InternalLog::LogAssert(s_LoadedAssets.find(filename) != s_LoadedAssets.end(), AssetAccessingErrorMsg, filename);
-			return *(PtTex*)s_LoadedAssets[filename];
+			InternalLog::LogAssert(s_LoadedAssets.find(filename) != s_LoadedAssets.end(), AssetAccessErrorMsg, filename);
+			return *(Asset::TexAsset*)s_LoadedAssets[filename];
 		}
-		PtShader& GetShaderAsset(const std::string& name)
+		Asset::ShaderAsset& GetShaderAsset(const std::string& name)
 		{
 			std::string filename = name + '.' + PT_SHADER_EXT;
-			InternalLog::LogAssert(s_LoadedAssets.find(filename) != s_LoadedAssets.end(), AssetAccessingErrorMsg, filename);
-			return *(PtShader*)s_LoadedAssets[filename];
+			InternalLog::LogAssert(s_LoadedAssets.find(filename) != s_LoadedAssets.end(), AssetAccessErrorMsg, filename);
+			return *(Asset::ShaderAsset*)s_LoadedAssets[filename];
 		}
-		PtMesh& GetMeshAsset(const std::string& name)
+		Asset::MeshAsset& GetMeshAsset(const std::string& name)
 		{
 			std::string filename = name + '.' + PT_MESH_EXT;
-			InternalLog::LogAssert(s_LoadedAssets.find(filename) != s_LoadedAssets.end(), AssetAccessingErrorMsg, filename);
-			return *(PtMesh*)s_LoadedAssets[filename];
+			InternalLog::LogAssert(s_LoadedAssets.find(filename) != s_LoadedAssets.end(), AssetAccessErrorMsg, filename);
+			return *(Asset::MeshAsset*)s_LoadedAssets[filename];
 		}
-		PtWindow& GetWindowAsset(const std::string& name)
+		Asset::WindowAsset& GetWindowAsset(const std::string& name)
 		{
 			std::string filename = name + '.' + PT_WINDOW_EXT;
-			InternalLog::LogAssert(s_LoadedAssets.find(filename) != s_LoadedAssets.end(), AssetAccessingErrorMsg, filename);
-			return *(PtWindow*)s_LoadedAssets[filename];
+			InternalLog::LogAssert(s_LoadedAssets.find(filename) != s_LoadedAssets.end(), AssetAccessErrorMsg, filename);
+			return *(Asset::WindowAsset*)s_LoadedAssets[filename];
 		}
-		PtScene& GetSceneAsset(const std::string& name)
+		Asset::SceneAsset& GetSceneAsset(const std::string& name)
 		{
 			std::string filename = name + '.' + PT_SCENE_EXT;
-			InternalLog::LogAssert(s_LoadedAssets.find(filename) != s_LoadedAssets.end(), AssetAccessingErrorMsg, filename);
-			return *(PtScene*)s_LoadedAssets[filename];
+			InternalLog::LogAssert(s_LoadedAssets.find(filename) != s_LoadedAssets.end(), AssetAccessErrorMsg, filename);
+			return *(Asset::SceneAsset*)s_LoadedAssets[filename];
 		}
-		PtTex& GetTextureAsset(const Utils::Filename& filename)
+		Asset::TexAsset& GetTexAsset(const Utils::Filename& filename)
 		{
-			InternalLog::LogAssert(s_LoadedAssets.find(filename.String()) != s_LoadedAssets.end(), AssetAccessingErrorMsg, filename.String());
-			return *(PtTex*)s_LoadedAssets[filename.String()];
+			InternalLog::LogAssert(s_LoadedAssets.find(filename.String()) != s_LoadedAssets.end(), AssetAccessErrorMsg, filename.String());
+			return *(Asset::TexAsset*)s_LoadedAssets[filename.String()];
 		}
-		PtShader& GetShaderAsset(const Utils::Filename& filename)
+		Asset::ShaderAsset& GetShaderAsset(const Utils::Filename& filename)
 		{
-			InternalLog::LogAssert(s_LoadedAssets.find(filename.String()) != s_LoadedAssets.end(), AssetAccessingErrorMsg, filename.String());
-			return *(PtShader*)s_LoadedAssets[filename.String()];
+			InternalLog::LogAssert(s_LoadedAssets.find(filename.String()) != s_LoadedAssets.end(), AssetAccessErrorMsg, filename.String());
+			return *(Asset::ShaderAsset*)s_LoadedAssets[filename.String()];
 		}
-		PtMesh& GetMeshAsset(const Utils::Filename& filename)
+		Asset::MeshAsset& GetMeshAsset(const Utils::Filename& filename)
 		{
-			InternalLog::LogAssert(s_LoadedAssets.find(filename.String()) != s_LoadedAssets.end(), AssetAccessingErrorMsg, filename.String());
-			return *(PtMesh*)s_LoadedAssets[filename.String()];
+			InternalLog::LogAssert(s_LoadedAssets.find(filename.String()) != s_LoadedAssets.end(), AssetAccessErrorMsg, filename.String());
+			return *(Asset::MeshAsset*)s_LoadedAssets[filename.String()];
 		}
-		PtWindow& GetWindowAsset(const Utils::Filename& filename)
+		Asset::WindowAsset& GetWindowAsset(const Utils::Filename& filename)
 		{
-			InternalLog::LogAssert(s_LoadedAssets.find(filename.String()) != s_LoadedAssets.end(), AssetAccessingErrorMsg, filename.String());
-			return *(PtWindow*)s_LoadedAssets[filename.String()];
+			InternalLog::LogAssert(s_LoadedAssets.find(filename.String()) != s_LoadedAssets.end(), AssetAccessErrorMsg, filename.String());
+			return *(Asset::WindowAsset*)s_LoadedAssets[filename.String()];
 		}
-		PtScene& GetSceneAsset(const Utils::Filename& filename)
+		Asset::SceneAsset& GetSceneAsset(const Utils::Filename& filename)
 		{
-			InternalLog::LogAssert(s_LoadedAssets.find(filename.String()) != s_LoadedAssets.end(), AssetAccessingErrorMsg, filename.String());
-			return *(PtScene*)s_LoadedAssets[filename.String()];
+			InternalLog::LogAssert(s_LoadedAssets.find(filename.String()) != s_LoadedAssets.end(), AssetAccessErrorMsg, filename.String());
+			return *(Asset::SceneAsset*)s_LoadedAssets[filename.String()];
 		}
 
 		// maps all filenames in the asset directory to their actual location so we don't have to mess with filepaths later on
@@ -161,7 +161,7 @@ namespace Parrot
 			for (const auto& dirEntry : std::filesystem::recursive_directory_iterator(assetDirectory.String()))
 			{
 				Utils::Filepath filepath(dirEntry.path().string());
-				if (GetFormatFromExtension(filepath.GetFilename().GetExtension()) != Format::Unknown)
+				if (GetAssetFormatFromExt(filepath.GetFilename().GetExtension()) != AssetFormat::Unknown)
 					s_FilenameToPath[filepath.GetFilename().String()] = std::move(filepath.GetFullPath());
 			}
 		}
@@ -170,7 +170,7 @@ namespace Parrot
 			for (auto& pair : s_FilenameToPath)
 			{
 				Utils::Filename filename(pair.first);
-				Format format = GetFormatFromExtension(filename.GetExtension());
+				AssetFormat format = GetAssetFormatFromExt(filename.GetExtension());
 				if (!IsAssetLoaded(filename))
 					LoadAsset(filename);
 			}
@@ -198,38 +198,18 @@ namespace Parrot
 				outPath += PT_TEXTURE_EXT;
 
 				std::ofstream stream(outPath, std::ios::binary);
-				TextureAPI::Settings settings;
+				Graphics::TextureAPI::Settings settings;
 				Math::Vec2u size((uint32_t)width, (uint32_t)height);
-				stream.write((const char*)&settings, sizeof(TextureAPI::Settings));
+				stream.write((const char*)&settings, sizeof(Graphics::TextureAPI::Settings));
 				stream.write((const char*)&size, sizeof(Math::Vec2u));
 				stream.write((const char*)buffer, (size_t)size.x * (size_t)size.y * 4);
 				stream.close();
 				delete[] buffer;
 			}
-			/*	else if (srcExt == "GLSL")
-			{
-				PT_GUARD_CALL(if (dstExt != PT_SHADER_EXT)
-				{
-					InternalLog::LogWarning("Asset conversion \"%\"->\"%\" failed, because the src format doesn't match the dst format! Use the dst format \".%\" to create shaders.", src.GetFilename().String(), PT_SHADER_EXT, dst.GetFilename().String());
-					return;
-				})
-				std::ifstream ifstream(src.GetFullPath(), std::ios::binary);
-				std::ofstream ofstream(dst.GetFullPath(), std::ios::binary);
-				ofstream << ifstream.rdbuf();
-				ifstream.close();
-				ofstream.close();
-			}*/
 			else
 			{
-				InternalLog::LogWarning("Src extension in \"%\" isn't supported! Supported formats are \"jpg\", \"png\" and \"GLSL\"", src.GetFilename().String());
+				InternalLog::LogWarning("Src extension in \"%\" isn't supported! Supported formats are \"jpg\" and \"png\"", src.GetFilename().String());
 			}
 		}
-
-		//void ConvertToAssetIfNExist(const Utils::Filepath& src, const Utils::Filepath& dst)
-		//{
-		//	if (std::filesystem::exists(dst.GetFullPath()))
-		//		return;
-		//	ConvertToAsset(src, dst);
-		//}
 	}
 }

@@ -1,6 +1,5 @@
 #pragma once
 #include "AssetManager.hpp"
-#include "Utils/Filepath.hpp"
 
 namespace Parrot
 {

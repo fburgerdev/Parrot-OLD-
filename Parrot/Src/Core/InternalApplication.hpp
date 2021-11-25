@@ -4,6 +4,7 @@
 
 namespace Parrot
 {
+	typedef Component::Script* (*ScriptCreationFunc)(SceneObj&);
 	namespace Application
 	{
 		extern void Internal_OnCreate();

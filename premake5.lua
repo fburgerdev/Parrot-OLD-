@@ -33,8 +33,7 @@ project "Parrot"
 
 	pchheader "Ptpch.hpp"
 	pchsource "%{prj.name}/Src/Ptpch.cpp"
-	
-	ignoredefaultlibraries { "LIBCMT" }
+
 	defines { "PT_OPENGL", "PT_GLFW" }
 	filter "configurations:Debug"
 		runtime "Debug"
@@ -63,7 +62,7 @@ project "Sandbox"
 	includedirs { "$(ProjectDir)Src/", "Parrot/Src/"}
 	links { "Parrot" }
 
-	ignoredefaultlibraries { "LIBCMT" }
+	ignoredefaultlibraries { "LIBCMTD" }
 	defines { "PT_OPENGL" }
 	filter "configurations:Debug"
 		runtime "Debug"

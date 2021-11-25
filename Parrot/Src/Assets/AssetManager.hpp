@@ -1,9 +1,9 @@
 #pragma once 
-#include "Formats/PtTex.hpp"
-#include "Formats/PtShader.hpp"
-#include "Formats/PtMesh.hpp"
-#include "Formats/PtWindow.hpp"
-#include "Formats/PtScene.hpp"
+#include "Formats/TexAsset.hpp"
+#include "Formats/ShaderAsset.hpp"
+#include "Formats/MeshAsset.hpp"
+#include "Formats/WindowAsset.hpp"
+#include "Formats/SceneAsset.hpp"
 
 namespace Parrot
 {
@@ -11,7 +11,7 @@ namespace Parrot
 	namespace AssetManager
 	{
 		// lists all supported custom file formats
-		enum class Format : int8_t
+		enum class AssetFormat : int8_t
 		{
 			Unknown = -1, Mesh, Shader, Texture, Scene, Window
 		};
@@ -25,15 +25,15 @@ namespace Parrot
 		void UnloadAsset(const Utils::Filename& filename);
 
 		// asset accessing
-		PtTex& GetTextureAsset(const Utils::Filename& filename);
-		PtTex& GetTextureAsset(const std::string& name);
-		PtShader& GetShaderAsset(const Utils::Filename& filenamee);
-		PtShader& GetShaderAsset(const std::string& name);
-		PtMesh& GetMeshAsset(const Utils::Filename& filename);
-		PtMesh& GetMeshAsset(const std::string& name);
-		PtWindow& GetWindowAsset(const Utils::Filename& filename);
-		PtWindow& GetWindowAsset(const std::string& name);
-		PtScene& GetSceneAsset(const Utils::Filename& filename);
-		PtScene& GetSceneAsset(const std::string& name);
+		Asset::TexAsset& GetTexAsset(const Utils::Filename& filename);
+		Asset::TexAsset& GetTexAsset(const std::string& name);
+		Asset::ShaderAsset& GetShaderAsset(const Utils::Filename& filenamee);
+		Asset::ShaderAsset& GetShaderAsset(const std::string& name);
+		Asset::MeshAsset& GetMeshAsset(const Utils::Filename& filename);
+		Asset::MeshAsset& GetMeshAsset(const std::string& name);
+		Asset::WindowAsset& GetWindowAsset(const Utils::Filename& filename);
+		Asset::WindowAsset& GetWindowAsset(const std::string& name);
+		Asset::SceneAsset& GetSceneAsset(const Utils::Filename& filename);
+		Asset::SceneAsset& GetSceneAsset(const std::string& name);
 	}
 }

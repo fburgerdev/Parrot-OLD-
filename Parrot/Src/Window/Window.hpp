@@ -1,6 +1,6 @@
 #pragma once
-#include "Assets/Formats/PtWindow.hpp"
-#include "Assets/Formats/PtScene.hpp"
+#include "Assets/Formats/WindowAsset.hpp"
+#include "Assets/Formats/SceneAsset.hpp"
 #include "Core/PtObj.hpp"
 
 namespace Parrot
@@ -9,14 +9,14 @@ namespace Parrot
 	class Window : public PtObj
 	{
 	public:
-		Window(const PtWindow& ptWindow);
+		Window(const Asset::WindowAsset& WindowAsset);
 		virtual ~Window();
 
 		const std::string& GetTag() const;
 		bool IsOpen() const;
 		void Close();
 
-		Scene& LoadScene(const PtScene& scene);
+		Scene& LoadScene(const Asset::SceneAsset& scene);
 		Scene& GetLoadedScene();
 		bool IsSceneLoaded();
 		void UnloadScene();
@@ -44,5 +44,5 @@ namespace Parrot
 		bool m_IsOpen;
 		Scene* m_Scene;
 	};
-	Window& CreateWindow(const PtWindow& ptWindow);
+	Window& CreateWindow(const Asset::WindowAsset& WindowAsset);
 }

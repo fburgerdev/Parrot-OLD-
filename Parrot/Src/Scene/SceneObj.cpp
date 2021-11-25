@@ -5,23 +5,23 @@
 
 namespace Parrot
 {
-	SceneObj::SceneObj(Scene& scene, const PtSceneObj& sceneObj)
+	SceneObj::SceneObj(Scene& scene, const Asset::SceneObjAsset& sceneObj)
 		: PtObj(PtObjType::SceneObj), transform(sceneObj.transform), m_Tag(sceneObj.tag), m_Scene(scene)
 	{
 		for (auto& pair : sceneObj.components)
 		{
 			if (pair.first == ComponentType::Renderobj)
 			{
-				m_Components[ComponentType::Renderobj] = new Renderobj(*(Renderobj*)pair.second);
+				m_Components[ComponentType::Renderobj] = new Component::Renderobj(*(Component::Renderobj*)pair.second);
 			}
 			else if (pair.first == ComponentType::Camera)
 			{
-				m_Components[ComponentType::Camera] = new Camera(transform, *(Camera*)pair.second);
+				m_Components[ComponentType::Camera] = new Component::Camera(transform, *(Component::Camera*)pair.second);
 			}
 		}
 		for (const std::string& tag : sceneObj.scripts)
 		{
-			Script* script = Application::Internal_GetScript(tag)(*this);
+			Component::Script* script = Application::Internal_GetScript(tag)(*this);
 			m_Scripts[tag] = script;
 		}
 	}
@@ -44,34 +44,34 @@ namespace Parrot
 	}
 
 	template<>
-	Renderobj& SceneObj::AddComponent<Renderobj>(const PtMesh& ptMesh, const PtShader& ptShader, const PtTex& ptTex)
+	Component::Renderobj& SceneObj::AddComponent<Component::Renderobj>(const Asset::MeshAsset& MeshAsset, const Asset::ShaderAsset& ShaderAsset, const Asset::TexAsset& TexAsset)
 	{
-		Renderobj* rObj = new Renderobj(ptMesh, ptShader, ptTex);
+		Component::Renderobj* rObj = new Component::Renderobj(MeshAsset, ShaderAsset, TexAsset);
 		m_Components[ComponentType::Renderobj] = rObj;
 		return *rObj;
 	}
 	template<>
-	Camera& SceneObj::AddComponent<Camera>(const float& foV, const Math::Vec2f& zRange)
+	Component::Camera& SceneObj::AddComponent<Component::Camera>(const float& foV, const Math::Vec2f& zRange)
 	{
-		Camera* cam = new Camera(transform, foV, zRange);
+		Component::Camera* cam = new Component::Camera(transform, foV, zRange);
 		m_Components[ComponentType::Camera] = cam;
 		return *cam;
 	}
 
 	template<>
-	Renderobj& SceneObj::GetComponent<Renderobj>()
+	Component::Renderobj& SceneObj::GetComponent<Component::Renderobj>()
 	{
 		InternalLog::LogAssert(m_Components.find(ComponentType::Renderobj) != m_Components.end(), "SceneObj \"%\" doesn't have a Renderobj component!", m_Tag);
-		return *(Renderobj*)m_Components[ComponentType::Renderobj];
+		return *(Component::Renderobj*)m_Components[ComponentType::Renderobj];
 	}
 	template<>
-	Camera& SceneObj::GetComponent<Camera>()
+	Component::Camera& SceneObj::GetComponent<Component::Camera>()
 	{
 		InternalLog::LogAssert(m_Components.find(ComponentType::Camera) != m_Components.end(), "SceneObj \"%\" doesn't have a Camera component!", m_Tag);
-		return *(Camera*)m_Components[ComponentType::Camera];
+		return *(Component::Camera*)m_Components[ComponentType::Camera];
 	}
 
-	std::unordered_map<std::string, Script*>& SceneObj::GetScripts()
+	std::unordered_map<std::string, Component::Script*>& SceneObj::GetScripts()
 	{
 		return m_Scripts;
 	}

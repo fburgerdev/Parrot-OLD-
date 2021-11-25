@@ -1,5 +1,4 @@
 #pragma once
-#include <string>
 #include "Window/Window.hpp"
 #include "Utils/Stopwatch.hpp"
 
@@ -9,7 +8,7 @@ namespace Parrot
 	{		
 		Window& GetWindow(const std::string& tag);
 		Window& GetBoundWindow();
-		Window& MainWindow();
+		Window& GetMainWindow();
 		bool ContainsWindow(const std::string& tag);
 
 		Utils::Timestep AbsTime();

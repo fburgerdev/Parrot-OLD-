@@ -140,18 +140,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Src\Assets\AssetManager.hpp" />
-    <ClInclude Include="Src\Core\PtObj.hpp" />
-    <ClInclude Include="Src\Assets\Formats\PtMesh.hpp" />
-    <ClInclude Include="Src\Assets\Formats\PtScene.hpp" />
-    <ClInclude Include="Src\Assets\Formats\PtSceneObj.hpp" />
-    <ClInclude Include="Src\Assets\Formats\PtShader.hpp" />
-    <ClInclude Include="Src\Assets\Formats\PtTex.hpp" />
-    <ClInclude Include="Src\Assets\Formats\PtWindow.hpp" />
+    <ClInclude Include="Src\Assets\Formats\MeshAsset.hpp" />
+    <ClInclude Include="Src\Assets\Formats\SceneAsset.hpp" />
+    <ClInclude Include="Src\Assets\Formats\SceneObjAsset.hpp" />
+    <ClInclude Include="Src\Assets\Formats\ShaderAsset.hpp" />
+    <ClInclude Include="Src\Assets\Formats\TexAsset.hpp" />
+    <ClInclude Include="Src\Assets\Formats\WindowAsset.hpp" />
     <ClInclude Include="Src\Assets\InternalAssetManager.hpp" />
     <ClInclude Include="Src\Core\Application.hpp" />
     <ClInclude Include="Src\Core\InternalApplication.hpp" />
-    <ClInclude Include="Src\Core\LogMessages.hpp" />
+    <ClInclude Include="Src\Core\Msgs.hpp" />
     <ClInclude Include="Src\Core\Macros.hpp" />
+    <ClInclude Include="Src\Core\PtObj.hpp" />
     <ClInclude Include="Src\Debug\InternalLog.hpp" />
     <ClInclude Include="Src\Debug\Log.hpp" />
     <ClInclude Include="Src\Graphics\GraphicsAPI.hpp" />
@@ -172,7 +172,7 @@
     <ClInclude Include="Src\ParrotScript.hpp" />
     <ClInclude Include="Src\Ptpch.hpp" />
     <ClInclude Include="Src\Renderer\MeshRenderer\MeshRenderer.hpp" />
-    <ClInclude Include="Src\Renderer\MeshRenderer\MeshVertex.hpp" />
+    <ClInclude Include="Src\Graphics\MeshVertex.hpp" />
     <ClInclude Include="Src\Scene\Components.hpp" />
     <ClInclude Include="Src\Scene\Scene.hpp" />
     <ClInclude Include="Src\Scene\SceneObj.hpp" />
@@ -185,13 +185,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Assets\AssetManager.cpp" />
-    <ClCompile Include="Src\Core\PtObj.cpp" />
-    <ClCompile Include="Src\Assets\Formats\PtMesh.cpp" />
-    <ClCompile Include="Src\Assets\Formats\PtScene.cpp" />
-    <ClCompile Include="Src\Assets\Formats\PtShader.cpp" />
-    <ClCompile Include="Src\Assets\Formats\PtTex.cpp" />
-    <ClCompile Include="Src\Assets\Formats\PtWindow.cpp" />
+    <ClCompile Include="Src\Assets\Formats\MeshAsset.cpp" />
+    <ClCompile Include="Src\Assets\Formats\SceneAsset.cpp" />
+    <ClCompile Include="Src\Assets\Formats\ShaderAsset.cpp" />
+    <ClCompile Include="Src\Assets\Formats\TexAsset.cpp" />
+    <ClCompile Include="Src\Assets\Formats\WindowAsset.cpp" />
     <ClCompile Include="Src\Core\Application.cpp" />
+    <ClCompile Include="Src\Core\PtObj.cpp" />
     <ClCompile Include="Src\Debug\InternalLog.cpp" />
     <ClCompile Include="Src\Debug\Log.cpp" />
     <ClCompile Include="Src\Graphics\GraphicsAPI.cpp" />

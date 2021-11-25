@@ -1,9 +1,8 @@
 #pragma once
 #include "Ptpch.hpp"
-#include "InternalParrot.hpp"
 #include "ParrotScript.hpp"
 
-using namespace Parrot;
+using namespace Parrot::Graphics;
 static void CreateDefaultMeshes()
 {
 	// quad

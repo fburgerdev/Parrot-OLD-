@@ -7,7 +7,7 @@ namespace Parrot
 	class Window_GLFW : public Window
 	{
 	public:
-		Window_GLFW(const PtWindow& ptWindow);
+		Window_GLFW(const Asset::WindowAsset& WindowAsset);
 		~Window_GLFW();
 
 		virtual void SetTitle(const std::string& title) override;

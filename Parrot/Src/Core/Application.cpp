@@ -1,8 +1,8 @@
 #include "Ptpch.hpp"
+#include "InternalApplication.hpp"
 #include "Assets/InternalAssetManager.hpp"
 #include "Debug/InternalLog.hpp"
 #include "Renderer/MeshRenderer/MeshRenderer.hpp"
-#include "InternalApplication.hpp"
 #include "Scene/Scene.hpp"
 
 namespace Parrot
@@ -23,10 +23,10 @@ namespace Parrot
 		}
 		Window& GetBoundWindow()
 		{
-			InternalLog::LogAssert(s_BoundWindow, "No Window was bound so far!");
+			InternalLog::LogAssert(s_BoundWindow, "No Window was bound so far or the bound window was closed!");
 			return *s_BoundWindow;
 		}
-		Window& MainWindow()
+		Window& GetMainWindow()
 		{
 			InternalLog::LogAssert(s_MainWindow, "Main Window got destroyed already or wasn't created yet!");
 			return *s_MainWindow;
@@ -70,9 +70,6 @@ namespace Parrot
 			s_BoundWindow = window;
 		}
 	}
-
-	void UpdateScene(Scene& scene);
-	void RenderScene(Scene& scene);
 }
 
 using namespace Parrot;
@@ -81,17 +78,16 @@ int main()
 	s_ApplicationTimer.Start();
 	
 	InternalLog::StartScope("ParrotInit");
+
 	AssetManager::Internal_InitAssetDir(Utils::Directory("..\\Parrot\\Src\\Assets\\Defaults\\"));
 	AssetManager::Internal_LoadAllFromDir();
 	InternalLog::LogInfo("Default Assets loaded successfully!");
-	InternalLog::EndScope();
-
-	AssetManager::Internal_ConvertToAsset(Utils::Filepath("..\\TestAssets\\Skybox.png"));
-	InternalLog::StartScope("OnCreate");
+	
 	Application::Internal_OnCreate();
+	
 	MeshRenderer::Init();
 	InternalLog::LogInfo("MeshRenderer initialized successfully!");
-	InternalLog::LogAssert(s_MainWindow, "\"Application::OnCreate()\" needs to create at least one Window!");
+	
 	InternalLog::EndScope();
 
 	InternalLog::StartScope("Runtime");
@@ -104,32 +100,8 @@ int main()
 			{
 				window.Bind();
 				window.Clear();
-				Scene& scene = window.GetLoadedScene();
-				if (!scene.m_OnCreateCalled)
-				{
-					for (Script* script : scene.m_Scripts)
-					{
-						script->OnCreate();
-					}
-					scene.m_OnCreateCalled = true;
-				}
-				for (Script* script : scene.m_Scripts)
-					script->OnUpdate();
-				for (auto& pair : scene.m_SceneObjs)
-				{
-					if (pair.second->HasComponent(ComponentType::Camera))
-					{
-						MeshRenderer::StartCoroutine(pair.second->GetComponent<Camera>());
-						break;
-					}
-				}
-				for (auto& pair : scene.m_SceneObjs)
-				{
-					if (pair.second->HasComponent(ComponentType::Renderobj))
-					{
-						MeshRenderer::Push(pair.second->transform, pair.second->GetComponent<Renderobj>());
-					}
-				}
+				window.GetLoadedScene().UpdateObjs();
+				window.GetLoadedScene().Render();
 				window.Refresh();
 			}
 			else

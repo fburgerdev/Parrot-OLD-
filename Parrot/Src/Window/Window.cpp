@@ -9,8 +9,8 @@
 namespace Parrot
 {
 	static std::unordered_map<std::string, uint32_t> s_WindowNamesakeCount;
-	Window::Window(const PtWindow& ptWindow)
-		: PtObj(PtObjType::Window), m_Tag(ptWindow.GetFilepath().GetFilename().GetName()), m_IsOpen(true), m_Scene(nullptr)
+	Window::Window(const Asset::WindowAsset& WindowAsset)
+		: PtObj(PtObjType::Window), m_Tag(WindowAsset.GetFilepath().GetFilename().GetName()), m_IsOpen(true), m_Scene(nullptr)
 	{
 		if (s_WindowNamesakeCount.find(m_Tag) == s_WindowNamesakeCount.end())
 		{
@@ -23,7 +23,7 @@ namespace Parrot
 		}
 
 		Application::Internal_AddWindow(m_Tag, this);
-		m_Scene = new Scene(*this, AssetManager::GetSceneAsset(ptWindow.GetData().scene));
+		m_Scene = new Scene(*this, AssetManager::GetSceneAsset(WindowAsset.GetData().scene));
 	}
 	
 	Window::~Window()
@@ -46,7 +46,7 @@ namespace Parrot
 		m_IsOpen = false;
 	}
 
-	Scene& Window::LoadScene(const PtScene& scene)
+	Scene& Window::LoadScene(const Asset::SceneAsset& scene)
 	{
 		UnloadScene();
 		m_Scene = new Scene(*this, scene);
@@ -68,10 +68,10 @@ namespace Parrot
 		delete m_Scene;
 	}
 	
-	Window& CreateWindow(const PtWindow& ptWindow)
+	Window& CreateWindow(const Asset::WindowAsset& WindowAsset)
 	{
 	#ifdef PT_GLFW
-		return *new Window_GLFW(ptWindow);
+		return *new Window_GLFW(WindowAsset);
 	#elif
 		#error No WindowAPI specified! Options: "PT_GLFW"
 	#endif

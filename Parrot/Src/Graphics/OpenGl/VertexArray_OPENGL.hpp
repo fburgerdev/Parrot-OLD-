@@ -3,15 +3,18 @@
 
 namespace Parrot
 {
-	class VertexArray_OPENGL : public VertexArrayAPI
+	namespace Graphics
 	{
-	public:
-		VertexArray_OPENGL(const VertexBufferAPI* vb, const VertexBufferLayout& layout);
-		~VertexArray_OPENGL();
+		class VertexArray_OPENGL : public VertexArrayAPI
+		{
+		public:
+			VertexArray_OPENGL(const VertexBufferAPI* vb, const VertexBufferLayout& layout);
+			~VertexArray_OPENGL();
 
-		virtual void Bind() const override;
-		virtual void Unbind() const override;
-	private:
-		uint32_t m_ID;
-	};
+			virtual void Bind() const override;
+			virtual void Unbind() const override;
+		private:
+			uint32_t m_ID;
+		};
+	}
 }

@@ -9,7 +9,9 @@
 
 namespace Parrot
 {
-	#ifdef PT_OPENGL
+#ifdef PT_OPENGL
+	namespace Graphics
+	{
 		IndexBufferAPI* CreateIndexBufferAPI(const uint32_t* indices, uint32_t count, bool isStatic)
 		{
 			return new IndexBuffer_OPENGL(indices, count, isStatic);
@@ -30,5 +32,6 @@ namespace Parrot
 		{
 			return new Shader_OPENGL(vertexSrc, fragmentSrc);
 		}
-	#endif // PT_OPENGL
+	}
+#endif // PT_OPENGL
 }

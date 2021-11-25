@@ -87,7 +87,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <IgnoreSpecificDefaultLibraries>LIBCMT.lib</IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>LIBCMTD.lib;</IgnoreSpecificDefaultLibraries>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Optimized|x64'">
@@ -133,18 +134,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Src\ContextManagerScript.hpp" />
     <ClInclude Include="Src\Controller3D.hpp" />
-    <ClInclude Include="Src\CubeScript.hpp" />
     <ClInclude Include="Src\DefaultMeshCreation.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Src\OnCreate.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Parrot\Parrot.vcxproj">
       <Project>{DD7697C9-C918-C29F-B2D3-D5F39E1449F0}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Src\OnCreate.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
