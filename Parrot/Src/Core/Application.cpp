@@ -79,7 +79,7 @@ int main()
 	
 	InternalLog::StartScope("ParrotInit");
 
-	AssetManager::Internal_InitAssetDir(Utils::Directory("..\\Parrot\\Src\\Assets\\Defaults\\"));
+	AssetManager::Internal_InitAssetDir(Utils::Directory("C:\\Users\\flori\\OneDrive\\Desktop\\Dev\\Parrot\\Parrot\\Src\\Assets\\Defaults"));
 	AssetManager::Internal_LoadAllFromDir();
 	InternalLog::LogInfo("Default Assets loaded successfully!");
 	
@@ -115,4 +115,5 @@ int main()
 	if (s_MainWindow)
 		delete s_MainWindow;
 	InternalLog::LogInfo("Parrot terminated successfully after %s!", s_ApplicationTimer.Timing().Seconds());
+	(void)std::getchar();
 }

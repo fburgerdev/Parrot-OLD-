@@ -1,5 +1,6 @@
 #include "Ptpch.hpp"
 #include "SceneObj.hpp"
+#include "Scene.hpp"
 #include "Debug/InternalLog.hpp"
 #include "Core/InternalApplication.hpp"
 
@@ -8,6 +9,15 @@ namespace Parrot
 	SceneObj::SceneObj(Scene& scene, const Asset::SceneObjAsset& sceneObj)
 		: PtObj(PtObjType::SceneObj), transform(sceneObj.transform), m_Tag(sceneObj.tag), m_Scene(scene)
 	{
+		//if (scene.HasSceneObj(sceneObj.tag))
+		//{
+		//	s_WindowNamesakeCount[m_Tag] = 0;
+		//}
+		//else
+		//	m_Tag = sceneObj.tag;
+		//	uint32_t number = ++s_WindowNamesakeCount[m_Tag];
+		//	m_Tag += '(' + std::to_string(number) + ')';
+		//}
 		for (auto& pair : sceneObj.components)
 		{
 			if (pair.first == ComponentType::Renderobj)
@@ -25,6 +35,7 @@ namespace Parrot
 			m_Scripts[tag] = script;
 		}
 	}
+
 	SceneObj::~SceneObj()
 	{
 		for (auto& ptr : m_Components)

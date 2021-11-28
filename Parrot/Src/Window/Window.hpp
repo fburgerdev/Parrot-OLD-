@@ -28,14 +28,19 @@ namespace Parrot
 		virtual void SetCursorPos(const Math::Vec2i& pos) = 0;
 		virtual Math::Vec2i GetCursorPos() const = 0;
 
-		virtual void Maximize() = 0;
-		virtual void Minimize() = 0;
+		virtual void ShowCursor(bool state) const = 0;
+	
+		virtual void Maximized(bool state) = 0;
+		virtual void Minimized(bool state) = 0;
 
 		virtual void SetSize(const Math::Vec2u& dim) = 0;
 		virtual Math::Vec2u GetSize() const = 0;
+		virtual void Resizable(bool state) = 0;
+
 		virtual void Refresh() = 0;
 
 		virtual void GainFocus() = 0;
+		virtual bool HasFocus() const = 0;
 
 		virtual void Clear() = 0;
 		virtual void Bind() const = 0;

@@ -17,14 +17,14 @@ namespace Parrot
 			Graphics::ShaderAPI* shader;
 			Graphics::TextureAPI* tex;
 		};
-		std::unordered_map<uint32_t, Graphics::ShaderAPI*> shaders;
-		std::unordered_map<uint32_t, Graphics::TextureAPI*> textures;
-		std::unordered_map<uint32_t, Mesh> meshes;
+		std::unordered_map<uint64_t, Graphics::ShaderAPI*> shaders;
+		std::unordered_map<uint64_t, Graphics::TextureAPI*> textures;
+		std::unordered_map<uint64_t, Mesh> meshes;
 	};
-	static std::unordered_map <uint32_t, GraphicsContent*> s_WindowGraphicsContent;
+	static std::unordered_map<uint64_t, GraphicsContent> s_Contents;
 	static GraphicsContent* s_ActiveContent;
 	
-	static const Asset::ShaderAsset* s_DefaultShader;
+	//static const Asset::ShaderAsset* s_DefaultShader;
 	static const Component::Camera* s_Cam;
 
 	namespace MeshRenderer
@@ -80,30 +80,35 @@ namespace Parrot
 		void Init()
 		{
 			glEnable(GL_DEPTH_TEST);
-			//glEnable(GL_CULL_FACE);
-			//glEnable(GL_BLEND);
-			//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glEnable(GL_CULL_FACE);
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		}
 
 		void StartCoroutine(const Component::Camera& cam)
 		{
-			s_ActiveContent = s_WindowGraphicsContent[Application::GetBoundWindow().GetObjID()];
+			s_ActiveContent = &s_Contents[Application::GetBoundWindow().GetObjID()];
 			s_Cam = &cam;
 		}
 
 		void Push(const Component::Transform& transform, const Component::Renderobj& ro)
 		{
-			//if (s_ActiveContent->meshes.find(ro.MeshAsset.GetObjID()) == s_ActiveContent->meshes.end())
-			//	CreateGraphicsContent(ro);
-			////ShaderAPI* shader = s_ActiveContent->shaders[ro.ShaderAsset.GetObjID()];
-			//s_DefaultShader->SetUniformMat4f("u_Transform", transform.Mat());
-			//s_DefaultShader->GetShaderAPI().SetUniformMat4f("u_Transform", transform.Mat());
-			//ro.MeshAsset.BindMesh();
-			//ro.TexAsset.BindTexture();
-			//if (ro.MeshAsset.GetData().isQuadGeometry)
-			//	glDrawElements(GL_TRIANGLES, (GLsizei)ro.MeshAsset.GetData().vertexCount * 6 / 4, GL_UNSIGNED_INT, 0);
-			//else
-			//	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)ro.MeshAsset.GetData().vertexCount);
+			if (s_ActiveContent->meshes.find(ro.mesh.GetObjID()) == s_ActiveContent->meshes.end())
+				CreateGraphicsContent(ro);
+			GraphicsContent::Mesh mesh = s_ActiveContent->meshes[ro.mesh.GetObjID()];
+			mesh.shader->Bind();
+			mesh.shader->SetUniformMat4f("u_ViewProj", s_Cam->ViewProjMat());
+			mesh.shader->SetUniformMat4f("u_Transform", transform.Mat());
+			mesh.tex->Bind();
+			mesh.va->Bind();
+				
+			if (ro.mesh.GetData().isQuadGeometry)
+			{
+				mesh.ib->Bind();
+				glDrawElements(GL_TRIANGLES, (GLsizei)ro.mesh.GetData().vertexCount * 6 / 4, GL_UNSIGNED_INT, 0);
+			}
+			else
+				glDrawArrays(GL_TRIANGLES, 0, (GLsizei)ro.mesh.GetData().vertexCount);
 
 		}
 	}

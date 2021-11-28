@@ -8,19 +8,19 @@
 namespace Parrot
 {
 	Scene::Scene(Window& window, const Asset::SceneAsset& SceneAsset)
-		: PtObj(PtObjType::Scene), m_Tag(SceneAsset.GetFilepath().GetFilename().GetName()), m_Window(window)
+		: PtObj(PtObjType::Scene), m_Tag(SceneAsset.GetFilepath().GetFilename().GetName()), m_Window(window), m_OnCreateCalled(false)
 	{
 		for (uint32_t i = 0; i < SceneAsset.GetData().objCount; ++i)
 		{
+			if (m_SceneObjNamesakeCount.find(m_Tag) == m_SceneObjNamesakeCount.end())
+			{
+				m_SceneObjNamesakeCount[m_Tag] = 0;
+			}
 			const Asset::SceneObjAsset& ptObj = SceneAsset.GetData().objs[i];
 			SceneObj* obj = new SceneObj(*this, ptObj);
 			m_SceneObjs[ptObj.tag] = obj;
 			for (auto& pair : obj->GetScripts())
 				m_Scripts.push_back(pair.second);
-		}
-		for (Component::Script* script : m_Scripts)
-		{
-			script->OnCreate();
 		}
 	}
 	Scene::~Scene()
@@ -36,6 +36,20 @@ namespace Parrot
 	Window& Scene::GetWindow()
 	{
 		return m_Window;
+	}
+	void Scene::AddSceneObj(const Asset::SceneObjAsset& sceneObj)
+	{
+	/*	if (m_SceneObjNamesakeCount.find(sceneObj.tag) == m_SceneObjNamesakeCount.end())
+		{
+			m_SceneObjNamesakeCount[sceneObj.tag] = 0;
+			m_SceneObjs[sceneObj.tag] = new SceneObj(*this, sceneObj);
+		}
+		else
+		{
+			uint32_t number = ++m_SceneObjNamesakeCount[sceneObj.tag];
+			std::string overrideTag = sceneObj.tag + '(' + std::to_string(number) + ')';
+			m_SceneObjs[overrideTag] = new SceneObj(*this, overrideTag, sceneObj);
+		}*/
 	}
 	bool Scene::HasSceneObj(const std::string& tag)
 	{
@@ -54,6 +68,14 @@ namespace Parrot
 
 	void Scene::UpdateObjs()
 	{
+		if (!m_OnCreateCalled)
+		{
+			for (Component::Script* script : m_Scripts)
+			{
+				script->OnCreate();
+			}
+			m_OnCreateCalled = true;
+		}
 		for (Component::Script* script : m_Scripts)
 			script->OnUpdate();
 	}

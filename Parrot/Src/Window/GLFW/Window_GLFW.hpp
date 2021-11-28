@@ -15,16 +15,19 @@ namespace Parrot
 
 		virtual void SetCursorPos(const Math::Vec2i& pos) override;
 		virtual Math::Vec2i GetCursorPos() const override;
+		virtual void ShowCursor(bool state) const override;
 
-		virtual void Maximize() override;
-		virtual void Minimize() override;
-
+		virtual void Maximized(bool state) override;
+		virtual void Minimized(bool state) override;
+	
 		virtual void SetSize(const Math::Vec2u& dim) override;
 		virtual Math::Vec2u GetSize() const override;
+		virtual void Resizable(bool state) override;
 
 		virtual void Refresh() override;
 
 		virtual void GainFocus() override;
+		virtual bool HasFocus() const override;
 
 		virtual void Clear() override;
 		virtual void Bind() const override;

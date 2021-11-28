@@ -10,6 +10,7 @@ public:
 private:
 	Window* wndw;
 	Component::Camera* cam;
+	bool mouseMovement = true;
 public:
 	using Script::Script;
 
@@ -17,18 +18,42 @@ public:
 	{
 		wndw = &sceneObj.GetScene().GetWindow();
 		cam = &sceneObj.GetComponent<Component::Camera>();
+		wndw->ShowCursor(false);
 	}
-
+	virtual void OnEvent(Event e) override
+	{
+		if (e.type == EventType::MousePress && e.mousePress.button == MouseButton::Left && e.mousePress.state == MouseButtonState::Pressed)
+		{
+			mouseMovement = true;
+			wndw->ShowCursor(false);
+		}
+		if (e.type == EventType::KeyPress && e.keyPress.keyCode == KeyCode::KEY_ESCAPE && e.keyPress.state == KeyState::Pressed)
+		{
+			if (!mouseMovement)
+				wndw->Close();
+			else
+			{
+				mouseMovement = false;
+				wndw->ShowCursor(true);
+			}
+		}
+	}
 	virtual void OnUpdate() override
 	{
+		if (!wndw->HasFocus())
+			return;
 		// camera rotation
-		Math::Vec2i dMouse = wndw->GetCursorPos() - (Math::Vec2i)((Math::Vec2f)wndw->GetSize() * 0.5f);
-		sceneObj.transform.rot.xy += (Math::Vec2f)dMouse * mSense;
-		// lock Pitch between -90 to 90 degrees
-		if (sceneObj.transform.rot.y > Math::PI_HALFS)
-			sceneObj.transform.rot.y = Math::PI_HALFS;
-		else if (sceneObj.transform.rot.y < -Math::PI_HALFS)
-			sceneObj.transform.rot.y = -Math::PI_HALFS;
+		if (mouseMovement)
+		{
+			Math::Vec2i dMouse = wndw->GetCursorPos() - (Math::Vec2i)((Math::Vec2f)wndw->GetSize() * 0.5f);
+			sceneObj.transform.rot.xy += (Math::Vec2f)dMouse * mSense;
+			// lock Pitch between -90 to 90 degrees
+			if (sceneObj.transform.rot.y > Math::PI_HALFS)
+				sceneObj.transform.rot.y = Math::PI_HALFS;
+			else if (sceneObj.transform.rot.y < -Math::PI_HALFS)
+				sceneObj.transform.rot.y = -Math::PI_HALFS;
+			wndw->SetCursorPos(wndw->GetSize() / 2); // center cursor
+		}
 
 		if (GetKeyState(KeyCode::KEY_UP) != KeyState::Released)
 			cam->foV += 0.01f;
@@ -51,6 +76,5 @@ public:
 		if (GetKeyState(KeyCode::KEY_LEFT_CONTROL) != KeyState::Released)
 			sceneObj.transform.pos -= cam->DirUp() * speed;
 
-		wndw->SetCursorPos(wndw->GetSize() / 2); // center cursor
 	}
 };

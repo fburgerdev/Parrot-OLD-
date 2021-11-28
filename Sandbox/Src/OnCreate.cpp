@@ -11,4 +11,5 @@ void Parrot::Application::Internal_OnCreate()
 	AssetManager::LoadAsset(Utils::Filename("Main.WNDW"));
 	AssetManager::LoadAsset(Utils::Filename("PopUp.WNDW"));
 	CreateWindow(AssetManager::GetWindowAsset("Main"));
+	CreateWindow(AssetManager::GetWindowAsset("Main"));
 }

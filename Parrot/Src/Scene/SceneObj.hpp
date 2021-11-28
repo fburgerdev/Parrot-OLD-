@@ -10,7 +10,7 @@ namespace Parrot
 	class SceneObj : public PtObj
 	{
 	public:
-		SceneObj(Scene& scene, const Asset::SceneObjAsset& SceneObjAsset);
+		SceneObj(Scene& scene, const Asset::SceneObjAsset& sceneObj);
 		~SceneObj();
 
 		const std::string& GetTag() const;

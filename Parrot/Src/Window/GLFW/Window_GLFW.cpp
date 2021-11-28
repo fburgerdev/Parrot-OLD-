@@ -110,14 +110,26 @@ namespace Parrot
 		glfwGetCursorPos(m_Window, &x, &y);
 		return Math::Vec2i((int32_t)x, (int32_t)y);
 	}
-
-	void Window_GLFW::Maximize()
+	void Window_GLFW::ShowCursor(bool state) const
 	{
-		glfwMaximizeWindow(m_Window);
+		if (state)
+			glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		else 
+			glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 	}
-	void Window_GLFW::Minimize()
+	void Window_GLFW::Maximized(bool state)
 	{
-		glfwIconifyWindow(m_Window);
+		if (state)
+			glfwMaximizeWindow(m_Window);
+		else
+			glfwRestoreWindow(m_Window);
+	}
+	void Window_GLFW::Minimized(bool state)
+	{
+		if (state)
+			glfwIconifyWindow(m_Window);
+		else
+			glfwRestoreWindow(m_Window);
 	}
 
 	void Window_GLFW::SetSize(const Math::Vec2u& dim)
@@ -130,6 +142,10 @@ namespace Parrot
 		glfwGetWindowSize(m_Window, &width, &height);
 		return Math::Vec2u((uint32_t)width, (uint32_t)height);
 	}
+	void Window_GLFW::Resizable(bool state)
+	{
+		glfwSetWindowAttrib(m_Window, GLFW_RESIZABLE, (int32_t)state);
+	}
 	void Window_GLFW::Refresh()
 	{
 		Bind();
@@ -139,6 +155,10 @@ namespace Parrot
 	void Window_GLFW::GainFocus()
 	{
 		glfwFocusWindow(m_Window);
+	}
+	bool Window_GLFW::HasFocus() const
+	{
+		return glfwGetWindowAttrib(m_Window, GLFW_FOCUSED);
 	}
 	void Window_GLFW::Clear()
 	{
