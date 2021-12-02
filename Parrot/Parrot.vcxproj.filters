@@ -78,16 +78,13 @@
     <ClInclude Include="Src\Assets\Formats\WindowAsset.hpp">
       <Filter>Src\Assets\Formats</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Assets\InternalAssetManager.hpp">
+    <ClInclude Include="Src\Assets\Internal_AssetManager.hpp">
       <Filter>Src\Assets</Filter>
     </ClInclude>
     <ClInclude Include="Src\Core\Application.hpp">
       <Filter>Src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Core\InternalApplication.hpp">
-      <Filter>Src\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Core\Msgs.hpp">
+    <ClInclude Include="Src\Core\Internal_Application.hpp">
       <Filter>Src\Core</Filter>
     </ClInclude>
     <ClInclude Include="Src\Core\Macros.hpp">
@@ -96,13 +93,16 @@
     <ClInclude Include="Src\Core\PtObj.hpp">
       <Filter>Src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Debug\InternalLog.hpp">
+    <ClInclude Include="Src\Debug\Internal_Log.hpp">
       <Filter>Src\Debug</Filter>
     </ClInclude>
     <ClInclude Include="Src\Debug\Log.hpp">
       <Filter>Src\Debug</Filter>
     </ClInclude>
     <ClInclude Include="Src\Graphics\GraphicsAPI.hpp">
+      <Filter>Src\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Graphics\MeshVertex.hpp">
       <Filter>Src\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Src\Graphics\OpenGl\IndexBuffer_OPENGL.hpp">
@@ -129,7 +129,7 @@
     <ClInclude Include="Src\Input\Input.hpp">
       <Filter>Src\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Input\InternalInput.hpp">
+    <ClInclude Include="Src\Input\Internal_Input.hpp">
       <Filter>Src\Input</Filter>
     </ClInclude>
     <ClInclude Include="Src\InternalParrot.hpp">
@@ -154,9 +154,6 @@
       <Filter>Src</Filter>
     </ClInclude>
     <ClInclude Include="Src\Renderer\MeshRenderer\MeshRenderer.hpp">
-      <Filter>Src\Renderer\MeshRenderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Graphics\MeshVertex.hpp">
       <Filter>Src\Renderer\MeshRenderer</Filter>
     </ClInclude>
     <ClInclude Include="Src\Scene\Components.hpp">
@@ -186,6 +183,7 @@
     <ClInclude Include="Vendor\Stb\stb_image.h">
       <Filter>Vendor\Stb</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Assets\StandardAssets.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Assets\AssetManager.cpp">
@@ -212,7 +210,7 @@
     <ClCompile Include="Src\Core\PtObj.cpp">
       <Filter>Src\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Debug\InternalLog.cpp">
+    <ClCompile Include="Src\Debug\Internal_Log.cpp">
       <Filter>Src\Debug</Filter>
     </ClCompile>
     <ClCompile Include="Src\Debug\Log.cpp">
@@ -269,20 +267,9 @@
     <ClCompile Include="Vendor\Stb\stb_image.cpp">
       <Filter>Vendor\Stb</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Assets\StandardAssets.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Src\Assets\Defaults\Cube.MSH">
-      <Filter>Src\Assets\Defaults</Filter>
-    </None>
-    <None Include="Src\Assets\Defaults\Default.SHDR">
-      <Filter>Src\Assets\Defaults</Filter>
-    </None>
-    <None Include="Src\Assets\Defaults\NoTex.TXTR">
-      <Filter>Src\Assets\Defaults</Filter>
-    </None>
-    <None Include="Src\Assets\Defaults\Quad.MSH">
-      <Filter>Src\Assets\Defaults</Filter>
-    </None>
     <None Include="Src\Assets\Defaults\Skybox.TXTR">
       <Filter>Src\Assets\Defaults</Filter>
     </None>

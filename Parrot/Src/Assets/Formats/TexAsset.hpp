@@ -10,21 +10,19 @@ namespace Parrot
 	{
 		class TexAsset : public PtObj
 		{
-			struct Data
-			{
-				Graphics::TextureAPI::Settings settings;
-				Math::Vec2u size;
-				uint8_t* buffer = nullptr;
-			};
 		public:
 			TexAsset(const Utils::Filepath& filepath);
+			TexAsset();
 			~TexAsset();
 
-			const Utils::Filepath& GetFilepath() const;
-			const Data& GetData() const;
-		private:
-			Utils::Filepath m_Filepath;
-			Data m_Data;
+			uint32_t BufferIndex(Math::Vec2u coords);
+			void SaveToFile();
+		public:
+			Utils::Filepath filepath;
+
+			Graphics::TextureAPI::Settings settings;
+			Math::Vec2u size;
+			Math::Vec4u8* buffer = nullptr;
 		};
 	}
 }

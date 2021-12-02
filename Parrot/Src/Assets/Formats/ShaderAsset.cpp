@@ -1,17 +1,17 @@
 #include "Ptpch.hpp"
 #include "ShaderAsset.hpp"
-#include "Debug/InternalLog.hpp"
-#include "Core/Msgs.hpp"
+
+#include "Debug/Internal_Log.hpp"
 
 namespace Parrot
 {
 	namespace Asset
 	{
 		ShaderAsset::ShaderAsset(const Utils::Filepath& filepath)
-			: PtObj(PtObjType::ShaderAsset), m_Filepath(filepath)
+			: PtObj(PtObj::Type::ShaderAsset), filepath(filepath)
 		{
-			std::ifstream stream(filepath.GetFullPath());
-			InternalLog::LogAssert(stream.is_open(), StreamErrorMsg, filepath.GetFullPath());
+			std::ifstream stream(filepath.FullPath());
+			Internal_Log::LogAssert(stream.is_open(), "File \"%\" could not be opened. Either the file doesn't exist or it is already opened by another process.", filepath.FullPath());
 			std::stringstream ss[2];
 			std::string line;
 			int32_t index = -1;
@@ -24,7 +24,7 @@ namespace Parrot
 						index = 0;
 						continue;
 					}
-					else if (line.find("fragment") != std::string::npos)
+					else if (line.find("fragment") != std::string::npos || line.find("pixel") != std::string::npos)
 					{
 						index = 1;
 						continue;
@@ -33,21 +33,28 @@ namespace Parrot
 				if (index != -1)
 					ss[index] << line << '\n';
 			}
-			m_Data.vertexSrc = ss[0].str();
-			m_Data.fragmentSrc = ss[1].str();
+			vertexSrc = ss[0].str();
+			fragmentSrc = ss[1].str();
 			stream.close();
 		}
-		ShaderAsset::~ShaderAsset()
+		ShaderAsset::ShaderAsset()
+			: PtObj(PtObj::Type::ShaderAsset)
 		{
 
 		}
-		const Utils::Filepath& ShaderAsset::GetFilepath() const
+
+		void ShaderAsset::SaveToFile()
 		{
-			return m_Filepath;
-		}
-		const ShaderAsset::Data& ShaderAsset::GetData() const
-		{
-			return m_Data;
+			constexpr const char* vertexL = "#vertex\n";
+			constexpr const char* fragmentL = "#fragment\n";
+
+			std::ofstream stream(filepath.FullPath());
+			stream.write(vertexL, std::strlen(vertexL));
+			stream.write(vertexSrc.c_str(), vertexSrc.length());
+			stream.write(fragmentL, std::strlen(fragmentL));
+			stream.write(fragmentSrc.c_str(), fragmentSrc.length());
+			stream.put('\0');
+			stream.close();
 		}
 	}
 }

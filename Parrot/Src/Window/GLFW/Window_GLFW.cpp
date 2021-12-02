@@ -2,9 +2,9 @@
 #include "glad/glad.h"
 #include "Window_GLFW.hpp"
 #include "Scene/Scene.hpp"
-#include "Debug/InternalLog.hpp"
-#include "Input/InternalInput.hpp"
-#include "Core/InternalApplication.hpp"
+#include "Debug/Internal_Log.hpp"
+#include "Input/Internal_Input.hpp"
+#include "Core/Internal_Application.hpp"
 
 namespace Parrot
 {
@@ -12,20 +12,20 @@ namespace Parrot
 	static std::unordered_map<GLFWwindow*, Scene*> s_WindowSceneMap;
 
 	Window_GLFW::Window_GLFW(const Asset::WindowAsset& WindowAsset)
-		: Window(WindowAsset), m_Window(nullptr), m_Title(WindowAsset.GetFilepath().GetFilename().GetName())//, m_IsFocused(true)
+		: Window(WindowAsset), m_Window(nullptr), m_Title(WindowAsset.filepath.GetFilename().GetName())//, m_IsFocused(true)
 	{
 		if (s_WindowSceneMap.empty())
 		{
-			InternalLog::LogAssert(glfwInit(), "GLFW initialization failed!");
-			InternalLog::LogInfo("GLFW initialization successful!");
+			Internal_Log::LogAssert(glfwInit(), "GLFW initialization failed!");
+			Internal_Log::LogInfo("GLFW initialization successful!");
 		}
-		m_Window = glfwCreateWindow(WindowAsset.GetData().size.x, WindowAsset.GetData().size.y, m_Title.c_str(), nullptr, s_MainWindow);
-		InternalLog::LogAssert(m_Window, "Window \"%\" creation failed!", m_Title);
-		InternalLog::LogInfo("Window \"%\" creation successful!", m_Title);
+		m_Window = glfwCreateWindow(WindowAsset.size.x, WindowAsset.size.y, m_Title.c_str(), nullptr, s_MainWindow);
+		Internal_Log::LogAssert(m_Window, "Window \"%\" creation failed!", m_Title);
+		Internal_Log::LogInfo("Window \"%\" creation successful!", m_Title);
 		Bind();
 
-		InternalLog::LogAssert(gladLoadGLLoader((GLADloadproc)glfwGetProcAddress), "GLAD initialization failed!");
-		InternalLog::LogInfo("GLAD initialization successful!");
+		Internal_Log::LogAssert(gladLoadGLLoader((GLADloadproc)glfwGetProcAddress), "GLAD initialization failed!");
+		Internal_Log::LogInfo("GLAD initialization successful!");
 
 	    // Callbacks
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int32_t width, int32_t height)
@@ -67,9 +67,13 @@ namespace Parrot
 				s_WindowSceneMap[window]->RaiseEvent(Event(EventType::WindowLostFocus));
 		});
 		if (s_WindowSceneMap.empty())
+		{
 			s_MainWindow = m_Window;
+			glfwSwapInterval(1);
+		}
+		else
+			glfwSwapInterval(0);
 		s_WindowSceneMap[m_Window] = &GetLoadedScene();
-	    glfwSwapInterval(1);
 	}
 
 	Window_GLFW::~Window_GLFW()
@@ -88,7 +92,7 @@ namespace Parrot
 		if (glfwGetCurrentContext() != m_Window)
 		{
 			glfwMakeContextCurrent(m_Window);
-			Application::Internal_SetBoundWindow((Window*)this);
+			Internal_Application::SetBoundWindow((Window*)this);
 		}
 	}
 	void Window_GLFW::SetTitle(const std::string& title)
@@ -145,6 +149,17 @@ namespace Parrot
 	void Window_GLFW::Resizable(bool state)
 	{
 		glfwSetWindowAttrib(m_Window, GLFW_RESIZABLE, (int32_t)state);
+	}
+
+	void Window_GLFW::SetWindowPos(Math::Vec2i pos)
+	{
+		glfwSetWindowPos(m_Window, pos.x, pos.y);
+	}
+	Math::Vec2i Window_GLFW::GetWindowPos()
+	{
+		Math::Vec2i pos;
+		glfwGetWindowPos(m_Window, &pos.x, &pos.y);
+		return pos;
 	}
 	void Window_GLFW::Refresh()
 	{

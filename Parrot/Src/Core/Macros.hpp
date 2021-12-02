@@ -4,11 +4,12 @@
 	#define PT_DEBUG_CALL(X) X
 	#define PT_GUARD_CALL(X) X
 	#define PT_DEBUGBREAK() __debugbreak()
+	#define PT_SHOW_CONSOLE
 #elif defined(PT_OPTIMIZED)
 	#define PT_DEBUG_CALL(X)
 	#define PT_GUARD_CALL(X) X
 	#define PT_DEBUGBREAK() __debugbreak()
-	#define PT_NLOG
+	#define PT_SHOW_CONSOLE
 #elif defined(PT_DIST)
 	#define PT_DEBUG_CALL(X)
 	#define PT_GUARD_CALL(X)

@@ -1,16 +1,17 @@
 #include "Ptpch.hpp"
 #include "Window.hpp"
+
 #include "Scene/Scene.hpp"
-#include "Core/InternalApplication.hpp"
 #include "Assets/AssetManager.hpp"
-#include "Debug/InternalLog.hpp"
 #include "GLFW/Window_GLFW.hpp"
+#include "Debug/Internal_Log.hpp"
+#include "Core/Internal_Application.hpp"
 
 namespace Parrot
 {
 	static std::unordered_map<std::string, uint32_t> s_WindowNamesakeCount;
 	Window::Window(const Asset::WindowAsset& WindowAsset)
-		: PtObj(PtObjType::Window), m_Tag(WindowAsset.GetFilepath().GetFilename().GetName()), m_IsOpen(true), m_Scene(nullptr)
+		: PtObj(PtObj::Type::Window), m_Tag(WindowAsset.filepath.GetFilename().GetName()), m_IsOpen(true), m_Scene(nullptr)
 	{
 		if (s_WindowNamesakeCount.find(m_Tag) == s_WindowNamesakeCount.end())
 		{
@@ -21,16 +22,14 @@ namespace Parrot
 			uint32_t number = ++s_WindowNamesakeCount[m_Tag];
 			m_Tag += '(' + std::to_string(number) + ')';
 		}
-
-		Application::Internal_AddWindow(m_Tag, this);
-		m_Scene = new Scene(*this, AssetManager::GetSceneAsset(WindowAsset.GetData().scene));
+		Internal_Application::AddWindow(m_Tag, this);
+		m_Scene = new Scene(*this, AssetManager::GetSceneAsset(WindowAsset.scene));
 	}
 	
 	Window::~Window()
 	{
 		s_WindowNamesakeCount[m_Tag]--;
 		UnloadScene();
-		Application::Internal_RemoveWindow(m_Tag);
 	}
 	const std::string& Window::GetTag() const
 	{
@@ -58,7 +57,7 @@ namespace Parrot
 	}
 	Scene& Window::GetLoadedScene()
 	{
-		InternalLog::LogAssert(m_Scene, "No Scene loaded in window \"%\"!", m_Tag);
+		Internal_Log::LogAssert(m_Scene, "No Scene loaded in window \"%\"!", m_Tag);
 		return *m_Scene;
 	}
 	void Window::UnloadScene()
@@ -68,12 +67,14 @@ namespace Parrot
 		delete m_Scene;
 	}
 	
-	Window& CreateWindow(const Asset::WindowAsset& WindowAsset)
+	Window& OpenWindow(const Asset::WindowAsset& WindowAsset)
 	{
+		Window* window;
 	#ifdef PT_GLFW
-		return *new Window_GLFW(WindowAsset);
+		window = new Window_GLFW(WindowAsset);
 	#elif
 		#error No WindowAPI specified! Options: "PT_GLFW"
 	#endif
+		return *window;
 	}
 }

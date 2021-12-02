@@ -15,7 +15,6 @@ namespace Parrot
 	class SceneObj;
 	namespace Component
 	{
-
 		class Transform
 		{
 		public:
@@ -35,9 +34,9 @@ namespace Parrot
 			Renderobj(const Asset::MeshAsset& mesh, const Asset::ShaderAsset& shader, const Asset::TexAsset& tex);
 			Renderobj(const Renderobj& other);
 		public:
-			const Asset::MeshAsset& mesh;
-			const Asset::ShaderAsset& shader;
-			const Asset::TexAsset& tex;
+			const Asset::MeshAsset* mesh;
+			const Asset::ShaderAsset* shader;
+			const Asset::TexAsset* tex;
 		};
 
 		class Camera
@@ -58,7 +57,7 @@ namespace Parrot
 			const Transform& m_Transform;
 		};
 
-		class Script
+		class Script : public PtObj
 		{
 		public:
 			Script(SceneObj& obj);

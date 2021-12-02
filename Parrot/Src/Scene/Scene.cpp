@@ -2,24 +2,24 @@
 #include "Scene.hpp"
 #include "Scene/SceneObj.hpp"
 #include "Renderer/MeshRenderer/MeshRenderer.hpp"
-#include "Core/InternalApplication.hpp"
-#include "Debug/InternalLog.hpp"
+#include "Core/Internal_Application.hpp"
+#include "Debug/Internal_Log.hpp"
 
 namespace Parrot
 {
 	Scene::Scene(Window& window, const Asset::SceneAsset& SceneAsset)
-		: PtObj(PtObjType::Scene), m_Tag(SceneAsset.GetFilepath().GetFilename().GetName()), m_Window(window), m_OnCreateCalled(false)
+		: PtObj(PtObj::Type::Scene), m_Tag(SceneAsset.filepath.GetFilename().GetName()), m_Window(window), m_OnCreateCalled(false)
 	{
-		for (uint32_t i = 0; i < SceneAsset.GetData().objCount; ++i)
+		for (uint32_t i = 0; i < SceneAsset.objCount; ++i)
 		{
 			if (m_SceneObjNamesakeCount.find(m_Tag) == m_SceneObjNamesakeCount.end())
 			{
 				m_SceneObjNamesakeCount[m_Tag] = 0;
 			}
-			const Asset::SceneObjAsset& ptObj = SceneAsset.GetData().objs[i];
+			const Asset::SceneObjAsset& ptObj = SceneAsset.objs[i];
 			SceneObj* obj = new SceneObj(*this, ptObj);
 			m_SceneObjs[ptObj.tag] = obj;
-			for (auto& pair : obj->GetScripts())
+			for (auto& pair : obj->m_Scripts)
 				m_Scripts.push_back(pair.second);
 		}
 	}
@@ -57,7 +57,7 @@ namespace Parrot
 	}
 	SceneObj& Scene::GetSceneObj(const std::string& tag)
 	{
-		InternalLog::LogAssert(m_SceneObjs.find(tag) != m_SceneObjs.end(), "SceneObj with tag \"%\" doesn't exist in Scene \"%\"!", tag, m_Tag);
+		Internal_Log::LogAssert(m_SceneObjs.find(tag) != m_SceneObjs.end(), "SceneObj with tag \"%\" doesn't exist in Scene \"%\"!", tag, m_Tag);
 		return *m_SceneObjs[tag];
 	}
 	void Scene::RaiseEvent(Event e)

@@ -95,7 +95,7 @@ namespace Parrot
 		IndexBufferAPI* CreateIndexBufferAPI(const uint32_t* indices, uint32_t count, bool isStatic = false);
 		VertexBufferAPI* CreateVertexBufferAPI(const void* vertices, size_t size, bool isStatic = false);
 		VertexArrayAPI* CreateVertexArrayAPI(const VertexBufferAPI* vb, const VertexBufferLayout& layout);
-		TextureAPI* CreateTextureAPI(const uint8_t* buffer, Math::Vec2u size, const TextureAPI::Settings& settings);
+		TextureAPI* CreateTextureAPI(const Math::Vec4u8* buffer, Math::Vec2u size, const TextureAPI::Settings& settings);
 		ShaderAPI* CreateShaderAPI(const std::string& vertexSrc, const std::string& fragmentSrc);
 	}
 }

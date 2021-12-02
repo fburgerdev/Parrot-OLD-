@@ -50,7 +50,7 @@ namespace Parrot
 
 			inline bool operator==(const Vector2<T>& other) { return x == other.x && y == other.y; }
 			inline bool operator!=(const Vector2<T>& other) { return x != other.x || y != other.y; }
-			inline bool operator<(const Vector2<T>& other) { return x < other.x&& y < other.y; }
+			inline bool operator<(const Vector2<T>& other) { return x < other.x && y < other.y; }
 			inline bool operator>(const Vector2<T>& other) { return x > other.x && y > other.y; }
 			inline bool operator<=(const Vector2<T>& other) { return x <= other.x && y <= other.y; }
 			inline bool operator>=(const Vector2<T>& other) { return x >= other.x && y >= other.y; }
@@ -116,7 +116,7 @@ namespace Parrot
 
 			inline bool operator==(const Vector3<T>& other) { return x == other.x && y == other.y && z == other.z; }
 			inline bool operator!=(const Vector3<T>& other) { return x != other.x || y != other.y || z != other.z; }
-			inline bool operator<(const Vector3<T>& other) { return x < other.x && y < other.y&& z < other.z; }
+			inline bool operator<(const Vector3<T>& other) { return x < other.x && y < other.y && z < other.z; }
 			inline bool operator>(const Vector3<T>& other) { return x > other.x && y > other.y && z > other.z; }
 			inline bool operator<=(const Vector3<T>& other) { return x <= other.x && y <= other.y && z <= other.z; }
 			inline bool operator>=(const Vector3<T>& other) { return x >= other.x && y >= other.y && z >= other.z; }
@@ -189,7 +189,7 @@ namespace Parrot
 
 			inline bool operator==(const Vector4<T>& other) { return x == other.x && y == other.y && z == other.z && w == other.w; }
 			inline bool operator!=(const Vector4<T>& other) { return x != other.x || y != other.y || z != other.z || w != other.w; }
-			inline bool operator<(const Vector4<T>& other) { return x < other.x&& y < other.y&& z < other.z&& w < other.w; }
+			inline bool operator<(const Vector4<T>& other) { return x < other.x&& y < other.y && z < other.z&& w < other.w; }
 			inline bool operator>(const Vector4<T>& other) { return x > other.x && y > other.y && z > other.z && w > other.w; }
 			inline bool operator<=(const Vector4<T>& other) { return x <= other.x && y <= other.y && z <= other.z && w <= other.w; }
 			inline bool operator>=(const Vector4<T>& other) { return x >= other.x && y >= other.y && z >= other.z && w >= other.w; }
@@ -221,6 +221,10 @@ namespace Parrot
 		typedef Vector2<uint32_t> Vec2u;
 		typedef Vector3<uint32_t> Vec3u;
 		typedef Vector4<uint32_t> Vec4u;
+
+		typedef Vector2<uint8_t> Vec2u8;
+		typedef Vector3<uint8_t> Vec3u8;
+		typedef Vector4<uint8_t> Vec4u8;
 
 		typedef Vector2<float> Vec2f;
 		typedef Vector3<float> Vec3f;

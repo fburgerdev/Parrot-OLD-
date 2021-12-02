@@ -24,6 +24,9 @@ namespace Parrot
 		virtual Math::Vec2u GetSize() const override;
 		virtual void Resizable(bool state) override;
 
+		virtual void SetWindowPos(Math::Vec2i pos) override;
+		virtual Math::Vec2i GetWindowPos() override;
+
 		virtual void Refresh() override;
 
 		virtual void GainFocus() override;

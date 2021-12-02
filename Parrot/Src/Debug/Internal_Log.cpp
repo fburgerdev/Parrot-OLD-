@@ -1,5 +1,5 @@
 #include "Ptpch.hpp"
-#include "InternalLog.hpp"
+#include "Internal_Log.hpp"
 
 namespace Parrot
 {
@@ -10,44 +10,44 @@ namespace Parrot
 	uint32_t& HIDDEN_GetLineNumber() { return s_lineNumber; }
 
 #ifndef PT_NLOG
-	void InternalLog::StartScope(const char* name)
+	void Internal_Log::StartScope(const char* name)
 	{
 		s_SpaceCount = 0;
 		IndentToCurrentLog();
 		std::cout << ConsoleColor::White << "[SCOPE] " << name << '\n';
 		s_Tabs.push_back('\t');
 	}
-	void InternalLog::EndScope()
+	void Internal_Log::EndScope()
 	{
 		if (s_Tabs.empty())
 			return;
 		s_Tabs.pop_back();
 	}
-	void InternalLog::EndAllScopes()
+	void Internal_Log::EndAllScopes()
 	{
 		if (s_Tabs.empty())
 			return;
 		s_Tabs.clear();
 	}
 #else
-	void InternalLog::StartScope(const char* name) {}
-	void InternalLog::EndScope() {}
-	void InternalLog::EndAllScopes() {}
+	void Internal_Log::StartScope(const char* name) {}
+	void Internal_Log::EndScope() {}
+	void Internal_Log::EndAllScopes() {}
 #endif
 
-	void InternalLog::NewLog()
+	void Internal_Log::NewLog()
 	{
 		std::cout << ConsoleColor::White << '(' << s_lineNumber++ << ")\t" << s_Tabs;
 	}
 
-	void InternalLog::IndentToCurrentLog()
+	void Internal_Log::IndentToCurrentLog()
 	{
 		std::cout << s_Tabs << '\t';
 		for (uint32_t i = 0; i < s_SpaceCount; ++i)
 			std::cout << ' ';
 	}
 
-	void InternalLog::Message(const char* format)
+	void Internal_Log::Message(const char* format)
 	{
 		while (*format != '\0')
 		{
@@ -57,5 +57,5 @@ namespace Parrot
 		}
 	}
 
-	uint32_t InternalLog::s_SpaceCount = 0;
+	uint32_t Internal_Log::s_SpaceCount = 0;
 }

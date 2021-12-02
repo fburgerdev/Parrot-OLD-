@@ -9,12 +9,12 @@ namespace Parrot
 		class SceneObjAsset : public PtObj
 		{
 		public:
-			SceneObjAsset() : PtObj(PtObjType::SceneObjAsset) {}
-
+			SceneObjAsset() : PtObj(PtObj::Type::SceneObjAsset) {}
+		public:
 			std::string tag;
 			Component::Transform transform;
 			std::unordered_map<ComponentType, void*> components;
-			std::vector<std::string> scripts;
+			std::vector<Component::Script*(*)(SceneObj*)> scripts;
 		};
 	}
 }

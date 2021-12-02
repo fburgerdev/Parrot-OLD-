@@ -6,13 +6,13 @@ namespace Parrot
 {
 	namespace Graphics
 	{
-		Texture_OPENGL::Texture_OPENGL(const uint8_t* buffer, const Math::Vec2u& size, const TextureAPI::Settings& settings)
+		Texture_OPENGL::Texture_OPENGL(const Math::Vec4u8* buffer, const Math::Vec2u& size, const TextureAPI::Settings& settings)
 			: m_ID(0)
 		{
 			glGenTextures(1, &m_ID);
 			glBindTexture(GL_TEXTURE_2D, m_ID);
 			glEnable(GL_TEXTURE_2D);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.x, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.x, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, (void*)buffer);
 			if (settings.mipmap != TextureAPI::Settings::Mipmap::None)
 				glGenerateMipmap(GL_TEXTURE_2D);
 

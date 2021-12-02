@@ -22,10 +22,13 @@ public:
 	}
 	virtual void OnEvent(Event e) override
 	{
+		if (e.type == EventType::CloseRequest)
+			wndw->Close();
 		if (e.type == EventType::MousePress && e.mousePress.button == MouseButton::Left && e.mousePress.state == MouseButtonState::Pressed)
 		{
 			mouseMovement = true;
 			wndw->ShowCursor(false);
+			wndw->SetCursorPos(wndw->GetSize() / 2);
 		}
 		if (e.type == EventType::KeyPress && e.keyPress.keyCode == KeyCode::KEY_ESCAPE && e.keyPress.state == KeyState::Pressed)
 		{
@@ -55,11 +58,6 @@ public:
 			wndw->SetCursorPos(wndw->GetSize() / 2); // center cursor
 		}
 
-		if (GetKeyState(KeyCode::KEY_UP) != KeyState::Released)
-			cam->foV += 0.01f;
-		else if (GetKeyState(KeyCode::KEY_DOWN) != KeyState::Released)
-			cam->foV -= 0.01f;
-		
 		// movement
 		if (GetKeyState(KeyCode::KEY_W) != KeyState::Released)
 			sceneObj.transform.pos += cam->Dir() * speed;
@@ -75,6 +73,5 @@ public:
 			sceneObj.transform.pos += cam->DirUp() * speed;
 		if (GetKeyState(KeyCode::KEY_LEFT_CONTROL) != KeyState::Released)
 			sceneObj.transform.pos -= cam->DirUp() * speed;
-
 	}
 };

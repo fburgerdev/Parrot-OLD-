@@ -1,9 +1,14 @@
 #include "Ptpch.hpp"
-#include "InternalApplication.hpp"
-#include "Assets/InternalAssetManager.hpp"
-#include "Debug/InternalLog.hpp"
+#include "Application.hpp"
+#include "Internal_Application.hpp"
+
+#include "Assets/StandardAssets.hpp"
 #include "Renderer/MeshRenderer/MeshRenderer.hpp"
 #include "Scene/Scene.hpp"
+#include "Debug/Internal_Log.hpp"
+#include "Assets/Internal_AssetManager.hpp"
+
+#include <Windows.h>
 
 namespace Parrot
 {
@@ -15,20 +20,19 @@ namespace Parrot
 
 	namespace Application
 	{
-		// Application.hpp
 		Window& GetWindow(const std::string& tag)
 		{
-			InternalLog::LogAssert(s_Windows.find(tag) != s_Windows.end(), "Window \"%\" doesn't exist!", tag);
+			Internal_Log::LogAssert(s_Windows.find(tag) != s_Windows.end(), "Window \"%\" doesn't exist!", tag);
 			return *s_Windows[tag];
 		}
 		Window& GetBoundWindow()
 		{
-			InternalLog::LogAssert(s_BoundWindow, "No Window was bound so far or the bound window was closed!");
+			Internal_Log::LogAssert(s_BoundWindow, "No Window was bound so far or the bound window was closed!");
 			return *s_BoundWindow;
 		}
 		Window& GetMainWindow()
 		{
-			InternalLog::LogAssert(s_MainWindow, "Main Window got destroyed already or wasn't created yet!");
+			Internal_Log::LogAssert(s_MainWindow, "Main Window got destroyed already or wasn't created yet!");
 			return *s_MainWindow;
 		}
 		bool HasWindow(const std::string& tag)
@@ -39,81 +43,88 @@ namespace Parrot
 		{
 			return s_ApplicationTimer.Timing();
 		}
+	}
 
-		// InternalApplication.hpp
-		void Internal_AddScript(const std::string& tag, ScriptCreationFunc func)
+	namespace Internal_Application
+	{
+		void AddScriptCreationFunc(const std::string& tag, ScriptCreationFunc func)
 		{
 			s_Scripts[tag] = func;
 		}
-		ScriptCreationFunc Internal_GetScript(const std::string& tag)
+		ScriptCreationFunc GetScriptCreationFunc(const std::string& tag)
 		{
-			InternalLog::LogAssert(s_Scripts.find(tag) != s_Scripts.end(), "Script \"%\" doesn't exist!", tag);
+			Internal_Log::LogAssert(s_Scripts.find(tag) != s_Scripts.end(), "Script \"%\" doesn't exist!", tag);
 			return *s_Scripts[tag];
 		}
-		void Internal_AddWindow(const std::string& tag, Window* window)
+		void AddWindow(const std::string& tag, Window* window)
 		{
 			if (s_Windows.empty())
 				s_MainWindow = window;
 			s_Windows[tag] = window;
 		}
-		void Internal_RemoveWindow(const std::string& tag)
-		{
-			Window* window = s_Windows[tag];
-			if (s_MainWindow == window)
-				s_MainWindow = nullptr;
-			if (s_BoundWindow == window)
-				s_BoundWindow = nullptr;
-			s_Windows.erase(tag);
-		}
-		void Internal_SetBoundWindow(Window* window)
+		void SetBoundWindow(Window* window)
 		{
 			s_BoundWindow = window;
 		}
+	}
+	void RemoveWindow(Window* window)
+	{
+		if (s_MainWindow == window)
+			s_MainWindow = nullptr;
+		if (s_BoundWindow == window)
+			s_BoundWindow = nullptr;
+		s_Windows.erase(window->GetTag());
 	}
 }
 
 using namespace Parrot;
 int main()
 {
+	HWND hWnd = GetConsoleWindow();
+#ifdef PT_SHOW_CONSOLE
+	ShowWindow(hWnd, SW_SHOW);
+#else 
+	ShowWindow(hWnd, SW_HIDE);
+#endif // PT_SHOW_CONSOLE
+
 	s_ApplicationTimer.Start();
 	
-	InternalLog::StartScope("ParrotInit");
+	Internal_Log::StartScope("ParrotInit");
 
-	AssetManager::Internal_InitAssetDir(Utils::Directory("C:\\Users\\flori\\OneDrive\\Desktop\\Dev\\Parrot\\Parrot\\Src\\Assets\\Defaults"));
-	AssetManager::Internal_LoadAllFromDir();
-	InternalLog::LogInfo("Default Assets loaded successfully!");
+	Asset::CreateStandardAssets();
+	Internal_Log::LogInfo("Standard Assets created successfully!");
 	
-	Application::Internal_OnCreate();
+	Internal_Application::OnCreate();
 	
-	MeshRenderer::Init();
-	InternalLog::LogInfo("MeshRenderer initialized successfully!");
+	Internal_Log::LogInfo("MeshRenderer initialized successfully!");
 	
-	InternalLog::EndScope();
+	Internal_Log::EndScope();
 
-	InternalLog::StartScope("Runtime");
+	Internal_Log::StartScope("Runtime");
 	while (s_MainWindow && s_MainWindow->IsOpen())
 	{
 		for (auto& pair : s_Windows)
 		{
-			Window& window = *pair.second;
-			if (window.IsOpen())
+			Window* window = pair.second;
+			if (window->IsOpen())
 			{
-				window.Bind();
-				window.Clear();
-				window.GetLoadedScene().UpdateObjs();
-				window.GetLoadedScene().Render();
-				window.Refresh();
+				window->Bind();
+				window->Clear();
+				window->GetLoadedScene().UpdateObjs();
+				window->GetLoadedScene().Render();
+				window->Refresh();
 			}
 			else
 			{
-				delete pair.second;
+				RemoveWindow(pair.second);
+				delete window;
 				break;
 			}
 		}
 	}	
-	InternalLog::EndScope();
-	if (s_MainWindow)
-		delete s_MainWindow;
-	InternalLog::LogInfo("Parrot terminated successfully after %s!", s_ApplicationTimer.Timing().Seconds());
+	Internal_Log::EndScope();
+	for (auto& pair : s_Windows)
+		delete pair.second;
+	Internal_Log::LogInfo("Parrot terminated successfully after %s!", s_ApplicationTimer.Timing().Seconds());
 	(void)std::getchar();
 }

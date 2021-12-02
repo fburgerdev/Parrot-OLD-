@@ -3,7 +3,7 @@
 
 namespace Parrot
 {
-	// defined in "InternalLog.cpp"
+	// defined in "Internal_Log.cpp"
 	const std::string& HIDDEN_GetLogTabs();
 	uint32_t& HIDDEN_GetLineNumber();
 

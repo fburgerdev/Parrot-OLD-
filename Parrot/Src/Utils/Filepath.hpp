@@ -28,7 +28,7 @@ namespace Parrot
 			void operator=(const std::string& filename);
 
 			const std::string& String() const;
-			std::string_view GetExtension() const;
+			std::string_view GetExt() const;
 			std::string_view GetName() const;
 		private:
 			std::string m_String;
@@ -39,14 +39,16 @@ namespace Parrot
 		public:
 			Filepath(const std::string& filepath);
 			Filepath(const Filepath& filepath);
+			Filepath(const Directory& dir, const Filename& name);
 			Filepath();
 
-			std::string GetFullPath() const;
-			const Directory& GetDirectory() const;
+			std::string FullPath() const;
+			const Directory& GetDir() const;
 			const Filename& GetFilename() const;
 		private:
 			Directory m_Directory;
 			Filename m_Filename;
 		};
+		Filepath operator+(const Directory& dir, const Filename& name);
 	}
 }

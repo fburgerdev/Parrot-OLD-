@@ -3,6 +3,8 @@
 #include "Utils/Filepath.hpp"
 #include "Graphics/MeshVertex.hpp"
 
+#include <vector>
+
 namespace Parrot
 {
 	namespace Asset
@@ -10,21 +12,15 @@ namespace Parrot
 		class MeshAsset : public PtObj
 		{
 		public:
-			struct Data
-			{
-				bool isQuadGeometry = true;
-				size_t vertexCount = 0;
-				Graphics::MeshVertex* vertices = nullptr;
-			};
-		public:
 			MeshAsset(const Utils::Filepath& filepath);
-			~MeshAsset();
+			MeshAsset();
 
-			const Utils::Filepath& GetFilepath() const;
-			const Data& GetData() const;
-		private:
-			Utils::Filepath m_Filepath;
-			Data m_Data;
+			void SaveToFile();
+		public:
+			Utils::Filepath filepath;
+
+			bool isQuadGeometry = true;
+			std::vector<Graphics::MeshVertex> vertices;
 		};
 	}
 }

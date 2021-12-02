@@ -1,13 +1,13 @@
 #include "Ptpch.hpp"
 #include "SceneObj.hpp"
 #include "Scene.hpp"
-#include "Debug/InternalLog.hpp"
-#include "Core/InternalApplication.hpp"
+#include "Debug/Internal_Log.hpp"
+#include "Core/Internal_Application.hpp"
 
 namespace Parrot
 {
 	SceneObj::SceneObj(Scene& scene, const Asset::SceneObjAsset& sceneObj)
-		: PtObj(PtObjType::SceneObj), transform(sceneObj.transform), m_Tag(sceneObj.tag), m_Scene(scene)
+		: PtObj(PtObj::Type::SceneObj), transform(sceneObj.transform), m_Tag(sceneObj.tag), m_Scene(scene)
 	{
 		//if (scene.HasSceneObj(sceneObj.tag))
 		//{
@@ -29,10 +29,10 @@ namespace Parrot
 				m_Components[ComponentType::Camera] = new Component::Camera(transform, *(Component::Camera*)pair.second);
 			}
 		}
-		for (const std::string& tag : sceneObj.scripts)
+		for (ScriptCreationFunc func : sceneObj.scripts)
 		{
-			Component::Script* script = Application::Internal_GetScript(tag)(*this);
-			m_Scripts[tag] = script;
+			Component::Script* script = func(this);
+			m_Scripts[typeid(*script).hash_code()] = script;
 		}
 	}
 
@@ -72,18 +72,13 @@ namespace Parrot
 	template<>
 	Component::Renderobj& SceneObj::GetComponent<Component::Renderobj>()
 	{
-		InternalLog::LogAssert(m_Components.find(ComponentType::Renderobj) != m_Components.end(), "SceneObj \"%\" doesn't have a Renderobj component!", m_Tag);
+		Internal_Log::LogAssert(m_Components.find(ComponentType::Renderobj) != m_Components.end(), "SceneObj \"%\" doesn't have a Renderobj component!", m_Tag);
 		return *(Component::Renderobj*)m_Components[ComponentType::Renderobj];
 	}
 	template<>
 	Component::Camera& SceneObj::GetComponent<Component::Camera>()
 	{
-		InternalLog::LogAssert(m_Components.find(ComponentType::Camera) != m_Components.end(), "SceneObj \"%\" doesn't have a Camera component!", m_Tag);
+		Internal_Log::LogAssert(m_Components.find(ComponentType::Camera) != m_Components.end(), "SceneObj \"%\" doesn't have a Camera component!", m_Tag);
 		return *(Component::Camera*)m_Components[ComponentType::Camera];
-	}
-
-	std::unordered_map<std::string, Component::Script*>& SceneObj::GetScripts()
-	{
-		return m_Scripts;
 	}
 }

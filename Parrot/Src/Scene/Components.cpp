@@ -1,6 +1,7 @@
 #include "Ptpch.hpp"
 #include "Components.hpp"
-#include "Debug/InternalLog.hpp"
+#include "Core/Internal_Application.hpp"
+#include "Debug/Internal_Log.hpp"
 #include "SceneObj.hpp"
 #include <cmath>
 
@@ -43,7 +44,7 @@ namespace Parrot
 		}
 
 		Renderobj::Renderobj(const Asset::MeshAsset& mesh, const Asset::ShaderAsset& shader, const Asset::TexAsset& tex)
-			: mesh(mesh), shader(shader), tex(tex)
+			: mesh(&mesh), shader(&shader), tex(&tex)
 		{
 
 		}
@@ -103,7 +104,8 @@ namespace Parrot
 			Math::Mat4f proj;
 			float tanFoV = 1.0f / tanf(foV / 2);
 			proj[0][0] = tanFoV;
-			proj[1][1] = (1080.0f / 720.0f) * tanFoV;
+			Math::Vec2u winSize = Application::GetBoundWindow().GetSize();
+			proj[1][1] = winSize.x / (float)winSize.y * tanFoV;
 			proj[2][2] = zRange.b / (zRange.b - zRange.a);
 			proj[3][2] = zRange.a * zRange.b / (zRange.a - zRange.b);
 			proj[2][3] = 1;
@@ -112,7 +114,7 @@ namespace Parrot
 		}
 
 		Script::Script(SceneObj& obj)
-			: sceneObj(obj)
+			: PtObj(PtObj::Type::Script), sceneObj(obj)
 		{
 
 		}

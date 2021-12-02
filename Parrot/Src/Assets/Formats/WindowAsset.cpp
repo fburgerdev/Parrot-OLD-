@@ -1,19 +1,19 @@
 #include "Ptpch.hpp"
 #include "WindowAsset.hpp"
+
 #include "Utils/FileRead.hpp"
-#include "Assets/InternalAssetManager.hpp"
-#include "Debug/InternalLog.hpp"
-#include "Core/Msgs.hpp"
+#include "Assets/Internal_AssetManager.hpp"
+#include "Debug/Internal_Log.hpp"
 
 namespace Parrot
 {
 	namespace Asset
 	{
 		WindowAsset::WindowAsset(const Utils::Filepath& filepath)
-			: PtObj(PtObjType::WindowAsset), m_Filepath(filepath)
+			: PtObj(PtObj::Type::WindowAsset), filepath(filepath)
 		{
-			std::ifstream stream(filepath.GetFullPath());
-			InternalLog::LogAssert(stream.is_open(), StreamErrorMsg, filepath.GetFullPath());
+			std::ifstream stream(filepath.FullPath());
+			Internal_Log::LogAssert(stream.is_open(), "File \"%\" could not be opened. Either the file doesn't exist or it is already opened by another process.", filepath.FullPath());
 
 			std::string line;
 			std::string key;
@@ -29,26 +29,17 @@ namespace Parrot
 					Utils::Filename filename(arg);
 					if (!AssetManager::IsAssetLoaded(filename))
 						AssetManager::LoadAsset(filename);
-					m_Data.scene = filename.GetName();
+					scene = filename.GetName();
 				}
 				else if (key == "Style")
-					Utils::GetArg(line, m_Data.style);
+					Utils::GetArg(line, style);
 				else if (key == "Size")
 				{
 					Utils::GetArg(line, arg);
-					m_Data.size = Utils::ArgToVec2u(arg);
+					size = Utils::ArgToVec2u(arg);
 				}
 			}
 			stream.close();
-		}
-		const Utils::Filepath& WindowAsset::GetFilepath() const
-		{
-			return m_Filepath;
-		}
-
-		const WindowAsset::Data& WindowAsset::GetData() const
-		{
-			return m_Data;
 		}
 	}
 }

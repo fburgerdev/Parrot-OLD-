@@ -15,7 +15,7 @@ namespace Parrot
 		{
 			Unknown = -1, Mesh, Shader, Texture, Scene, Window
 		};
-		
+
 		// directory handling
 		const Utils::Directory& GetAssetDir();
 
@@ -35,5 +35,10 @@ namespace Parrot
 		Asset::WindowAsset& GetWindowAsset(const std::string& name);
 		Asset::SceneAsset& GetSceneAsset(const Utils::Filename& filename);
 		Asset::SceneAsset& GetSceneAsset(const std::string& name);
-	}
+
+		const Asset::MeshAsset& GetQuadMesh();
+		const Asset::MeshAsset& GetCubeMesh();
+		const Asset::TexAsset& GetWhiteTex();
+		const Asset::ShaderAsset& GetStandardShader();
+	};
 }

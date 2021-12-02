@@ -1,11 +1,11 @@
 #pragma once
 #include <unordered_map>
 #include "Assets/Formats/SceneAsset.hpp"
-#include "SceneObj.hpp"
 #include "Core/Application.hpp"
 #include "Core/PtObj.hpp"
 
 int main();
+class SceneObj;
 namespace Parrot
 {
 	class Scene : public PtObj

@@ -5,12 +5,12 @@
 namespace Parrot
 {
 	namespace Application
-	{		
-		Window& GetWindow(const std::string& tag);
-		Window& GetBoundWindow();
-		Window& GetMainWindow();
-		bool ContainsWindow(const std::string& tag);
+	{
+		 Window& GetWindow(const std::string& tag);
+		 Window& GetBoundWindow();
+		 Window& GetMainWindow();
+		 bool HasWindow(const std::string& tag);
 
-		Utils::Timestep AbsTime();
+		 Utils::Timestep AbsTime();
 	}
 }

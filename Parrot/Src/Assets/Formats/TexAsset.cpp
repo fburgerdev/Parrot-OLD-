@@ -1,35 +1,45 @@
 #include "Ptpch.hpp"
 #include "TexAsset.hpp"
-#include "Debug/InternalLog.hpp"
-#include "Core/Msgs.hpp"
+
+#include "Debug/Internal_Log.hpp"
 
 namespace Parrot
 {
 	namespace Asset
 	{
 		TexAsset::TexAsset(const Utils::Filepath& filepath)
-			: PtObj(PtObjType::TexAsset), m_Filepath(filepath)
+			: PtObj(PtObj::Type::TexAsset), filepath(filepath)
 		{
-			std::ifstream stream(filepath.GetFullPath(), std::ios::binary);
-			InternalLog::LogAssert(stream.is_open(), StreamErrorMsg, filepath.GetFullPath());
-			stream.read((char*)&m_Data.settings, sizeof(Graphics::TextureAPI::Settings));
-			stream.read((char*)&m_Data.size, sizeof(Math::Vec2u));
-			m_Data.buffer = new uint8_t[(size_t)m_Data.size.x * (size_t)m_Data.size.y * 4];
-			stream.read((char*)m_Data.buffer, (size_t)m_Data.size.x * (size_t)m_Data.size.y * 4);
+			std::ifstream stream(filepath.FullPath(), std::ios::binary);
+			Internal_Log::LogAssert(stream.is_open(), "File \"%\" could not be opened. Either the file doesn't exist or it is already opened by another process.", filepath.FullPath());
+			stream.read((char*)&settings, sizeof(Graphics::TextureAPI::Settings));
+			stream.read((char*)&size, sizeof(Math::Vec2u));
+			buffer = new Math::Vec4u8[(size_t)size.x * (size_t)size.y];
+			stream.read((char*)buffer, (size_t)size.x * (size_t)size.y * 4);
 			stream.close();
+		}
+		TexAsset::TexAsset()
+			: PtObj(PtObj::Type::TexAsset)
+		{
+
 		}
 		TexAsset::~TexAsset()
 		{
-			delete[] m_Data.buffer;
+			delete[] buffer;
 		}
-		const Utils::Filepath& TexAsset::GetFilepath() const
+		
+		uint32_t TexAsset::BufferIndex(Math::Vec2u coords)
 		{
-			return m_Filepath;
+			return coords.y * size.x + coords.x;
 		}
 
-		const TexAsset::Data& TexAsset::GetData() const
+		void TexAsset::SaveToFile()
 		{
-			return m_Data;
+			std::ofstream stream(filepath.FullPath(), std::ios::binary);
+			stream.write((char*)&settings, sizeof(Graphics::TextureAPI::Settings));
+			stream.write((char*)&size, sizeof(Math::Vec2u));
+			stream.write((char*)buffer, (size_t)size.x * (size_t)size.y * 4);
+			stream.close();
 		}
 	}
 }

@@ -17,6 +17,7 @@
   <ItemGroup>
     <ClInclude Include="Src\Controller3D.hpp" />
     <ClInclude Include="Src\DefaultMeshCreation.hpp" />
+    <ClInclude Include="Src\Prank.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\OnCreate.cpp" />

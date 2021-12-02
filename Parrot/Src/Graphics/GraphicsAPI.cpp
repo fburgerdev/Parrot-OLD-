@@ -24,7 +24,7 @@ namespace Parrot
 		{
 			return new VertexArray_OPENGL(vb, layout);
 		}
-		TextureAPI* CreateTextureAPI(const uint8_t* buffer, Math::Vec2u size, const TextureAPI::Settings& settings)
+		TextureAPI* CreateTextureAPI(const Math::Vec4u8* buffer, Math::Vec2u size, const TextureAPI::Settings& settings)
 		{
 			return new Texture_OPENGL(buffer, size, settings);
 		}

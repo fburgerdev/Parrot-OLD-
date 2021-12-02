@@ -37,6 +37,9 @@ namespace Parrot
 		virtual Math::Vec2u GetSize() const = 0;
 		virtual void Resizable(bool state) = 0;
 
+		virtual void SetWindowPos(Math::Vec2i pos) = 0;
+		virtual Math::Vec2i GetWindowPos() = 0;
+
 		virtual void Refresh() = 0;
 
 		virtual void GainFocus() = 0;
@@ -49,5 +52,5 @@ namespace Parrot
 		bool m_IsOpen;
 		Scene* m_Scene;
 	};
-	Window& CreateWindow(const Asset::WindowAsset& WindowAsset);
+	Window& OpenWindow(const Asset::WindowAsset& WindowAsset);
 }

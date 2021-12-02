@@ -3,7 +3,7 @@
 
 namespace Parrot
 {
-	class InternalLog
+	class Internal_Log
 	{
 	private:
 		struct ConsoleColor

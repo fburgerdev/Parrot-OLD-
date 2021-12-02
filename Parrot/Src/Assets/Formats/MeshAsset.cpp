@@ -1,35 +1,40 @@
 #include "Ptpch.hpp"
 #include "MeshAsset.hpp"
-#include "Debug/InternalLog.hpp"
-#include "Core/Msgs.hpp"
+
+#include "Debug/Internal_Log.hpp"
 
 namespace Parrot
 {
 	namespace Asset
 	{
 		MeshAsset::MeshAsset(const Utils::Filepath& filepath)
-			: PtObj(PtObjType::MeshAsset), m_Filepath(filepath)
+			: PtObj(PtObj::Type::MeshAsset), filepath(filepath)
 		{
-			std::ifstream stream(filepath.GetFullPath(), std::ios::binary);
-			InternalLog::LogAssert(stream.is_open(), StreamErrorMsg, filepath.GetFullPath());
+			std::ifstream stream(filepath.FullPath(), std::ios::binary);
+			Internal_Log::LogAssert(stream.is_open(), "File \"%\" could not be opened. Either the file doesn't exist or it is already opened by another process.", filepath.FullPath());
 
-			stream.read((char*)&m_Data.isQuadGeometry, 1);
-			stream.read((char*)&m_Data.vertexCount, sizeof(size_t));
-			m_Data.vertices = (Graphics::MeshVertex*)malloc(sizeof(Graphics::MeshVertex) * m_Data.vertexCount);
-			stream.read((char*)m_Data.vertices, sizeof(Graphics::MeshVertex) * m_Data.vertexCount);
+			stream.read((char*)&isQuadGeometry, 1);
+			size_t vertexCount;
+			stream.read((char*)&vertexCount, sizeof(size_t));
+			vertices.resize(vertexCount);
+			stream.read((char*)vertices.data(), sizeof(Graphics::MeshVertex) * vertexCount);
 			stream.close();
 		}
-		MeshAsset::~MeshAsset()
+		MeshAsset::MeshAsset()
+			: PtObj(PtObj::Type::MeshAsset)
 		{
-			delete[] m_Data.vertices;
+
 		}
-		const Utils::Filepath& MeshAsset::GetFilepath() const
+
+		void MeshAsset::SaveToFile()
 		{
-			return m_Filepath;
-		}
-		const MeshAsset::Data& MeshAsset::GetData() const
-		{
-			return m_Data;
+			std::ofstream stream(filepath.FullPath(), std::ios::binary);
+
+			size_t vertexCount = vertices.size();
+			stream.write((char*)&isQuadGeometry, 1);
+			stream.write((char*)&vertexCount, sizeof(size_t));
+			stream.write((char*)vertices.data(), sizeof(Graphics::MeshVertex) * vertexCount);
+			stream.close();
 		}
 	}
 }

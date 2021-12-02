@@ -1,5 +1,5 @@
 #pragma once
 
-#include "Core/InternalApplication.hpp"
-#include "Assets/InternalAssetManager.hpp"
-#include "Debug/InternalLog.hpp"
+#include "Core/Internal_Application.hpp"
+#include "Assets/Internal_AssetManager.hpp"
+#include "Debug/Internal_Log.hpp"
