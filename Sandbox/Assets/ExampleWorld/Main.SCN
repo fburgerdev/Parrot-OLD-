@@ -1,0 +1,8 @@
+SceneObj: "Cam"
+	Transform: Position "0, 0, 10" Rotation "180, 0, 0"
+	Camera:
+	Script: "Controller3D"
+SceneObj: "Light"
+	Light:
+SceneObj: "Terrain"
+	Script: "TerrainGen"

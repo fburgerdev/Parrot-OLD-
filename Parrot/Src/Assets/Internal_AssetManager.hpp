@@ -7,6 +7,6 @@ namespace Parrot
 	{
 		void InitAssetDir(const Utils::Directory& assetDirectory);
 
-		void ConvertToAsset(const Utils::Filepath& src, const Utils::Directory& dst = Utils::Directory());
+		void LoadImageFromFilename(const Utils::Filename& filename, Math::Vec2u& size, Math::Vec4u8* buffer);
 	}
 }

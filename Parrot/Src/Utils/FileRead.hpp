@@ -62,5 +62,16 @@ namespace Parrot
 			out.z = std::stof(arg.substr(comma2 + 1, arg.length() - comma2));
 			return out;
 		}
+
+		static Math::Vec3u8 ArgToVec3u8(const std::string& arg)
+		{
+			Math::Vec3u8 out;
+			size_t comma1 = arg.find_first_of(',');
+			size_t comma2 = arg.find_last_of(',');
+			out.x = (uint8_t)std::stoul(arg.substr(0, comma1));
+			out.y = (uint8_t)std::stoul(arg.substr(comma1 + 1, comma2 - comma1));
+			out.z = (uint8_t)std::stoul(arg.substr(comma2 + 1, arg.length() - comma2));
+			return out;
+		}
 	}
 }

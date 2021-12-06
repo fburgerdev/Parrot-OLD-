@@ -28,8 +28,9 @@ namespace Parrot
 					Utils::GetArg(line, arg);
 					Utils::Filename filename(arg);
 					if (!AssetManager::IsAssetLoaded(filename))
-						AssetManager::LoadAsset(filename);
-					scene = filename.GetName();
+						scene = &AssetManager::LoadSceneAsset(filename);
+					else
+						scene = &AssetManager::GetSceneAsset(filename);
 				}
 				else if (key == "Style")
 					Utils::GetArg(line, style);

@@ -184,6 +184,7 @@
       <Filter>Vendor\Stb</Filter>
     </ClInclude>
     <ClInclude Include="Src\Assets\StandardAssets.hpp" />
+    <ClInclude Include="Src\Math\Random.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Assets\AssetManager.cpp">
@@ -268,6 +269,8 @@
       <Filter>Vendor\Stb</Filter>
     </ClCompile>
     <ClCompile Include="Src\Assets\StandardAssets.cpp" />
+    <ClCompile Include="Src\Assets\Formats\SceneObjAsset.cpp" />
+    <ClCompile Include="Src\Math\Random.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Src\Assets\Defaults\Skybox.TXTR">

@@ -43,12 +43,12 @@ namespace Parrot
 			return out;
 		}
 
-		Renderobj::Renderobj(const Asset::MeshAsset& mesh, const Asset::ShaderAsset& shader, const Asset::TexAsset& tex)
+		RenderObj::RenderObj(const Asset::MeshAsset& mesh, const Asset::ShaderAsset& shader, const Asset::TexAsset& tex)
 			: mesh(&mesh), shader(&shader), tex(&tex)
 		{
 
 		}
-		Renderobj::Renderobj(const Renderobj& other)
+		RenderObj::RenderObj(const RenderObj& other)
 			: mesh(other.mesh), shader(other.shader), tex(other.tex)
 		{
 
@@ -119,6 +119,12 @@ namespace Parrot
 
 		}
 		Script::~Script()
+		{
+
+		}
+		
+		Light::Light(Math::Vec3f dir, Math::Vec3u8 color, float intensity)
+			: PtObj(PtObj::Type::Light), dir(dir), color(color), intensity(intensity)
 		{
 
 		}

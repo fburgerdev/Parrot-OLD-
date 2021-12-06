@@ -14,16 +14,14 @@ namespace Parrot
 		: PtObj(PtObj::Type::Window), m_Tag(WindowAsset.filepath.GetFilename().GetName()), m_IsOpen(true), m_Scene(nullptr)
 	{
 		if (s_WindowNamesakeCount.find(m_Tag) == s_WindowNamesakeCount.end())
-		{
 			s_WindowNamesakeCount[m_Tag] = 0;
-		}
 		else
 		{
 			uint32_t number = ++s_WindowNamesakeCount[m_Tag];
 			m_Tag += '(' + std::to_string(number) + ')';
 		}
 		Internal_Application::AddWindow(m_Tag, this);
-		m_Scene = new Scene(*this, AssetManager::GetSceneAsset(WindowAsset.scene));
+		m_Scene = new Scene(*this, *WindowAsset.scene);
 	}
 	
 	Window::~Window()

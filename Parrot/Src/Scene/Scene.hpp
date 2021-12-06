@@ -1,13 +1,13 @@
 #pragma once
 #include <unordered_map>
-#include "Assets/Formats/SceneAsset.hpp"
+#include "Assets/Formats/SceneObjAsset.hpp"
 #include "Core/Application.hpp"
 #include "Core/PtObj.hpp"
 
 int main();
-class SceneObj;
 namespace Parrot
 {
+	class SceneObj;
 	class Scene : public PtObj
 	{
 	public:
@@ -17,7 +17,7 @@ namespace Parrot
 		const std::string& GetTag() const;
 		Window& GetWindow();
 
-		void AddSceneObj(const Asset::SceneObjAsset& sceneObj);
+		SceneObj& AddSceneObj(const Asset::SceneObjAsset& sceneObj);
 		bool HasSceneObj(const std::string& tag);
 		SceneObj& GetSceneObj(const std::string& tag);
 

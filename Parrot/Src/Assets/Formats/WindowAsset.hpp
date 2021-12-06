@@ -2,6 +2,7 @@
 #include "Core/PtObj.hpp"
 #include "Utils/Filepath.hpp"
 #include "Math/Vector.hpp"
+#include "SceneAsset.hpp"
 
 namespace Parrot
 {
@@ -14,7 +15,7 @@ namespace Parrot
 		public:
 			Utils::Filepath filepath;
 
-			std::string scene;
+			const SceneAsset* scene;
 			Math::Vec2u size = Math::Vec2u(1080, 720);
 			std::string style = "default";
 		};

@@ -11,14 +11,21 @@
 #define PT_SHADER_EXT "SHDR"
 #define PT_TEXTURE_EXT "TXTR"
 #define PT_SCENE_EXT "SCN"
+#define PT_SCENEOBJ_EXT "SCNOBJ"
 #define PT_WINDOW_EXT "WNDW"
-#define PT_VALID_FORMAT_LIST "MSH, SHDR, TXTR, SCN, WNDW"
+#define PT_VALID_FORMAT_LIST "MSH, SHDR, TXTR, SCN, SCNOBJ, WNDW"
 
 namespace Parrot
 {
 	static Utils::Directory s_AssetDirectory;
 	static std::unordered_map<std::string, std::string> s_FilenameToPath;
-	static std::unordered_map<std::string, void*> s_LoadedAssets;
+	
+	static std::unordered_map<std::string, Asset::TexAsset*> s_TexAssets;
+	static std::unordered_map<std::string, Asset::ShaderAsset*> s_ShaderAssets;
+	static std::unordered_map<std::string, Asset::MeshAsset*> s_MeshAssets;
+	static std::unordered_map<std::string, Asset::WindowAsset*> s_WindowAssets;
+	static std::unordered_map<std::string, Asset::SceneAsset*> s_SceneAssets;
+	static std::unordered_map<std::string, Asset::SceneObjAsset*> s_SceneObjAssets;
 
 	static AssetManager::AssetFormat GetAssetFormatFromExt(std::string_view ext)
 	{
@@ -30,6 +37,8 @@ namespace Parrot
 			return AssetManager::AssetFormat::Texture;
 		else if (ext == PT_SCENE_EXT)
 			return AssetManager::AssetFormat::Scene;
+		else if (ext == PT_SCENEOBJ_EXT)
+			return AssetManager::AssetFormat::SceneObj;
 		else if (ext == PT_WINDOW_EXT)
 			return AssetManager::AssetFormat::Window;
 		return AssetManager::AssetFormat::Unknown;
@@ -40,118 +49,263 @@ namespace Parrot
 		return s_AssetDirectory;
 	}
 
-	bool AssetManager::LoadAsset(const Utils::Filename& filename)
+	bool AssetManager::IsAssetLoaded(const Utils::Filename& filename)
 	{
-		AssetManager::AssetFormat format = GetAssetFormatFromExt(filename.GetExt());
-		PT_GUARD_CALL(
-		if (format == AssetFormat::Unknown)
-		{
-			Internal_Log::LogWarning("Trying to load asset of unknown format \"%\"! Try using one of these formats \"%\"", filename.String(), PT_VALID_FORMAT_LIST);
-			return false;
-		}
-		if (s_FilenameToPath.find(filename.String()) == s_FilenameToPath.end())
-		{
-			Internal_Log::LogWarning("Asset \"%\" wasn't found in asset directory \"%\"!", filename.String(), s_AssetDirectory.String());
-			return false;
-		}
-		if (s_LoadedAssets.find(filename.String()) != s_LoadedAssets.end())
-		{
-			Internal_Log::LogWarning("Asset \"%\" was already loaded!", filename.String());
-			return false;
-		})
-
+		AssetFormat format = GetAssetFormatFromExt(filename.GetExt());
 		switch (format)
 		{
-		case AssetFormat::Mesh:
-			s_LoadedAssets[filename.String()] = new Asset::MeshAsset(s_FilenameToPath[filename.String()]);
-			return true;
-		case AssetFormat::Shader:
-			s_LoadedAssets[filename.String()] = new Asset::ShaderAsset(s_FilenameToPath[filename.String()]);
-			return true;
 		case AssetFormat::Texture:
-			s_LoadedAssets[filename.String()] = new Asset::TexAsset(s_FilenameToPath[filename.String()]);
-			return true;
-		case AssetFormat::Scene:
-			s_LoadedAssets[filename.String()] = new Asset::SceneAsset(s_FilenameToPath[filename.String()]);
-			return true;
+			return s_TexAssets.find(filename.String()) != s_TexAssets.end();
+		case AssetFormat::Shader:
+			return s_ShaderAssets.find(filename.String()) != s_ShaderAssets.end();
+		case AssetFormat::Mesh:
+			return s_MeshAssets.find(filename.String()) != s_MeshAssets.end();
 		case AssetFormat::Window:
-			s_LoadedAssets[filename.String()] = new Asset::WindowAsset(s_FilenameToPath[filename.String()]);
-			return true;
+			return s_WindowAssets.find(filename.String()) != s_WindowAssets.end();
+		case AssetFormat::Scene:
+			return s_SceneAssets.find(filename.String()) != s_SceneAssets.end();
+		case AssetFormat::SceneObj:
+			return s_SceneObjAssets.find(filename.String()) != s_SceneObjAssets.end();
 		default:
 			return false;
 		}
 		return false;
 	}
-	bool AssetManager::IsAssetLoaded(const Utils::Filename& filename)
-	{
-		return s_LoadedAssets.find(filename.String()) != s_LoadedAssets.end();
-	}
 	void AssetManager::UnloadAsset(const Utils::Filename& filename)
 	{
-		PT_GUARD_CALL(if (s_LoadedAssets.find(filename.String()) == s_LoadedAssets.end())
+		AssetFormat format = GetAssetFormatFromExt(filename.GetExt());
+		switch (format)
 		{
-			Internal_Log::LogWarning("Asset \"%\" is not loaded!", filename.String());
+		case AssetFormat::Texture:
+			PT_GUARD_CALL(if (s_TexAssets.find(filename.String()) == s_TexAssets.end())
+			{
+				Internal_Log::LogWarning("Asset \"%\" is not loaded!", filename.String());
+				return;
+			})
+			delete s_TexAssets[filename.String()];
+			s_TexAssets.erase(filename.String());
 			return;
-		})
-		delete s_LoadedAssets[filename.String()];
-		s_LoadedAssets.erase(filename.String());
+		case AssetFormat::Shader:
+			PT_GUARD_CALL(if (s_ShaderAssets.find(filename.String()) == s_ShaderAssets.end())
+			{
+				Internal_Log::LogWarning("Asset \"%\" is not loaded!", filename.String());
+				return;
+			})
+			delete s_ShaderAssets[filename.String()];
+			s_ShaderAssets.erase(filename.String());
+			return;
+		case AssetFormat::Mesh:
+			PT_GUARD_CALL(if (s_MeshAssets.find(filename.String()) == s_MeshAssets.end())
+			{
+				Internal_Log::LogWarning("Asset \"%\" is not loaded!", filename.String());
+				return;
+			})
+			delete s_MeshAssets[filename.String()];
+			s_MeshAssets.erase(filename.String());
+			return;
+		case AssetFormat::Window:
+			PT_GUARD_CALL(if (s_WindowAssets.find(filename.String()) == s_WindowAssets.end())
+			{
+				Internal_Log::LogWarning("Asset \"%\" is not loaded!", filename.String());
+				return;
+			})
+			delete s_WindowAssets[filename.String()];
+			s_WindowAssets.erase(filename.String());
+			return;
+		case AssetFormat::Scene:
+			PT_GUARD_CALL(if (s_SceneAssets.find(filename.String()) == s_SceneAssets.end())
+			{
+				Internal_Log::LogWarning("Asset \"%\" is not loaded!", filename.String());
+				return;
+			})
+			delete s_SceneAssets[filename.String()];
+			s_SceneAssets.erase(filename.String());
+			return;
+		case AssetFormat::SceneObj:
+			PT_GUARD_CALL(if (s_SceneObjAssets.find(filename.String()) == s_SceneObjAssets.end())
+			{
+				Internal_Log::LogWarning("Asset \"%\" is not loaded!", filename.String());
+				return;
+			})
+			delete s_SceneObjAssets[filename.String()];
+			s_SceneObjAssets.erase(filename.String());
+			return;
+		default:
+			return;
+		}
+	}
+
+	Asset::TexAsset& AssetManager::LoadTexAsset(const Utils::Filename& filename)
+	{
+		Internal_Log::LogAssert(s_FilenameToPath.find(filename.String()) != s_FilenameToPath.end(), "Asset \"%\" wasn't found in asset directory \"%\"!", filename.String(), s_AssetDirectory.String());
+		PT_GUARD_CALL
+		(
+			if (s_TexAssets.find(filename.String()) != s_TexAssets.end())
+			{
+				Internal_Log::LogWarning("Asset \"%\" was already loaded!", filename.String());
+				return *s_TexAssets[filename.String()];
+			}
+		)
+		Asset::TexAsset* asset = new Asset::TexAsset(s_FilenameToPath[filename.String()]);
+		s_TexAssets[filename.String()] = asset;
+		return *asset;
+	}
+	Asset::ShaderAsset& AssetManager::LoadShaderAsset(const Utils::Filename& filename)
+	{
+		Internal_Log::LogAssert(s_FilenameToPath.find(filename.String()) != s_FilenameToPath.end(), "Asset \"%\" wasn't found in asset directory \"%\"!", filename.String(), s_AssetDirectory.String());
+		PT_GUARD_CALL
+		(
+			if (s_ShaderAssets.find(filename.String()) != s_ShaderAssets.end())
+			{
+				Internal_Log::LogWarning("Asset \"%\" was already loaded!", filename.String());
+				return *s_ShaderAssets[filename.String()];
+			}
+		)
+		Asset::ShaderAsset* asset = new Asset::ShaderAsset(s_FilenameToPath[filename.String()]);
+		s_ShaderAssets[filename.String()] = asset;
+		return *asset;
+	}
+	Asset::MeshAsset& AssetManager::LoadMeshAsset(const Utils::Filename& filename)
+	{
+		Internal_Log::LogAssert(s_FilenameToPath.find(filename.String()) != s_FilenameToPath.end(), "Asset \"%\" wasn't found in asset directory \"%\"!", filename.String(), s_AssetDirectory.String());
+		PT_GUARD_CALL
+		(
+			if (s_MeshAssets.find(filename.String()) != s_MeshAssets.end())
+			{
+				Internal_Log::LogWarning("Asset \"%\" was already loaded!", filename.String());
+				return *s_MeshAssets[filename.String()];
+			}
+		)
+		Asset::MeshAsset* asset = new Asset::MeshAsset(s_FilenameToPath[filename.String()]);
+		s_MeshAssets[filename.String()] = asset;
+		return *asset;
+	}
+	Asset::WindowAsset& AssetManager::LoadWindowAsset(const Utils::Filename& filename)
+	{
+		Internal_Log::LogAssert(s_FilenameToPath.find(filename.String()) != s_FilenameToPath.end(), "Asset \"%\" wasn't found in asset directory \"%\"!", filename.String(), s_AssetDirectory.String());
+		PT_GUARD_CALL
+		(
+			if (s_WindowAssets.find(filename.String()) != s_WindowAssets.end())
+			{
+				Internal_Log::LogWarning("Asset \"%\" was already loaded!", filename.String());
+				return *s_WindowAssets[filename.String()];
+			}
+		)
+		Asset::WindowAsset* asset = new Asset::WindowAsset(s_FilenameToPath[filename.String()]);
+		s_WindowAssets[filename.String()] = asset;
+		return *asset;
+	}
+	Asset::SceneAsset& AssetManager::LoadSceneAsset(const Utils::Filename& filename)
+	{
+		Internal_Log::LogAssert(s_FilenameToPath.find(filename.String()) != s_FilenameToPath.end(), "Asset \"%\" wasn't found in asset directory \"%\"!", filename.String(), s_AssetDirectory.String());
+		PT_GUARD_CALL
+		(
+			if (s_SceneAssets.find(filename.String()) != s_SceneAssets.end())
+			{
+				Internal_Log::LogWarning("Asset \"%\" was already loaded!", filename.String());
+				return *s_SceneAssets[filename.String()];
+			}
+		)
+		Asset::SceneAsset* asset = new Asset::SceneAsset(s_FilenameToPath[filename.String()]);
+		s_SceneAssets[filename.String()] = asset;
+		return *asset;
+	}
+	Asset::SceneObjAsset& AssetManager::LoadSceneObjAsset(const Utils::Filename& filename)
+	{
+		Internal_Log::LogAssert(s_FilenameToPath.find(filename.String()) != s_FilenameToPath.end(), "Asset \"%\" wasn't found in asset directory \"%\"!", filename.String(), s_AssetDirectory.String());
+		PT_GUARD_CALL
+		(
+			if (s_SceneObjAssets.find(filename.String()) != s_SceneObjAssets.end())
+			{
+				Internal_Log::LogWarning("Asset \"%\" was already loaded!", filename.String());
+				return *s_SceneObjAssets[filename.String()];
+			}
+		)
+		Asset::SceneObjAsset* asset = new Asset::SceneObjAsset(s_FilenameToPath[filename.String()]);
+		s_SceneObjAssets[filename.String()] = asset;
+		return *asset;
+	}
+
+	Asset::TexAsset& AssetManager::LoadTexAsset(const std::string& name)
+	{
+		return LoadTexAsset(Utils::Filename(name + '.' + PT_TEXTURE_EXT));
+	}
+	Asset::ShaderAsset& AssetManager::LoadShaderAsset(const std::string& name)
+	{
+		return LoadShaderAsset(Utils::Filename(name + '.' + PT_SHADER_EXT));
+	}
+	Asset::MeshAsset& AssetManager::LoadMeshAsset(const std::string& name)
+	{
+		return LoadMeshAsset(Utils::Filename(name + '.' + PT_MESH_EXT));
+	}
+	Asset::WindowAsset& AssetManager::LoadWindowAsset(const std::string& name)
+	{
+		return LoadWindowAsset(Utils::Filename(name + '.' + PT_WINDOW_EXT));
+	}
+	Asset::SceneAsset& AssetManager::LoadSceneAsset(const std::string& name)
+	{
+		return LoadSceneAsset(Utils::Filename(name + '.' + PT_SCENE_EXT));
+	}
+	Asset::SceneObjAsset& AssetManager::LoadSceneObjAsset(const std::string& name)
+	{
+		return LoadSceneObjAsset(Utils::Filename(name + '.' + PT_SCENEOBJ_EXT));
 	}
 
 	static constexpr const char* AssetAccessErrorMsg = "Couldn't find loaded asset \"%\" in asset manager. Either the asset wasn't loaded in the first place or the name was misspelled.";
-	Asset::TexAsset& AssetManager::GetTexAsset(const std::string& name)
-	{
-		std::string filename = name + '.' + PT_TEXTURE_EXT;
-		Internal_Log::LogAssert(s_LoadedAssets.find(filename) != s_LoadedAssets.end(), AssetAccessErrorMsg, filename);
-		return *(Asset::TexAsset*)s_LoadedAssets[filename];
-	}
-	Asset::ShaderAsset& AssetManager::GetShaderAsset(const std::string& name)
-	{
-		std::string filename = name + '.' + PT_SHADER_EXT;
-		Internal_Log::LogAssert(s_LoadedAssets.find(filename) != s_LoadedAssets.end(), AssetAccessErrorMsg, filename);
-		return *(Asset::ShaderAsset*)s_LoadedAssets[filename];
-	}
-	Asset::MeshAsset& AssetManager::GetMeshAsset(const std::string& name)
-	{
-		std::string filename = name + '.' + PT_MESH_EXT;
-		Internal_Log::LogAssert(s_LoadedAssets.find(filename) != s_LoadedAssets.end(), AssetAccessErrorMsg, filename);
-		return *(Asset::MeshAsset*)s_LoadedAssets[filename];
-	}
-	Asset::WindowAsset& AssetManager::GetWindowAsset(const std::string& name)
-	{
-		std::string filename = name + '.' + PT_WINDOW_EXT;
-		Internal_Log::LogAssert(s_LoadedAssets.find(filename) != s_LoadedAssets.end(), AssetAccessErrorMsg, filename);
-		return *(Asset::WindowAsset*)s_LoadedAssets[filename];
-	}
-	Asset::SceneAsset& AssetManager::GetSceneAsset(const std::string& name)
-	{
-		std::string filename = name + '.' + PT_SCENE_EXT;
-		Internal_Log::LogAssert(s_LoadedAssets.find(filename) != s_LoadedAssets.end(), AssetAccessErrorMsg, filename);
-		return *(Asset::SceneAsset*)s_LoadedAssets[filename];
-	}
 	Asset::TexAsset& AssetManager::GetTexAsset(const Utils::Filename& filename)
 	{
-		Internal_Log::LogAssert(s_LoadedAssets.find(filename.String()) != s_LoadedAssets.end(), AssetAccessErrorMsg, filename.String());
-		return *(Asset::TexAsset*)s_LoadedAssets[filename.String()];
+		Internal_Log::LogAssert(s_TexAssets.find(filename.String()) != s_TexAssets.end(), AssetAccessErrorMsg, filename.String());
+		return *(Asset::TexAsset*)s_TexAssets[filename.String()];
 	}
 	Asset::ShaderAsset& AssetManager::GetShaderAsset(const Utils::Filename& filename)
 	{
-		Internal_Log::LogAssert(s_LoadedAssets.find(filename.String()) != s_LoadedAssets.end(), AssetAccessErrorMsg, filename.String());
-		return *(Asset::ShaderAsset*)s_LoadedAssets[filename.String()];
+		Internal_Log::LogAssert(s_ShaderAssets.find(filename.String()) != s_ShaderAssets.end(), AssetAccessErrorMsg, filename.String());
+		return *(Asset::ShaderAsset*)s_ShaderAssets[filename.String()];
 	}
 	Asset::MeshAsset& AssetManager::GetMeshAsset(const Utils::Filename& filename)
 	{
-		Internal_Log::LogAssert(s_LoadedAssets.find(filename.String()) != s_LoadedAssets.end(), AssetAccessErrorMsg, filename.String());
-		return *(Asset::MeshAsset*)s_LoadedAssets[filename.String()];
+		Internal_Log::LogAssert(s_MeshAssets.find(filename.String()) != s_MeshAssets.end(), AssetAccessErrorMsg, filename.String());
+		return *(Asset::MeshAsset*)s_MeshAssets[filename.String()];
 	}
 	Asset::WindowAsset& AssetManager::GetWindowAsset(const Utils::Filename& filename)
 	{
-		Internal_Log::LogAssert(s_LoadedAssets.find(filename.String()) != s_LoadedAssets.end(), AssetAccessErrorMsg, filename.String());
-		return *(Asset::WindowAsset*)s_LoadedAssets[filename.String()];
+		Internal_Log::LogAssert(s_WindowAssets.find(filename.String()) != s_WindowAssets.end(), AssetAccessErrorMsg, filename.String());
+		return *(Asset::WindowAsset*)s_WindowAssets[filename.String()];
 	}
 	Asset::SceneAsset& AssetManager::GetSceneAsset(const Utils::Filename& filename)
 	{
-		Internal_Log::LogAssert(s_LoadedAssets.find(filename.String()) != s_LoadedAssets.end(), AssetAccessErrorMsg, filename.String());
-		return *(Asset::SceneAsset*)s_LoadedAssets[filename.String()];
+		Internal_Log::LogAssert(s_SceneAssets.find(filename.String()) != s_SceneAssets.end(), AssetAccessErrorMsg, filename.String());
+		return *(Asset::SceneAsset*)s_SceneAssets[filename.String()];
+	}
+	Asset::SceneObjAsset& AssetManager::GetSceneObjAsset(const Utils::Filename& filename)
+	{
+		Internal_Log::LogAssert(s_SceneObjAssets.find(filename.String()) != s_SceneObjAssets.end(), AssetAccessErrorMsg, filename.String());
+		return *(Asset::SceneObjAsset*)s_SceneObjAssets[filename.String()];
+	}
+
+	Asset::TexAsset& AssetManager::GetTexAsset(const std::string& name)
+	{
+		return GetTexAsset(Utils::Filename(name + '.' + PT_TEXTURE_EXT));
+	}
+	Asset::ShaderAsset& AssetManager::GetShaderAsset(const std::string& name)
+	{
+		return GetShaderAsset(Utils::Filename(name + '.' + PT_SHADER_EXT));
+	}
+	Asset::MeshAsset& AssetManager::GetMeshAsset(const std::string& name)
+	{
+		return GetMeshAsset(Utils::Filename(name + '.' + PT_MESH_EXT));
+	}
+	Asset::WindowAsset& AssetManager::GetWindowAsset(const std::string& name)
+	{
+		return GetWindowAsset(Utils::Filename(name + '.' + PT_WINDOW_EXT));
+	}
+	Asset::SceneAsset& AssetManager::GetSceneAsset(const std::string& name)
+	{
+		return GetSceneAsset(Utils::Filename(name + '.' + PT_SCENE_EXT));
+	}
+	Asset::SceneObjAsset& AssetManager::GetSceneObjAsset(const std::string& name)
+	{
+		return GetSceneObjAsset(Utils::Filename(name + '.' +  PT_SCENEOBJ_EXT));
 	}
 
 	const Asset::MeshAsset& AssetManager::GetQuadMesh()
@@ -182,50 +336,27 @@ namespace Parrot
 				s_FilenameToPath[filepath.GetFilename().String()] = std::move(filepath.FullPath());
 		}
 	}
-	/*void Internal_AssetManager::LoadAllFromDir()
-	{
-		for (auto& pair : s_FilenameToPath)
-		{
-			Utils::Filename filename(pair.first);
-			AssetManager::AssetFormat format = GetAssetFormatFromExt(filename.GetExt());
-			if (!AssetManager::IsAssetLoaded(filename))
-				AssetManager::LoadAsset(filename);
-		}
-	}*/
 
-	void Internal_AssetManager::ConvertToAsset(const Utils::Filepath& src, const Utils::Directory& dst)
+	void Internal_AssetManager::LoadImageFromFilename(const Utils::Filename& filename, Math::Vec2u& size, Math::Vec4u8* buffer)
 	{
-		std::string_view srcExt = src.GetFilename().GetExt();
-		if (srcExt == "png" || srcExt == "jpg")
+		std::string_view ext = filename.GetExt();
+		if (ext == "png" || ext == "jpg")
 		{
 			int32_t colorChannels = 4;
 			stbi_set_flip_vertically_on_load(true);
 			int32_t width, height, BPP;
-			uint8_t* buffer = stbi_load(src.FullPath().c_str(), &width, &height, &BPP, colorChannels);
-			PT_GUARD_CALL(if (!buffer)
-			{
-				Internal_Log::LogWarning("Texture with path \"%\" couldn't be loaded. Check if the filepath is correct and the file isn't corrupted.", src.FullPath());
-				return;
-			})
-
-			std::string outPath = s_AssetDirectory.String();
-			outPath += dst.String();
-			outPath += src.GetFilename().GetName();
-			outPath += '.';
-			outPath += PT_TEXTURE_EXT;
-
-			std::ofstream stream(outPath, std::ios::binary);
-			Graphics::TextureAPI::Settings settings;
-			Math::Vec2u size((uint32_t)width, (uint32_t)height);
-			stream.write((const char*)&settings, sizeof(Graphics::TextureAPI::Settings));
-			stream.write((const char*)&size, sizeof(Math::Vec2u));
-			stream.write((const char*)buffer, (size_t)size.x * (size_t)size.y * 4);
-			stream.close();
-			delete[] buffer;
+			buffer = (Math::Vec4u8*)stbi_load((s_AssetDirectory.String() + filename.String()).c_str(), &width, &height, &BPP, colorChannels);
+			size.x = width;
+			size.y = height;
+			PT_GUARD_CALL
+			(
+				if (!buffer)
+					Internal_Log::LogWarning("Texture \"%\" couldn't be loaded. Check if the filename is correct and the file isn't corrupted.", filename.String());
+			)
 		}
 		else
 		{
-			Internal_Log::LogWarning("Src extension in \"%\" isn't supported! Supported formats are \"jpg\" and \"png\"", src.GetFilename().String());
+			Internal_Log::LogWarning("Src extension in \"%\" isn't supported! Supported formats are \"jpg\" and \"png\"", filename.String());
 		}
 	}
 }

@@ -6,6 +6,6 @@ namespace Parrot
 	namespace MeshRenderer
 	{
 		void StartCoroutine(const Component::Camera& cam);
-		void Push(const Component::Transform& transform, const Component::Renderobj& ro);
+		void Push(const Component::Transform& transform, const Component::RenderObj& ro);
 	}
 }

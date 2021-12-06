@@ -169,6 +169,7 @@
     <ClInclude Include="Src\Math\Arithmetic.hpp" />
     <ClInclude Include="Src\Math\Constants.hpp" />
     <ClInclude Include="Src\Math\Matrix.hpp" />
+    <ClInclude Include="Src\Math\Random.hpp" />
     <ClInclude Include="Src\Math\Vector.hpp" />
     <ClInclude Include="Src\ParrotScript.hpp" />
     <ClInclude Include="Src\Ptpch.hpp" />
@@ -185,6 +186,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Assets\AssetManager.cpp" />
+    <ClCompile Include="Src\Assets\Formats\SceneObjAsset.cpp" />
     <ClCompile Include="Src\Assets\StandardAssets.cpp" />
     <ClCompile Include="Src\Assets\Formats\MeshAsset.cpp" />
     <ClCompile Include="Src\Assets\Formats\SceneAsset.cpp" />
@@ -202,6 +204,7 @@
     <ClCompile Include="Src\Graphics\OpenGl\VertexArray_OPENGL.cpp" />
     <ClCompile Include="Src\Graphics\OpenGl\VertexBuffer_OPENGL.cpp" />
     <ClCompile Include="Src\Input\Input.cpp" />
+    <ClCompile Include="Src\Math\Random.cpp" />
     <ClCompile Include="Src\Ptpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

@@ -18,6 +18,7 @@
 #include "Math/Matrix.hpp"
 #include "Math/Constants.hpp"
 #include "Math/Arithmetic.hpp"
+#include "Math/Random.hpp"
 
 #include "Input/Input.hpp"
 #include "Input/Event.hpp"

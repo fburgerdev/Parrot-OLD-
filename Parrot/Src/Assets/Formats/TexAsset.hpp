@@ -17,9 +17,11 @@ namespace Parrot
 
 			uint32_t BufferIndex(Math::Vec2u coords);
 			void SaveToFile();
+			void LoadImage();
 		public:
 			Utils::Filepath filepath;
 
+			Utils::Filename imageFilename;
 			Graphics::TextureAPI::Settings settings;
 			Math::Vec2u size;
 			Math::Vec4u8* buffer = nullptr;

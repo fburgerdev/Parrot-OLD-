@@ -8,7 +8,7 @@ namespace Parrot
 	public:
 		enum class Type : int8_t
 		{
-			Unknown = -1, Window, Scene, SceneObj, WindowAsset, SceneAsset, SceneObjAsset, MeshAsset, TexAsset, ShaderAsset, Script
+			Unknown = -1, Window, Scene, SceneObj, WindowAsset, SceneAsset, SceneObjAsset, MeshAsset, TexAsset, ShaderAsset, Script, Light
 		};
 		uint64_t ID() const;
 	protected:

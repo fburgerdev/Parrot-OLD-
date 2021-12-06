@@ -1,7 +1,8 @@
 #pragma once
 #include "Core/PtObj.hpp"
 #include "Utils/Filepath.hpp"
-#include "SceneObjAsset.hpp"
+
+#include <vector>
 
 namespace Parrot
 {
@@ -14,8 +15,7 @@ namespace Parrot
 		public:
 			Utils::Filepath filepath;
 
-			size_t objCount = 0;
-			SceneObjAsset* objs = nullptr;
+			std::vector<void*> sceneObjs;
 		};
 	}
 }

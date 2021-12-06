@@ -135,9 +135,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Src\Controller3D.hpp" />
-    <ClInclude Include="Src\DefaultMeshCreation.hpp" />
-    <ClInclude Include="Src\Prank.hpp" />
+    <ClInclude Include="Src\ExampleWorld\TerrainGen.hpp" />
+    <ClInclude Include="Src\StandardScripts\Controller3D.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\OnCreate.cpp" />

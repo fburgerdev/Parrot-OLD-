@@ -10,7 +10,7 @@ namespace Parrot
 {
 	enum class ComponentType
 	{
-		None = 0, Transform, Renderobj, Camera
+		None = 0, Transform, RenderObj, Camera, Light
 	};
 	class SceneObj;
 	namespace Component
@@ -28,11 +28,11 @@ namespace Parrot
 			Math::Vec3f scale;
 		};
 
-		class Renderobj
+		class RenderObj
 		{
 		public:
-			Renderobj(const Asset::MeshAsset& mesh, const Asset::ShaderAsset& shader, const Asset::TexAsset& tex);
-			Renderobj(const Renderobj& other);
+			RenderObj(const Asset::MeshAsset& mesh, const Asset::ShaderAsset& shader, const Asset::TexAsset& tex);
+			RenderObj(const RenderObj& other);
 		public:
 			const Asset::MeshAsset* mesh;
 			const Asset::ShaderAsset* shader;
@@ -68,6 +68,16 @@ namespace Parrot
 			virtual void OnEvent(Event e) {};
 		public:
 			SceneObj& sceneObj;
+		};
+
+		class Light : public PtObj
+		{
+		public:
+			Light(Math::Vec3f dir = { 0, -1, 0 }, Math::Vec3u8 color = { 255, 255, 255 }, float intensity = 1.0f);
+		public:
+			Math::Vec3f dir;
+			Math::Vec3u8 color;
+			float intensity;
 		};
 	}
 }

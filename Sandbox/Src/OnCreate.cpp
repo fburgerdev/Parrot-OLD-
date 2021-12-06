@@ -1,18 +1,18 @@
 #include "InternalParrot.hpp"
-#include "Controller3D.hpp"
-#include "Prank.hpp"
-#include "DefaultMeshCreation.hpp"
 
+#include "StandardScripts/Controller3D.hpp"
+
+#include "ExampleWorld/TerrainGen.hpp"
+
+// ExampleWorld
 void Parrot::Internal_Application::OnCreate()
 {
 	Internal_Application::AddScriptCreationFunc("Controller3D", [](SceneObj* obj) { return (Component::Script*)new Controller3D(*obj); });
-	Internal_Application::AddScriptCreationFunc("Prank", [](SceneObj* obj) { return (Component::Script*)new Prank(*obj); });
-	srand((uint32_t)time(0));
+	Internal_Application::AddScriptCreationFunc("TerrainGen", [](SceneObj* obj) { return (Component::Script*)new TerrainGen(*obj); });
 
-	Internal_AssetManager::InitAssetDir(Utils::Directory("..\\TestAssets\\"));
-	//AssetManager::Internal_ConvertToAsset(Utils::Filepath("..\\TestAssets\\Lindner\\Lindner.jpg"));
-	AssetManager::LoadAsset(Utils::Filename("Main.WNDW"));
+	//Internal_AssetManager::ConvertToAsset(Utils::Filepath("Assets\\ExampleWorld\\Parrot2.jpg"), Utils::Directory("Assets\\ExampleWorld\\"));
+	Internal_AssetManager::InitAssetDir(Utils::Directory("Assets\\ExampleWorld\\"));
 
-	OpenWindow(AssetManager::GetWindowAsset("Main"));
+	AssetManager::LoadWindowAsset(Utils::Filename("Main.WNDW"));
 	OpenWindow(AssetManager::GetWindowAsset("Main"));
 }

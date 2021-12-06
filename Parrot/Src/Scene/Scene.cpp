@@ -1,5 +1,6 @@
 #include "Ptpch.hpp"
 #include "Scene.hpp"
+
 #include "Scene/SceneObj.hpp"
 #include "Renderer/MeshRenderer/MeshRenderer.hpp"
 #include "Core/Internal_Application.hpp"
@@ -7,21 +8,11 @@
 
 namespace Parrot
 {
-	Scene::Scene(Window& window, const Asset::SceneAsset& SceneAsset)
-		: PtObj(PtObj::Type::Scene), m_Tag(SceneAsset.filepath.GetFilename().GetName()), m_Window(window), m_OnCreateCalled(false)
+	Scene::Scene(Window& window, const Asset::SceneAsset& sceneAsset)
+		: PtObj(PtObj::Type::Scene), m_Tag(sceneAsset.filepath.GetFilename().GetName()), m_Window(window), m_OnCreateCalled(false)
 	{
-		for (uint32_t i = 0; i < SceneAsset.objCount; ++i)
-		{
-			if (m_SceneObjNamesakeCount.find(m_Tag) == m_SceneObjNamesakeCount.end())
-			{
-				m_SceneObjNamesakeCount[m_Tag] = 0;
-			}
-			const Asset::SceneObjAsset& ptObj = SceneAsset.objs[i];
-			SceneObj* obj = new SceneObj(*this, ptObj);
-			m_SceneObjs[ptObj.tag] = obj;
-			for (auto& pair : obj->m_Scripts)
-				m_Scripts.push_back(pair.second);
-		}
+		for (void* obj : sceneAsset.sceneObjs)
+			AddSceneObj(*(Asset::SceneObjAsset*)obj);
 	}
 	Scene::~Scene()
 	{
@@ -37,19 +28,24 @@ namespace Parrot
 	{
 		return m_Window;
 	}
-	void Scene::AddSceneObj(const Asset::SceneObjAsset& sceneObj)
+	SceneObj& Scene::AddSceneObj(const Asset::SceneObjAsset& sceneObj)
 	{
-	/*	if (m_SceneObjNamesakeCount.find(sceneObj.tag) == m_SceneObjNamesakeCount.end())
-		{
-			m_SceneObjNamesakeCount[sceneObj.tag] = 0;
-			m_SceneObjs[sceneObj.tag] = new SceneObj(*this, sceneObj);
-		}
+		SceneObj* obj = new SceneObj(*this, sceneObj);
+		if (m_SceneObjs.find(obj->m_Tag) == m_SceneObjs.end())
+			m_SceneObjNamesakeCount[obj->m_Tag] = 0;
 		else
 		{
-			uint32_t number = ++m_SceneObjNamesakeCount[sceneObj.tag];
-			std::string overrideTag = sceneObj.tag + '(' + std::to_string(number) + ')';
-			m_SceneObjs[overrideTag] = new SceneObj(*this, overrideTag, sceneObj);
-		}*/
+			uint32_t number = ++m_SceneObjNamesakeCount[obj->m_Tag];
+			obj->m_Tag += '(' + std::to_string(number) + ')';
+		}
+		m_SceneObjs[obj->m_Tag] = obj;
+		for (auto& pair : obj->m_Scripts)
+			m_Scripts.push_back(pair.second);
+		// instantly calls OnCreate function if obj is added after the scene creation
+		if (m_OnCreateCalled)
+			for (auto& pair : obj->m_Scripts)
+				pair.second->OnCreate();
+		return *obj;
 	}
 	bool Scene::HasSceneObj(const std::string& tag)
 	{
@@ -62,8 +58,8 @@ namespace Parrot
 	}
 	void Scene::RaiseEvent(Event e)
 	{
-		for (Component::Script* script : m_Scripts)
-			script->OnEvent(e);
+		for (size_t i = 0; i < m_Scripts.size(); i++)
+			m_Scripts[i]->OnEvent(e);
 	}
 
 	void Scene::UpdateObjs()
@@ -91,9 +87,9 @@ namespace Parrot
 		}
 		for (auto& pair : m_SceneObjs)
 		{
-			if (pair.second->HasComponent(ComponentType::Renderobj))
+			if (pair.second->HasComponent(ComponentType::RenderObj))
 			{
-				MeshRenderer::Push(pair.second->transform, pair.second->GetComponent<Component::Renderobj>());
+				MeshRenderer::Push(pair.second->transform, pair.second->GetComponent<Component::RenderObj>());
 			}
 		}
 	}

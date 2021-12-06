@@ -103,6 +103,7 @@ int main()
 	Internal_Log::StartScope("Runtime");
 	while (s_MainWindow && s_MainWindow->IsOpen())
 	{
+		Utils::Stopwatch frameWatch;
 		for (auto& pair : s_Windows)
 		{
 			Window* window = pair.second;
@@ -121,6 +122,7 @@ int main()
 				break;
 			}
 		}
+		//Internal_Log::LogInfo("% fps", 1.0f / frameWatch.Timing().Seconds());
 	}	
 	Internal_Log::EndScope();
 	for (auto& pair : s_Windows)

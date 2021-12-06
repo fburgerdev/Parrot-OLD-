@@ -29,7 +29,7 @@ namespace Parrot
 
 	namespace MeshRenderer
 	{
-		void CreateGraphicsContent(const Component::Renderobj& ro)
+		void CreateGraphicsContent(const Component::RenderObj& ro)
 		{
 			// vb, ib, va
 			Graphics::VertexBufferAPI* vb = CreateVertexBufferAPI(ro.mesh->vertices.data(), sizeof(Graphics::MeshVertex) * ro.mesh->vertices.size(), true);
@@ -41,8 +41,9 @@ namespace Parrot
 			Graphics::IndexBufferAPI* ib = nullptr;
 			if (ro.mesh->isQuadGeometry)
 			{
-				uint32_t* indices = new uint32_t[ro.mesh->vertices.size() * 6 / 4];
-				for (uint32_t i = 0; i < (ro.mesh->vertices.size() >> 2); ++i)
+				const uint32_t ibSize = (uint32_t)ro.mesh->vertices.size() / 4;
+				uint32_t* indices = new uint32_t[(size_t)ibSize * 6];
+				for (uint32_t i = 0; i < ibSize; ++i)
 				{
 					indices[i * 6 + 0] = (i << 2) + 0;	 //  0------1
 					indices[i * 6 + 1] = (i << 2) + 1;	 //  | \  / |
@@ -87,7 +88,7 @@ namespace Parrot
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		}
 
-		void Push(const Component::Transform& transform, const Component::Renderobj& ro)
+		void Push(const Component::Transform& transform, const Component::RenderObj& ro)
 		{
 			if (s_ActiveContent->meshes.find(ro.mesh->ID()) == s_ActiveContent->meshes.end())
 				CreateGraphicsContent(ro);
@@ -97,7 +98,12 @@ namespace Parrot
 			mesh.shader->SetUniformMat4f("u_Transform", transform.Mat());
 			mesh.tex->Bind();
 			mesh.va->Bind();
-				
+
+			// temp
+			mesh.shader->SetUniformVec3f("u_Lights[0].dir", { 0, -1, 0 });
+			mesh.shader->SetUniformVec3f("u_Lights[0].color", { 0.0f, 0.0f, 1.0f });
+			mesh.shader->SetUniformFloat("u_Lights[0].intensity", 1.0f);
+
 			if (ro.mesh->isQuadGeometry)
 			{
 				mesh.ib->Bind();
