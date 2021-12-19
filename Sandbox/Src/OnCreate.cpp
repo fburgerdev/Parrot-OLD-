@@ -1,18 +1,20 @@
-#include "InternalParrot.hpp"
+#include "ParrotSetup.hpp"
 
 #include "StandardScripts/Controller3D.hpp"
-
 #include "ExampleWorld/TerrainGen.hpp"
+#include "NoiseTesting.hpp"
 
-// ExampleWorld
-void Parrot::Internal_Application::OnCreate()
+namespace Parrot
 {
-	Internal_Application::AddScriptCreationFunc("Controller3D", [](SceneObj* obj) { return (Component::Script*)new Controller3D(*obj); });
-	Internal_Application::AddScriptCreationFunc("TerrainGen", [](SceneObj* obj) { return (Component::Script*)new TerrainGen(*obj); });
-
-	//Internal_AssetManager::ConvertToAsset(Utils::Filepath("Assets\\ExampleWorld\\Parrot2.jpg"), Utils::Directory("Assets\\ExampleWorld\\"));
-	Internal_AssetManager::InitAssetDir(Utils::Directory("Assets\\ExampleWorld\\"));
-
-	AssetManager::LoadWindowAsset(Utils::Filename("Main.WNDW"));
-	OpenWindow(AssetManager::GetWindowAsset("Main"));
+	void OnCreate()
+	{
+		Internal_AddScriptCreationFunc("Controller3D", [](SceneObj* obj) { return (Component::Script*)new Controller3D(*obj); });
+		Internal_AddScriptCreationFunc("TerrainGen", [](SceneObj* obj) { return (Component::Script*)new TerrainGen(*obj); });
+		Internal_AddScriptCreationFunc("NoiseTesting", [](SceneObj* obj) { return (Component::Script*)new NoiseTesting(*obj); });
+		
+		Console::Init(PT_SHOW_CONSOLE);
+		DebugOut.Init(&std::cout, nullptr);
+		Internal_SetAssetFolder(Utils::Folder(Utils::Directory("Assets/ExampleWorld")));		
+		CreateWindow(AssetManager::GetWindowAsset("Main"));
+	}
 }

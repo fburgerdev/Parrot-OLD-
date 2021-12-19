@@ -1,12 +1,20 @@
 #include "Ptpch.hpp"
 #include "MeshRenderer.hpp"
 #include "Core/Application.hpp"
-#include "Assets/Internal_AssetManager.hpp"
-#include "Debug/Internal_Log.hpp"
 #include <GLAD/glad.h>
 
 namespace Parrot
 {
+	Window& Internal_GetBoundWindow();
+	namespace Graphics
+	{
+		IndexBufferAPI* CreateIndexBufferAPI(const uint32_t* indices, uint32_t count, bool isStatic = false);
+		VertexBufferAPI* CreateVertexBufferAPI(const void* vertices, size_t size, bool isStatic = false);
+		VertexArrayAPI* CreateVertexArrayAPI(const VertexBufferAPI* vb, const VertexBufferLayout& layout);
+		TextureAPI* CreateTextureAPI(const Math::Vec4u8* buffer, Math::Vec2u size, const TextureAPI::Settings& settings);
+		ShaderAPI* CreateShaderAPI(const std::string& vertexSrc, const std::string& fragmentSrc);
+	}
+
 	struct GraphicsContent
 	{
 		struct Mesh
@@ -57,30 +65,30 @@ namespace Parrot
 			
 			// shader
 			Graphics::ShaderAPI* shader;
-			if (s_ActiveContent->shaders.find(ro.mesh->ID()) == s_ActiveContent->shaders.end())
+			if (s_ActiveContent->shaders.find(ro.mesh->GetID()) == s_ActiveContent->shaders.end())
 			{
 				shader = Graphics::CreateShaderAPI(ro.shader->vertexSrc, ro.shader->fragmentSrc);
-				s_ActiveContent->shaders[ro.mesh->ID()] = shader;
+				s_ActiveContent->shaders[ro.mesh->GetID()] = shader;
 			}
 			else
-				shader = s_ActiveContent->shaders[ro.mesh->ID()];
+				shader = s_ActiveContent->shaders[ro.mesh->GetID()];
 
 			// tex
 			Graphics::TextureAPI* tex;
-			if (s_ActiveContent->textures.find(ro.mesh->ID()) == s_ActiveContent->textures.end())
+			if (s_ActiveContent->textures.find(ro.mesh->GetID()) == s_ActiveContent->textures.end())
 			{
 				tex = Graphics::CreateTextureAPI(ro.tex->buffer, ro.tex->size, ro.tex->settings);
-				s_ActiveContent->textures[ro.mesh->ID()] = tex;
+				s_ActiveContent->textures[ro.mesh->GetID()] = tex;
 			}
 			else
-				tex = s_ActiveContent->textures[ro.mesh->ID()];
+				tex = s_ActiveContent->textures[ro.mesh->GetID()];
 
-			s_ActiveContent->meshes[ro.mesh->ID()] = { vb, ib, va, shader, tex };
+			s_ActiveContent->meshes[ro.mesh->GetID()] = { vb, ib, va, shader, tex };
 		}
 
 		void StartCoroutine(const Component::Camera& cam)
 		{
-			s_ActiveContent = &s_Contents[Application::GetBoundWindow().ID()];
+			s_ActiveContent = &s_Contents[Internal_GetBoundWindow().GetID()];
 			s_Cam = &cam;
 			glEnable(GL_DEPTH_TEST);
 			glEnable(GL_CULL_FACE);
@@ -90,9 +98,9 @@ namespace Parrot
 
 		void Push(const Component::Transform& transform, const Component::RenderObj& ro)
 		{
-			if (s_ActiveContent->meshes.find(ro.mesh->ID()) == s_ActiveContent->meshes.end())
+			if (s_ActiveContent->meshes.find(ro.mesh->GetID()) == s_ActiveContent->meshes.end())
 				CreateGraphicsContent(ro);
-			GraphicsContent::Mesh& mesh = s_ActiveContent->meshes[ro.mesh->ID()];
+			GraphicsContent::Mesh& mesh = s_ActiveContent->meshes[ro.mesh->GetID()];
 			mesh.shader->Bind();
 			mesh.shader->SetUniformMat4f("u_ViewProj", s_Cam->ViewProjMat());
 			mesh.shader->SetUniformMat4f("u_Transform", transform.Mat());

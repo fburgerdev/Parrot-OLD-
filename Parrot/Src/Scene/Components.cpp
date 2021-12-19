@@ -1,12 +1,13 @@
 #include "Ptpch.hpp"
 #include "Components.hpp"
-#include "Core/Internal_Application.hpp"
-#include "Debug/Internal_Log.hpp"
+#include "Window/Window.hpp"
 #include "SceneObj.hpp"
+
 #include <cmath>
 
 namespace Parrot
 {
+	Window& Internal_GetBoundWindow();
 	namespace Component
 	{
 		Transform::Transform()
@@ -43,13 +44,8 @@ namespace Parrot
 			return out;
 		}
 
-		RenderObj::RenderObj(const Asset::MeshAsset& mesh, const Asset::ShaderAsset& shader, const Asset::TexAsset& tex)
-			: mesh(&mesh), shader(&shader), tex(&tex)
-		{
-
-		}
-		RenderObj::RenderObj(const RenderObj& other)
-			: mesh(other.mesh), shader(other.shader), tex(other.tex)
+		RenderObj::RenderObj(const Asset::MeshAsset& mesh, const Asset::TexAsset& tex, const Asset::ShaderAsset& shader)
+			: mesh(&mesh), tex(&tex), shader(&shader)
 		{
 
 		}
@@ -104,7 +100,7 @@ namespace Parrot
 			Math::Mat4f proj;
 			float tanFoV = 1.0f / tanf(foV / 2);
 			proj[0][0] = tanFoV;
-			Math::Vec2u winSize = Application::GetBoundWindow().GetSize();
+			Math::Vec2u winSize = Internal_GetBoundWindow().GetSize();
 			proj[1][1] = winSize.x / (float)winSize.y * tanFoV;
 			proj[2][2] = zRange.b / (zRange.b - zRange.a);
 			proj[3][2] = zRange.a * zRange.b / (zRange.a - zRange.b);
@@ -114,7 +110,7 @@ namespace Parrot
 		}
 
 		Script::Script(SceneObj& obj)
-			: PtObj(PtObj::Type::Script), sceneObj(obj)
+			: sceneObj(obj)
 		{
 
 		}
@@ -124,7 +120,7 @@ namespace Parrot
 		}
 		
 		Light::Light(Math::Vec3f dir, Math::Vec3u8 color, float intensity)
-			: PtObj(PtObj::Type::Light), dir(dir), color(color), intensity(intensity)
+			: dir(dir), color(color), intensity(intensity)
 		{
 
 		}

@@ -6,22 +6,23 @@
 
 namespace Parrot
 {
+	class Constructor;
 	namespace Asset
 	{
 		class TexAsset : public PtObj
 		{
-		public:
+		private:
 			TexAsset(const Utils::Filepath& filepath);
-			TexAsset();
+			TexAsset(const std::string& tag);
+			friend Constructor;
+		public:
 			~TexAsset();
-
-			uint32_t BufferIndex(Math::Vec2u coords);
-			void SaveToFile();
+			
+			Math::Vec4u8& Pixel(Math::Vec2u coords) const;
+			void SaveToFile(const Utils::Filepath& filepath);
 			void LoadImage();
 		public:
-			Utils::Filepath filepath;
-
-			Utils::Filename imageFilename;
+			Utils::Filename image;
 			Graphics::TextureAPI::Settings settings;
 			Math::Vec2u size;
 			Math::Vec4u8* buffer = nullptr;

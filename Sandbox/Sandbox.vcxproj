@@ -88,8 +88,6 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>LIBCMTD.lib</IgnoreSpecificDefaultLibraries>
-      <EntryPointSymbol>
-      </EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Optimized|x64'">
@@ -136,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Src\ExampleWorld\TerrainGen.hpp" />
+    <ClInclude Include="Src\NoiseTesting.hpp" />
     <ClInclude Include="Src\StandardScripts\Controller3D.hpp" />
   </ItemGroup>
   <ItemGroup>

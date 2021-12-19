@@ -1,31 +1,49 @@
 #include "Ptpch.hpp"
 #include "glad/glad.h"
 #include "Window_GLFW.hpp"
+#include "Debug/Debugstream.hpp"
+
 #include "Scene/Scene.hpp"
-#include "Debug/Internal_Log.hpp"
-#include "Input/Internal_Input.hpp"
-#include "Core/Internal_Application.hpp"
 
 namespace Parrot
 {
+	void Internal_SetBoundWindow(Window* window);
+	void Internal_SetMouseButtonState(MouseButton button, MouseButtonState state);
+	void Internal_SetKeyboardKeyState(KeyCode keyCode, KeyState state);
+
 	static GLFWwindow* s_MainWindow = nullptr;
 	static std::unordered_map<GLFWwindow*, Scene*> s_WindowSceneMap;
 
-	Window_GLFW::Window_GLFW(const Asset::WindowAsset& WindowAsset)
-		: Window(WindowAsset), m_Window(nullptr), m_Title(WindowAsset.filepath.GetFilename().GetName())//, m_IsFocused(true)
+	Window_GLFW::Window_GLFW(const Asset::WindowAsset& asset)
+		: Window(asset), m_Window(nullptr), m_Title(asset.GetTag())
 	{
 		if (s_WindowSceneMap.empty())
 		{
-			Internal_Log::LogAssert(glfwInit(), "GLFW initialization failed!");
-			Internal_Log::LogInfo("GLFW initialization successful!");
+			if (!glfwInit())
+			{
+				DebugOut << GLFWInitError << "Window: " << m_Title << Debugstream::EndMsg;
+				Close();
+				return;
+			}
+			DebugOut << "GLFW initialized successfully." << Debugstream::EndMsg;
 		}
-		m_Window = glfwCreateWindow(WindowAsset.size.x, WindowAsset.size.y, m_Title.c_str(), nullptr, s_MainWindow);
-		Internal_Log::LogAssert(m_Window, "Window \"%\" creation failed!", m_Title);
-		Internal_Log::LogInfo("Window \"%\" creation successful!", m_Title);
+		m_Window = glfwCreateWindow(asset.size.x, asset.size.y, m_Title.c_str(), nullptr, s_MainWindow);
+		if (!m_Window)
+		{
+			DebugOut << WindowCreationError << "Window: " << m_Title << Debugstream::EndMsg;
+			Close();
+			return;
+		}
+		DebugOut << "Window \"" << m_Title << "\" created successfully." << Debugstream::EndMsg;
 		Bind();
 
-		Internal_Log::LogAssert(gladLoadGLLoader((GLADloadproc)glfwGetProcAddress), "GLAD initialization failed!");
-		Internal_Log::LogInfo("GLAD initialization successful!");
+		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+		{
+			DebugOut << GLEWInitError << "Window: " << m_Title << Debugstream::EndMsg;
+			Close();
+			return;
+		}
+		DebugOut << "GLEW for Window \"" << m_Title << "\" initialized successfully." << Debugstream::EndMsg;
 
 	    // Callbacks
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int32_t width, int32_t height)
@@ -73,13 +91,16 @@ namespace Parrot
 		}
 		else
 			glfwSwapInterval(0);
-		s_WindowSceneMap[m_Window] = &GetLoadedScene();
+		s_WindowSceneMap[m_Window] = &LoadedScene();
 	}
 
 	Window_GLFW::~Window_GLFW()
 	{
-		s_WindowSceneMap.erase(m_Window);
-		glfwDestroyWindow(m_Window);
+		if (m_Window)
+		{
+			s_WindowSceneMap.erase(m_Window);
+			glfwDestroyWindow(m_Window);
+		}
 		if (s_WindowSceneMap.empty())
 		{
 			glfwTerminate();
@@ -92,7 +113,7 @@ namespace Parrot
 		if (glfwGetCurrentContext() != m_Window)
 		{
 			glfwMakeContextCurrent(m_Window);
-			Internal_Application::SetBoundWindow((Window*)this);
+			Internal_SetBoundWindow((Window*)this);
 		}
 	}
 	void Window_GLFW::SetTitle(const std::string& title)

@@ -7,9 +7,6 @@
     <Filter Include="Src\Assets">
       <UniqueIdentifier>{4FD9EC83-3B91-2ED1-A498-072D906FC9C1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Assets\Defaults">
-      <UniqueIdentifier>{7681CE59-E2E2-AB67-6B50-F219D7B0E226}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\Assets\Formats">
       <UniqueIdentifier>{FA62D895-E646-99EB-4FA7-933E3BAA836D}</UniqueIdentifier>
     </Filter>
@@ -60,6 +57,12 @@
     <ClInclude Include="Src\Assets\AssetManager.hpp">
       <Filter>Src\Assets</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Assets\AssetRead.hpp">
+      <Filter>Src\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Assets\DefaultAssets.hpp">
+      <Filter>Src\Assets</Filter>
+    </ClInclude>
     <ClInclude Include="Src\Assets\Formats\MeshAsset.hpp">
       <Filter>Src\Assets\Formats</Filter>
     </ClInclude>
@@ -78,25 +81,25 @@
     <ClInclude Include="Src\Assets\Formats\WindowAsset.hpp">
       <Filter>Src\Assets\Formats</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Assets\Internal_AssetManager.hpp">
-      <Filter>Src\Assets</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Core\Application.hpp">
       <Filter>Src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Core\Internal_Application.hpp">
+    <ClInclude Include="Src\Core\Constructor.hpp">
       <Filter>Src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Core\Macros.hpp">
+    <ClInclude Include="Src\Core\Core.hpp">
       <Filter>Src\Core</Filter>
     </ClInclude>
     <ClInclude Include="Src\Core\PtObj.hpp">
       <Filter>Src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Debug\Internal_Log.hpp">
+    <ClInclude Include="Src\Debug\Console.hpp">
       <Filter>Src\Debug</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Debug\Log.hpp">
+    <ClInclude Include="Src\Debug\DebugMsg.hpp">
+      <Filter>Src\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Debug\Debugstream.hpp">
       <Filter>Src\Debug</Filter>
     </ClInclude>
     <ClInclude Include="Src\Graphics\GraphicsAPI.hpp">
@@ -129,12 +132,6 @@
     <ClInclude Include="Src\Input\Input.hpp">
       <Filter>Src\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Input\Internal_Input.hpp">
-      <Filter>Src\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\InternalParrot.hpp">
-      <Filter>Src</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Math\Arithmetic.hpp">
       <Filter>Src\Math</Filter>
     </ClInclude>
@@ -144,10 +141,19 @@
     <ClInclude Include="Src\Math\Matrix.hpp">
       <Filter>Src\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Math\Noise.hpp">
+      <Filter>Src\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Math\Random.hpp">
+      <Filter>Src\Math</Filter>
+    </ClInclude>
     <ClInclude Include="Src\Math\Vector.hpp">
       <Filter>Src\Math</Filter>
     </ClInclude>
     <ClInclude Include="Src\ParrotScript.hpp">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ParrotSetup.hpp">
       <Filter>Src</Filter>
     </ClInclude>
     <ClInclude Include="Src\Ptpch.hpp">
@@ -165,10 +171,13 @@
     <ClInclude Include="Src\Scene\SceneObj.hpp">
       <Filter>Src\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Utils\FileRead.hpp">
+    <ClInclude Include="Src\Utils\Filepath.hpp">
       <Filter>Src\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Utils\Filepath.hpp">
+    <ClInclude Include="Src\Utils\Filestream.hpp">
+      <Filter>Src\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Utils\Folder.hpp">
       <Filter>Src\Utils</Filter>
     </ClInclude>
     <ClInclude Include="Src\Utils\Stopwatch.hpp">
@@ -183,17 +192,24 @@
     <ClInclude Include="Vendor\Stb\stb_image.h">
       <Filter>Vendor\Stb</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Assets\StandardAssets.hpp" />
-    <ClInclude Include="Src\Math\Random.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Assets\AssetManager.cpp">
+      <Filter>Src\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Assets\AssetRead.cpp">
+      <Filter>Src\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Assets\DefaultAssets.cpp">
       <Filter>Src\Assets</Filter>
     </ClCompile>
     <ClCompile Include="Src\Assets\Formats\MeshAsset.cpp">
       <Filter>Src\Assets\Formats</Filter>
     </ClCompile>
     <ClCompile Include="Src\Assets\Formats\SceneAsset.cpp">
+      <Filter>Src\Assets\Formats</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Assets\Formats\SceneObjAsset.cpp">
       <Filter>Src\Assets\Formats</Filter>
     </ClCompile>
     <ClCompile Include="Src\Assets\Formats\ShaderAsset.cpp">
@@ -208,13 +224,19 @@
     <ClCompile Include="Src\Core\Application.cpp">
       <Filter>Src\Core</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Core\Constructors.cpp">
+      <Filter>Src\Core</Filter>
+    </ClCompile>
     <ClCompile Include="Src\Core\PtObj.cpp">
       <Filter>Src\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Debug\Internal_Log.cpp">
+    <ClCompile Include="Src\Debug\Console.cpp">
       <Filter>Src\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Debug\Log.cpp">
+    <ClCompile Include="Src\Debug\DebugMsg.cpp">
+      <Filter>Src\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Debug\Debugstream.cpp">
       <Filter>Src\Debug</Filter>
     </ClCompile>
     <ClCompile Include="Src\Graphics\GraphicsAPI.cpp">
@@ -238,6 +260,12 @@
     <ClCompile Include="Src\Input\Input.cpp">
       <Filter>Src\Input</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Math\Noise.cpp">
+      <Filter>Src\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Math\Random.cpp">
+      <Filter>Src\Math</Filter>
+    </ClCompile>
     <ClCompile Include="Src\Ptpch.cpp">
       <Filter>Src</Filter>
     </ClCompile>
@@ -256,6 +284,12 @@
     <ClCompile Include="Src\Utils\Filepath.cpp">
       <Filter>Src\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Utils\Filestream.cpp">
+      <Filter>Src\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Utils\Folder.cpp">
+      <Filter>Src\Utils</Filter>
+    </ClCompile>
     <ClCompile Include="Src\Utils\Stopwatch.cpp">
       <Filter>Src\Utils</Filter>
     </ClCompile>
@@ -268,13 +302,5 @@
     <ClCompile Include="Vendor\Stb\stb_image.cpp">
       <Filter>Vendor\Stb</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Assets\StandardAssets.cpp" />
-    <ClCompile Include="Src\Assets\Formats\SceneObjAsset.cpp" />
-    <ClCompile Include="Src\Math\Random.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Src\Assets\Defaults\Skybox.TXTR">
-      <Filter>Src\Assets\Defaults</Filter>
-    </None>
   </ItemGroup>
 </Project>

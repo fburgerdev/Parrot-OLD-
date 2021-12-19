@@ -2,23 +2,22 @@
 #include "Core/PtObj.hpp"
 #include "Utils/Filepath.hpp"
 #include "Graphics/MeshVertex.hpp"
-
 #include <vector>
 
 namespace Parrot
 {
+	class Constructor;
 	namespace Asset
 	{
 		class MeshAsset : public PtObj
 		{
-		public:
+		private:
 			MeshAsset(const Utils::Filepath& filepath);
-			MeshAsset();
-
-			void SaveToFile();
+			MeshAsset(const std::string& tag);
+			friend Constructor;
 		public:
-			Utils::Filepath filepath;
-
+			bool SaveToFile(Utils::Filepath& filepath);
+		public:
 			bool isQuadGeometry = true;
 			std::vector<Graphics::MeshVertex> vertices;
 		};

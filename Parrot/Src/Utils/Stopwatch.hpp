@@ -8,13 +8,12 @@ namespace Parrot
 		class Timestep
 		{
 		public:
-			Timestep(float seconds)
-				: m_Seconds(seconds) {}
-			float Microseconds();
-			float Milliseconds();
-			float Seconds();
+			Timestep(float ms);
+			float Us();
+			float Ms();
+			float Sec();
 		private:
-			float m_Seconds;
+			float m_Ms;
 		};
 
 		class Stopwatch
@@ -22,10 +21,10 @@ namespace Parrot
 		public:
 			Stopwatch();
 
-			void Start();
-			Timestep Timing();
+			void Reset();
+			Timestep Ts();
 		private:
-			std::chrono::steady_clock::time_point m_StartTime;
+			std::chrono::steady_clock::time_point m_ResetTime;
 		};
 	}
 }

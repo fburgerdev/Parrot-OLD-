@@ -5,35 +5,34 @@ namespace Parrot
 {
 	namespace Utils
 	{
-		float Timestep::Microseconds()
+		Timestep::Timestep(float ms)
+			: m_Ms(ms) {}
+		float Timestep::Us()
 		{
-			return m_Seconds * 1000000;
+			return m_Ms * 1000.0f;
 		}
-
-		float Timestep::Milliseconds()
+		float Timestep::Ms()
 		{
-			return m_Seconds * 1000;
+			return m_Ms;
 		}
-
-		float Timestep::Seconds()
+		float Timestep::Sec()
 		{
-			return m_Seconds;
+			return m_Ms / 1000.0f;
 		}
 
 		Stopwatch::Stopwatch()
 		{
-			Start();
+			Reset();
+		}
+		void Stopwatch::Reset()
+		{
+			m_ResetTime = std::chrono::high_resolution_clock::now();
 		}
 
-		void Stopwatch::Start()
+		Timestep Stopwatch::Ts()
 		{
-			m_StartTime = std::chrono::high_resolution_clock::now();
-		}
-
-		Timestep Stopwatch::Timing()
-		{
-			auto duration = std::chrono::high_resolution_clock::now() - m_StartTime;
-			return Timestep((float)std::chrono::duration_cast<std::chrono::microseconds>(duration).count() / 1000000.0f);
+			auto duration = std::chrono::high_resolution_clock::now() - m_ResetTime;
+			return Timestep((float)std::chrono::duration_cast<std::chrono::microseconds>(duration).count() / 1000.0f);
 		}
 	}
 }

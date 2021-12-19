@@ -1,135 +1,125 @@
 #include "Ptpch.hpp"
 #include "SceneObjAsset.hpp"
-
-#include "Utils/FileRead.hpp"
-#include "Debug/Internal_Log.hpp"
-#include "Assets/Internal_AssetManager.hpp"
-#include "Core/Internal_Application.hpp"
+#include "Debug/Debugstream.hpp"
+#include "Assets/AssetRead.hpp"
+#include "Assets/AssetManager.hpp"
 
 namespace Parrot
 {
+	ScriptCreationFunc Internal_GetScriptCreationFunc(const std::string& tag);
 	namespace Asset
 	{
-		static void CreateSceneObjAsset(std::ifstream& stream, SceneObjAsset& obj)
+		std::string SceneObjAsset::ExtractSceneObjAsset(Utils::FileIn& stream, SceneObjAsset& obj)
 		{
+			std::string assertMsg = "SceneObjAsset Syntax Error in " + stream.GetFilepath().FullPath();
+
+			std::string tag;
+
 			std::string line;
 			std::string key;
 			std::string arg;
-			bool sceneObjNamed = false;
+
+			std::streampos cursorPos = stream.tellg();
 			while (std::getline(stream, line))
 			{
-				Utils::GetKey(line, key);
+				AssetSyntaxAssert(GetKey(line, key), assertMsg);
 
-				if (line.find("//") != line.npos)
-					line = line.substr(0, line.find("//"));
-				if (key == "SceneObj")
+				size_t commentStart = line.find("//");
+				if (commentStart != line.npos)
+					line = line.substr(0, commentStart);
+				if (key == "sceneobj")
 				{
-					if (sceneObjNamed)
+					if (!tag.empty())
 					{
-						// go back to last line
-						stream.seekg(-(int64_t)line.length() - 2, std::ios::cur);
-						return;
+						stream.seekg(cursorPos);
+						return tag;
 					}
-					Utils::GetArg(line, arg);
-					obj.tag = arg;
-					sceneObjNamed = true;
+					AssetSyntaxAssert(GetArg(line, arg), assertMsg);
+					tag = arg;
 				}
-				else if (key == "Transform")
+				else if (key == "transform")
 				{
-					if (Utils::GetArgWIdentifier(line, "Position", arg))
-						obj.transform.pos = Utils::ArgToVec3f(arg);
-					if (Utils::GetArgWIdentifier(line, "Rotation", arg))
-						obj.transform.rot = Utils::ArgToVec3f(arg) * Math::PI / 180.0f;
-					if (Utils::GetArgWIdentifier(line, "Scale", arg))
-						obj.transform.scale = Utils::ArgToVec3f(arg);
+					if (GetArgWIdentifier(line, "Position", arg))
+						AssetSyntaxAssert(ArgToVec3f(arg, obj.transform.pos), assertMsg);
+					if (GetArgWIdentifier(line, "Rotation", arg))
+					{
+						AssetSyntaxAssert(ArgToVec3f(arg, obj.transform.rot), assertMsg);
+						obj.transform.rot *= Math::PI / 180.0f;
+					}
+					if (GetArgWIdentifier(line, "Scale", arg))
+						AssetSyntaxAssert(ArgToVec3f(arg, obj.transform.scale), assertMsg);
 				}
-				else if (key == "Camera")
+				else if (key == "camera")
 				{
 					float foV = Math::PI_HALFS;
-					if (Utils::GetArgWIdentifier(line, "FoV", arg))
-						foV = Utils::ArgToFloat(arg) * Math::PI / 180.0f;
+					if (GetArgWIdentifier(line, "Fov", arg))
+						foV = ArgToFloat(arg) * Math::PI / 180.0f;
 					Math::Vec2f zRange(0.1f, 1000.0f);
-					if (Utils::GetArgWIdentifier(line, "ZRange", arg))
-						zRange = Utils::ArgToVec2f(arg);
+					if (GetArgWIdentifier(line, "Zrange", arg))
+						AssetSyntaxAssert(ArgToVec2f(arg, zRange), assertMsg);
 					obj.components[ComponentType::Camera] = new Component::Camera(obj.transform, foV, zRange);
 				}
-				else if (key == "RenderObj")
+				else if (key == "renderobj")
 				{
 					const MeshAsset* mesh;
-					Utils::GetArgWIdentifier(line, "Mesh", arg);
+					GetArgWIdentifier(line, "Mesh", arg);
 					if (arg == "Quad")
 						mesh = &AssetManager::GetQuadMesh();
 					else if (arg == "Cube")
 						mesh = &AssetManager::GetCubeMesh();
 					else
-					{
-						Utils::Filename meshFilename(arg);
-						if (!AssetManager::IsAssetLoaded(meshFilename))
-							mesh = &AssetManager::LoadMeshAsset(meshFilename);
-						else
-							mesh = &AssetManager::GetMeshAsset(meshFilename);
-					}
+						mesh = &AssetManager::GetMeshAsset(arg);
 
 					const ShaderAsset* shader;
-					if (!Utils::GetArgWIdentifier(line, "Shader", arg))
-						shader = &AssetManager::GetStandardShader();
+					if (!GetArgWIdentifier(line, "Shader", arg))
+						shader = &AssetManager::GetDefaultShader();
 					else
-					{
-						Utils::Filename shaderFilename = arg;
-						if (!AssetManager::IsAssetLoaded(shaderFilename))
-							shader = &AssetManager::LoadShaderAsset(shaderFilename);
-						else
-							shader = &AssetManager::GetShaderAsset(shaderFilename);
-					}
+						shader = &AssetManager::GetShaderAsset(arg);
 
 					const TexAsset* tex;
-					if (!Utils::GetArgWIdentifier(line, "Tex", arg))
-						tex = &AssetManager::GetWhiteTex();
+					if (!GetArgWIdentifier(line, "Tex", arg))
+						tex = &AssetManager::GetDefaultTex();
 					else
-					{
-						Utils::Filename texFilename = arg;
-						if (!AssetManager::IsAssetLoaded(texFilename))
-							tex = &AssetManager::LoadTexAsset(texFilename);
-						else
-							tex = &AssetManager::GetTexAsset(texFilename);
-					}
-					obj.components[ComponentType::RenderObj] = new Component::RenderObj(*mesh, *shader, *tex);
+						tex = &AssetManager::GetTexAsset(arg);
+					obj.components[ComponentType::RenderObj] = new Component::RenderObj(*mesh, *tex, *shader);
 				}
-				else if (key == "Script")
+				else if (key == "script")
 				{
-					Utils::GetArg(line, arg);
-					obj.scripts.push_back(Internal_Application::GetScriptCreationFunc(arg));
+					GetArg(line, arg);
+					obj.scripts.push_back(Internal_GetScriptCreationFunc(arg));
 				}
-				else if (key == "Light")
+				else if (key == "light")
 				{
 					Math::Vec3f dir(0, -1, 0);
-					if (Utils::GetArgWIdentifier(line, "Dir", arg))
-						dir = Utils::ArgToVec3f(arg);
+					if (GetArgWIdentifier(line, "Dir", arg))
+						AssetSyntaxAssert(ArgToVec3f(arg, dir), assertMsg);
 					Math::Vec3u8 color(255);
-					if (Utils::GetArgWIdentifier(line, "Color", arg))
-						color = Utils::ArgToVec3u8(arg);
+					if (GetArgWIdentifier(line, "Color", arg))
+						AssetSyntaxAssert(ArgToVec3u8(arg, color), assertMsg);
 					float intensity = 1.0f;
-					if (Utils::GetArgWIdentifier(line, "Intensity", arg))
-						intensity = Utils::ArgToFloat(arg);
+					if (GetArgWIdentifier(line, "Intensity", arg))
+						intensity = ArgToFloat(arg);
 					obj.components[ComponentType::Light] = new Component::Light(dir, color, intensity);
 				}
+				cursorPos = stream.tellg();
 			}
+			return tag;
 		}
 
 		SceneObjAsset::SceneObjAsset(const Utils::Filepath& filepath)
-			: PtObj(PtObj::Type::SceneObjAsset)
+			: PtObj(filepath.GetFilename().GetName())
 		{
-			std::ifstream stream(filepath.FullPath());
-			Internal_Log::LogAssert(stream.is_open(), "File \"%\" could not be opened. Either the file doesn't exist or it is already opened by another process.", filepath.FullPath());
-		
-			CreateSceneObjAsset(stream, *this);
+			Utils::FileIn stream(filepath);
+			if (!stream.is_open())
+				return;
+			ExtractSceneObjAsset(stream, *this);
 			stream.close();
 		}
 
-		SceneObjAsset::SceneObjAsset(std::ifstream& stream)
-			: PtObj(PtObj::Type::SceneObjAsset)
+		SceneObjAsset::SceneObjAsset(Utils::FileIn& stream)
+			: PtObj()
 		{
-			CreateSceneObjAsset(stream, *this);
+			m_Tag = ExtractSceneObjAsset(stream, *this);
 		}
 	}
 }

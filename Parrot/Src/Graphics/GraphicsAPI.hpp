@@ -91,11 +91,5 @@ namespace Parrot
 			virtual void SetUniformMat3f(const std::string& identifier, const Math::Mat3f& mat) const = 0;
 			virtual void SetUniformMat4f(const std::string& identifier, const Math::Mat4f& mat) const = 0;
 		};
-
-		IndexBufferAPI* CreateIndexBufferAPI(const uint32_t* indices, uint32_t count, bool isStatic = false);
-		VertexBufferAPI* CreateVertexBufferAPI(const void* vertices, size_t size, bool isStatic = false);
-		VertexArrayAPI* CreateVertexArrayAPI(const VertexBufferAPI* vb, const VertexBufferLayout& layout);
-		TextureAPI* CreateTextureAPI(const Math::Vec4u8* buffer, Math::Vec2u size, const TextureAPI::Settings& settings);
-		ShaderAPI* CreateShaderAPI(const std::string& vertexSrc, const std::string& fragmentSrc);
 	}
 }

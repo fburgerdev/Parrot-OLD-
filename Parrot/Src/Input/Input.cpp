@@ -1,5 +1,5 @@
 #include "Ptpch.hpp"
-#include "Internal_Input.hpp"
+#include "Input/Input.hpp"
 
 namespace Parrot
 {

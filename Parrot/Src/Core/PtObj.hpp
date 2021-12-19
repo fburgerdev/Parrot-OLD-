@@ -1,23 +1,23 @@
 #pragma once
 #include <memory>
+#include <string>
 
 namespace Parrot
 {
 	class PtObj
 	{
 	public:
-		enum class Type : int8_t
-		{
-			Unknown = -1, Window, Scene, SceneObj, WindowAsset, SceneAsset, SceneObjAsset, MeshAsset, TexAsset, ShaderAsset, Script, Light
-		};
-		uint64_t ID() const;
+		size_t GetID() const;
+		const std::string& GetTag() const;
 	protected:
-		PtObj(Type type);
-		~PtObj();
+		PtObj(std::string_view tag);
+		PtObj(std::string&& tag) noexcept;
+		PtObj();
+		virtual ~PtObj();
+		std::string m_Tag;
 	private:
-		uint64_t m_ID;
-		Type m_Type;
-		static uint64_t s_IDCount;
-		static uint64_t s_ObjCount[9];
+		size_t m_ID;
 	};
+	
+	PtObj& GetPtObj(size_t id);
 }

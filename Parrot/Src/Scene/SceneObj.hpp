@@ -1,20 +1,21 @@
 #pragma once
-#include <string>
-#include <unordered_map>
-#include "Components.hpp"
 #include "Assets/Formats/SceneObjAsset.hpp"
-#include "Scene.hpp"
+#include "Components.hpp"
 #include "Assets/AssetManager.hpp"
+
+#include <unordered_map>
+#include <string>
 
 namespace Parrot
 {	
+	class Scene;
 	class SceneObj : public PtObj
 	{
+	private:
+		SceneObj(Scene& scene, const Asset::SceneObjAsset& asset);
 	public:
-		SceneObj(Scene& scene, const Asset::SceneObjAsset& sceneObj);
 		~SceneObj();
 
-		const std::string& GetTag() const;
 		Scene& GetScene();
 
 		bool HasComponent(ComponentType type);
@@ -23,9 +24,9 @@ namespace Parrot
 		template<class _Type, class... _Args>
 		_Type& AddComponent(const _Args&... args);
 		template<>
-		Component::RenderObj& AddComponent<Component::RenderObj>(const Asset::MeshAsset& meshAsset, const Asset::ShaderAsset& shaderAsset, const Asset::TexAsset& TexAsset);
+		Component::RenderObj& AddComponent<Component::RenderObj>(const Asset::MeshAsset& meshAsset, const Asset::TexAsset& texAsset, const Asset::ShaderAsset& shaderAsset);
 		template<>
-		Component::RenderObj& AddComponent<Component::RenderObj>(const Asset::MeshAsset& meshAsset, const Asset::ShaderAsset& shaderAsset);
+		Component::RenderObj& AddComponent<Component::RenderObj>(const Asset::MeshAsset& meshAsset, const Asset::TexAsset& texAsset);
 		template<>
 		Component::RenderObj& AddComponent<Component::RenderObj>(const Asset::MeshAsset& meshAsset);
 		template<>
@@ -39,7 +40,6 @@ namespace Parrot
 	public:
 		Component::Transform transform;
 	private:
-		std::string m_Tag;
 		Scene& m_Scene;
 		std::unordered_map<ComponentType, void*> m_Components;
 		std::unordered_map<size_t, Component::Script*> m_Scripts;

@@ -1,43 +1,29 @@
 #include "Ptpch.hpp"
 #include "Scene.hpp"
-
-#include "Scene/SceneObj.hpp"
+#include "Debug/Debugstream.hpp"
 #include "Renderer/MeshRenderer/MeshRenderer.hpp"
-#include "Core/Internal_Application.hpp"
-#include "Debug/Internal_Log.hpp"
 
 namespace Parrot
 {
-	Scene::Scene(Window& window, const Asset::SceneAsset& sceneAsset)
-		: PtObj(PtObj::Type::Scene), m_Tag(sceneAsset.filepath.GetFilename().GetName()), m_Window(window), m_OnCreateCalled(false)
+	Scene::Scene(Window& window, const Asset::SceneAsset& asset)
+		: PtObj(asset.GetTag()), m_Window(window), m_OnCreateCalled(false)
 	{
-		for (void* obj : sceneAsset.sceneObjs)
-			AddSceneObj(*(Asset::SceneObjAsset*)obj);
+		for (Asset::SceneObjAsset* obj : asset.sceneObjAssets)
+			AddSceneObj(*obj);
 	}
 	Scene::~Scene()
 	{
-		for (auto& pair : m_SceneObjs)
-			delete pair.second;
+		for (auto&[tag, obj] : m_SceneObjs)
+			delete obj;
 	}
 
-	const std::string& Scene::GetTag() const
-	{
-		return m_Tag;
-	}
 	Window& Scene::GetWindow()
 	{
 		return m_Window;
 	}
-	SceneObj& Scene::AddSceneObj(const Asset::SceneObjAsset& sceneObj)
+	SceneObj& Scene::AddSceneObj(const Asset::SceneObjAsset& asset)
 	{
-		SceneObj* obj = new SceneObj(*this, sceneObj);
-		if (m_SceneObjs.find(obj->m_Tag) == m_SceneObjs.end())
-			m_SceneObjNamesakeCount[obj->m_Tag] = 0;
-		else
-		{
-			uint32_t number = ++m_SceneObjNamesakeCount[obj->m_Tag];
-			obj->m_Tag += '(' + std::to_string(number) + ')';
-		}
+		SceneObj* obj = new SceneObj(*this, asset);
 		m_SceneObjs[obj->m_Tag] = obj;
 		for (auto& pair : obj->m_Scripts)
 			m_Scripts.push_back(pair.second);
@@ -47,13 +33,17 @@ namespace Parrot
 				pair.second->OnCreate();
 		return *obj;
 	}
+
 	bool Scene::HasSceneObj(const std::string& tag)
 	{
 		return m_SceneObjs.find(tag) != m_SceneObjs.end();
 	}
 	SceneObj& Scene::GetSceneObj(const std::string& tag)
 	{
-		Internal_Log::LogAssert(m_SceneObjs.find(tag) != m_SceneObjs.end(), "SceneObj with tag \"%\" doesn't exist in Scene \"%\"!", tag, m_Tag);
+		if (PT_FUNC_GUARDS_ENABLED && m_SceneObjs.find(tag) == m_SceneObjs.end())
+		{
+			DebugOut << SceneObjLookupWarning << "Scene: " << m_Tag << " Unknown SceneObj: " << tag << Debugstream::EndMsg;
+		}
 		return *m_SceneObjs[tag];
 	}
 	void Scene::RaiseEvent(Event e)
@@ -67,9 +57,7 @@ namespace Parrot
 		if (!m_OnCreateCalled)
 		{
 			for (Component::Script* script : m_Scripts)
-			{
 				script->OnCreate();
-			}
 			m_OnCreateCalled = true;
 		}
 		for (Component::Script* script : m_Scripts)

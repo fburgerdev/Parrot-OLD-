@@ -6,3 +6,5 @@ SceneObj: "Light"
 	Light:
 SceneObj: "Terrain"
 	Script: "TerrainGen"
+SceneObj: "NoiseTest"
+	Script: "NoiseTesting"

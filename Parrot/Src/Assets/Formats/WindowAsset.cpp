@@ -1,43 +1,45 @@
 #include "Ptpch.hpp"
 #include "WindowAsset.hpp"
+#include "Debug/Debugstream.hpp"
 
-#include "Utils/FileRead.hpp"
-#include "Assets/Internal_AssetManager.hpp"
-#include "Debug/Internal_Log.hpp"
+#include "Assets/AssetRead.hpp"
+#include "Assets/AssetManager.hpp"
 
 namespace Parrot
 {
 	namespace Asset
 	{
 		WindowAsset::WindowAsset(const Utils::Filepath& filepath)
-			: PtObj(PtObj::Type::WindowAsset), filepath(filepath)
+			: PtObj(filepath.GetFilename().GetName()), scene(nullptr)
 		{
 			std::ifstream stream(filepath.FullPath());
-			Internal_Log::LogAssert(stream.is_open(), "File \"%\" could not be opened. Either the file doesn't exist or it is already opened by another process.", filepath.FullPath());
-
+			if (PT_FUNC_GUARDS_ENABLED && !stream.is_open())
+			{
+				DebugOut << FileContextWarning << filepath.FullPath() << Debugstream::EndMsg;
+				stream.close();
+				return;
+			}
+			std::string assertMsg = filepath.FullPath();
+			
 			std::string line;
 			std::string key;
 			std::string arg;
 			while (std::getline(stream, line))
 			{
-				Utils::GetKey(line, key);
+				AssetSyntaxAssert(GetKey(line, key), assertMsg);
 				if (line.find("//") != line.npos)
 					line = line.substr(0, line.find("//"));
-				if (key == "Scene")
+				if (key == "scene")
 				{
-					Utils::GetArg(line, arg);
-					Utils::Filename filename(arg);
-					if (!AssetManager::IsAssetLoaded(filename))
-						scene = &AssetManager::LoadSceneAsset(filename);
-					else
-						scene = &AssetManager::GetSceneAsset(filename);
+					AssetSyntaxAssert(GetArg(line, arg), assertMsg);
+					scene = &AssetManager::GetSceneAsset(arg);
 				}
-				else if (key == "Style")
-					Utils::GetArg(line, style);
-				else if (key == "Size")
+				else if (key == "style")
+						AssetSyntaxAssert(GetArg(line, style), assertMsg);
+				else if (key == "size")
 				{
-					Utils::GetArg(line, arg);
-					size = Utils::ArgToVec2u(arg);
+					AssetSyntaxAssert(GetArg(line, arg), assertMsg);
+					AssetSyntaxAssert(ArgToVec2u(arg, size), assertMsg);
 				}
 			}
 			stream.close();

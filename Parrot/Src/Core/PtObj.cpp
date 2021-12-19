@@ -3,20 +3,39 @@
 
 namespace Parrot
 {
-	PtObj::PtObj(PtObj::Type type)
-		: m_ID(++s_IDCount), m_Type(type)
+	static size_t s_IDCount = 0;
+	static std::unordered_map<size_t, PtObj*> s_IDMap;
+
+	PtObj::PtObj(const std::string_view tag)
+		: m_ID(++s_IDCount), m_Tag(tag)
 	{
-		++s_ObjCount[(int8_t)type];
+		s_IDMap[m_ID] = this;
+	}		
+	PtObj::PtObj(std::string&& tag) noexcept
+		: m_ID(++s_IDCount), m_Tag(std::move(tag))
+	{
+		s_IDMap[m_ID] = this;
+	}
+	PtObj::PtObj()
+		: m_ID(++s_IDCount)
+	{
+		s_IDMap[m_ID] = this;
 	}
 	PtObj::~PtObj()
 	{
-		--s_ObjCount[(int8_t)m_Type];
+		s_IDMap.erase(m_ID);
 	}
-	uint64_t PtObj::ID() const
+	const std::string& PtObj::GetTag() const
+	{
+		return m_Tag;
+	}
+	size_t PtObj::GetID() const
 	{
 		return m_ID;
 	}
-
-	uint64_t PtObj::s_IDCount = 0;
-	uint64_t PtObj::s_ObjCount[9] = { 0 };
+	
+	PtObj& GetPtObj(uint64_t id)
+	{
+		return *s_IDMap[id];
+	}
 }

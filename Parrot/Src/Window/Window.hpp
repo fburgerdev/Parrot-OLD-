@@ -1,25 +1,25 @@
 #pragma once 
 #include "Assets/Formats/WindowAsset.hpp"
-#include "Assets/Formats/SceneAsset.hpp"
-#include "Core/PtObj.hpp"
+#include "Scene/Scene.hpp"
 
+int main();
 namespace Parrot
 {
-	class Scene;
+	class Window;
+	Window& CreateWindow(const Asset::WindowAsset& asset);
 	class Window : public PtObj
 	{
-	public:
+	protected:
 		Window(const Asset::WindowAsset& WindowAsset);
+		friend Window& CreateWindow(const Asset::WindowAsset& asset);
+	public:
 		virtual ~Window();
 
-		const std::string& GetTag() const;
 		bool IsOpen() const;
 		void Close();
 
 		Scene& LoadScene(const Asset::SceneAsset& scene);
-		Scene& GetLoadedScene();
-		bool IsSceneLoaded();
-		void UnloadScene();
+		Scene& LoadedScene();
 
 		// physical window
 		virtual void SetTitle(const std::string& title) = 0;
@@ -40,17 +40,18 @@ namespace Parrot
 		virtual void SetWindowPos(Math::Vec2i pos) = 0;
 		virtual Math::Vec2i GetWindowPos() = 0;
 
-		virtual void Refresh() = 0;
-
 		virtual void GainFocus() = 0;
 		virtual bool HasFocus() const = 0;
-
+	protected:
+		virtual void Refresh() = 0;
 		virtual void Clear() = 0;
 		virtual void Bind() const = 0;
 	private:
-		std::string m_Tag;
+		void UnloadScene();
+	private:
 		bool m_IsOpen;
 		Scene* m_Scene;
+
+		friend int ::main();
 	};
-	Window& OpenWindow(const Asset::WindowAsset& WindowAsset);
 }

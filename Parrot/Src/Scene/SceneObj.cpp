@@ -1,41 +1,34 @@
 #include "Ptpch.hpp"
-#include "Scene.hpp"
 #include "SceneObj.hpp"
-
-#include "Debug/Internal_Log.hpp"
-#include "Core/Internal_Application.hpp"
+#include "Debug/Debugstream.hpp"
+#include "Scene.hpp"
 
 namespace Parrot
 {
-	SceneObj::SceneObj(Scene& scene, const Asset::SceneObjAsset& sceneObj)
-		: PtObj(PtObj::Type::SceneObj), transform(sceneObj.transform), m_Tag(sceneObj.tag), m_Scene(scene)
+	SceneObj::SceneObj(Scene& scene, const Asset::SceneObjAsset& asset)
+		: PtObj(asset.GetTag()), transform(asset.transform), m_Scene(scene)
 	{
-		for (auto& pair : sceneObj.components)
+		for (auto&[type, ptr] : asset.components)
 		{
-			if (pair.first == ComponentType::RenderObj)
+			if (type == ComponentType::RenderObj)
 			{
-				m_Components[ComponentType::RenderObj] = new Component::RenderObj(*(Component::RenderObj*)pair.second);
+				m_Components[ComponentType::RenderObj] = new Component::RenderObj(*(Component::RenderObj*)ptr);
 			}
-			else if (pair.first == ComponentType::Camera)
+			else if (type == ComponentType::Camera)
 			{
-				m_Components[ComponentType::Camera] = new Component::Camera(transform, *(Component::Camera*)pair.second);
+				m_Components[ComponentType::Camera] = new Component::Camera(transform, *(Component::Camera*)ptr);
 			}
 		}
-		for (ScriptCreationFunc func : sceneObj.scripts)
+		for (auto& func : asset.scripts)
 		{
 			Component::Script* script = func(this);
 			m_Scripts[typeid(*script).hash_code()] = script;
 		}
 	}
-
 	SceneObj::~SceneObj()
 	{
-		for (auto& ptr : m_Components)
-			delete ptr.second;
-	}
-	const std::string& SceneObj::GetTag() const
-	{
-		return m_Tag;
+		for (auto&[type, ptr] : m_Components)
+			delete ptr;
 	}
 	Scene& SceneObj::GetScene()
 	{
@@ -47,23 +40,23 @@ namespace Parrot
 	}
 
 	template<>
-	Component::RenderObj& SceneObj::AddComponent<Component::RenderObj>(const Asset::MeshAsset& meshAsset, const Asset::ShaderAsset& shaderAsset, const Asset::TexAsset& TexAsset)
+	Component::RenderObj& SceneObj::AddComponent<Component::RenderObj>(const Asset::MeshAsset& meshAsset, const Asset::TexAsset& texAsset, const Asset::ShaderAsset& shaderAsset)
 	{
-		Component::RenderObj* rObj = new Component::RenderObj(meshAsset, shaderAsset, TexAsset);
+		Component::RenderObj* rObj = new Component::RenderObj(meshAsset, texAsset, shaderAsset);
 		m_Components[ComponentType::RenderObj] = rObj;
 		return *rObj;
 	}
 	template<>
-	Component::RenderObj& SceneObj::AddComponent<Component::RenderObj>(const Asset::MeshAsset& meshAsset, const Asset::ShaderAsset& shaderAsset)
+	Component::RenderObj& SceneObj::AddComponent<Component::RenderObj>(const Asset::MeshAsset& meshAsset, const Asset::TexAsset& texAsset)
 	{
-		Component::RenderObj* rObj = new Component::RenderObj(meshAsset, shaderAsset, AssetManager::GetWhiteTex());
+		Component::RenderObj* rObj = new Component::RenderObj(meshAsset, texAsset, AssetManager::GetDefaultShader());
 		m_Components[ComponentType::RenderObj] = rObj;
 		return *rObj;
 	}
 	template<>
 	Component::RenderObj& SceneObj::AddComponent<Component::RenderObj>(const Asset::MeshAsset& meshAsset)
 	{
-		Component::RenderObj* rObj = new Component::RenderObj(meshAsset, AssetManager::GetStandardShader(), AssetManager::GetWhiteTex());
+		Component::RenderObj* rObj = new Component::RenderObj(meshAsset, AssetManager::GetDefaultTex(), AssetManager::GetDefaultShader());
 		m_Components[ComponentType::RenderObj] = rObj;
 		return *rObj;
 	}
@@ -78,13 +71,19 @@ namespace Parrot
 	template<>
 	Component::RenderObj& SceneObj::GetComponent<Component::RenderObj>()
 	{
-		Internal_Log::LogAssert(m_Components.find(ComponentType::RenderObj) != m_Components.end(), "SceneObj \"%\" doesn't have a RenderObj component!", m_Tag);
+		if (PT_FUNC_GUARDS_ENABLED && m_Components.find(ComponentType::RenderObj) == m_Components.end())
+		{
+			DebugOut << ComponentLookupWarning << "SceneObj \"" << m_Tag << "\" doesn't have a RenderObj component!" << Debugstream::EndMsg;
+		}
 		return *(Component::RenderObj*)m_Components[ComponentType::RenderObj];
 	}
 	template<>
 	Component::Camera& SceneObj::GetComponent<Component::Camera>()
 	{
-		Internal_Log::LogAssert(m_Components.find(ComponentType::Camera) != m_Components.end(), "SceneObj \"%\" doesn't have a Camera component!", m_Tag);
+		if (PT_FUNC_GUARDS_ENABLED && m_Components.find(ComponentType::Camera) == m_Components.end())
+		{
+			DebugOut << ComponentLookupWarning << "SceneObj \"" << m_Tag << "\" doesn't have a Camera component!" << Debugstream::EndMsg;
+		}
 		return *(Component::Camera*)m_Components[ComponentType::Camera];
 	}
 }

@@ -12,15 +12,18 @@ namespace Parrot
 	{
 		None = 0, Transform, RenderObj, Camera, Light
 	};
+	namespace Asset { class SceneObjAsset; }
 	class SceneObj;
 	namespace Component
 	{
 		class Transform
 		{
-		public:
+		private:
 			Transform();
 			Transform(const Math::Vec3f& pos, const Math::Vec3f& rot, const Math::Vec3f& scale);
-
+			friend Asset::SceneObjAsset;
+			friend SceneObj;
+		public:
 			Math::Mat4f Mat() const;
 		public:
 			Math::Vec3f pos;
@@ -30,21 +33,24 @@ namespace Parrot
 
 		class RenderObj
 		{
-		public:
-			RenderObj(const Asset::MeshAsset& mesh, const Asset::ShaderAsset& shader, const Asset::TexAsset& tex);
-			RenderObj(const RenderObj& other);
+		private:
+			RenderObj(const Asset::MeshAsset& mesh, const Asset::TexAsset& tex,  const Asset::ShaderAsset& shader);
+			friend Asset::SceneObjAsset;
+			friend SceneObj;
 		public:
 			const Asset::MeshAsset* mesh;
-			const Asset::ShaderAsset* shader;
 			const Asset::TexAsset* tex;
+			const Asset::ShaderAsset* shader;
 		};
 
 		class Camera
 		{
-		public:
+		private:
 			Camera(const Transform& transform, float foV, Math::Vec2f zRange = { 0.01f, 1000.0f });
 			Camera(const Transform& transform, const Camera& other);
-
+			friend Asset::SceneObjAsset;
+			friend SceneObj;
+		public:
 			Math::Vec3f Dir() const;
 			Math::Vec3f DirUp() const;
 			Math::Vec3f DirRight() const;
@@ -57,10 +63,13 @@ namespace Parrot
 			const Transform& m_Transform;
 		};
 
-		class Script : public PtObj
+		class Script
 		{
 		public:
 			Script(SceneObj& obj);
+			friend Asset::SceneObjAsset;
+			friend SceneObj;
+		public:
 			virtual ~Script();
 
 			virtual void OnCreate() {};
@@ -70,10 +79,12 @@ namespace Parrot
 			SceneObj& sceneObj;
 		};
 
-		class Light : public PtObj
+		class Light
 		{
-		public:
+		private:
 			Light(Math::Vec3f dir = { 0, -1, 0 }, Math::Vec3u8 color = { 255, 255, 255 }, float intensity = 1.0f);
+			friend Asset::SceneObjAsset;
+			friend SceneObj;
 		public:
 			Math::Vec3f dir;
 			Math::Vec3u8 color;

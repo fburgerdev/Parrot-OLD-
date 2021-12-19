@@ -1,6 +1,6 @@
 #include "Ptpch.hpp"
 #include "Shader_OPENGL.hpp"
-#include "Debug/Internal_Log.hpp"
+#include "Debug/Debugstream.hpp"
 #include <GLAD/glad.h>
 
 namespace Parrot
@@ -97,7 +97,7 @@ namespace Parrot
                 char* message = new char[length];
                 glGetShaderInfoLog(id, length, &length, message);
                 glDeleteShader(id);
-                Internal_Log::LogWarning("%", message);
+                DebugOut << message << Debugstream::EndMsg;
                 delete[] message;
                 return 0;
             }

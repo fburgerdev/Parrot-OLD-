@@ -7,7 +7,7 @@ namespace Parrot
 	class Window_GLFW : public Window
 	{
 	public:
-		Window_GLFW(const Asset::WindowAsset& WindowAsset);
+		Window_GLFW(const Asset::WindowAsset& asset);
 		~Window_GLFW();
 
 		virtual void SetTitle(const std::string& title) override;
@@ -27,16 +27,14 @@ namespace Parrot
 		virtual void SetWindowPos(Math::Vec2i pos) override;
 		virtual Math::Vec2i GetWindowPos() override;
 
-		virtual void Refresh() override;
-
 		virtual void GainFocus() override;
 		virtual bool HasFocus() const override;
 
-		virtual void Clear() override;
 		virtual void Bind() const override;
+		virtual void Clear() override;
+		virtual void Refresh() override;
 	private:
 		GLFWwindow* m_Window;
 		std::string m_Title;
-		//bool m_IsFocused;
 	};
 }

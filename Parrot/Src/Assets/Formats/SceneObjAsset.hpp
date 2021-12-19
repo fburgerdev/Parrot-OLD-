@@ -1,31 +1,31 @@
 #pragma once
+#include "Core/PtObj.hpp"
+#include "Utils/Filepath.hpp"
+#include "Utils/Filestream.hpp"
 #include "Scene/Components.hpp"
-#include "SceneAsset.hpp"
 
 #include <vector>
 #include <unordered_map>
-#include <iostream>
 #include <fstream>
-#include <ostream>
-#include <sstream>
 
 namespace Parrot
 {
+	typedef Component::Script* (*ScriptCreationFunc)(SceneObj*);
+	class Constructor;
 	namespace Asset
 	{
 		class SceneObjAsset : public PtObj
 		{
-		public:
-			SceneObjAsset(const Utils::Filepath& filepath);
 		private:
-			SceneObjAsset(std::ifstream& stream);
+			SceneObjAsset(const Utils::Filepath& filepath);
+			SceneObjAsset(Utils::FileIn& stream);
+			friend Constructor;
+		private:
+			static std::string ExtractSceneObjAsset(Utils::FileIn& stream, SceneObjAsset& obj);
 		public:
-			std::string tag;
 			Component::Transform transform;
 			std::unordered_map<ComponentType, void*> components;
-			std::vector<Component::Script*(*)(SceneObj*)> scripts;
-		private:
-			friend SceneAsset;
+			std::vector<ScriptCreationFunc> scripts;
 		};
 	}
 }

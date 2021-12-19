@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Scenes">
-      <UniqueIdentifier>{86EEB3D0-7290-DEA6-5B4B-F2FA478C65F7}</UniqueIdentifier>
+    <Filter Include="ExampleWorld">
+      <UniqueIdentifier>{99F109F7-8554-999B-2EDA-D1511A1C651E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scenes\MainScene">
-      <UniqueIdentifier>{88F11C71-74EA-3BC3-9D1C-214889741BCF}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scenes\MainScene\SceneObjects">
-      <UniqueIdentifier>{6FA255DC-DBBA-3C06-A467-CC9F103FD19F}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Windows">
-      <UniqueIdentifier>{5032B729-BC11-36C5-C529-C19B31889C26}</UniqueIdentifier>
+    <Filter Include="StandardScripts">
+      <UniqueIdentifier>{9EB5B02B-0A41-1EF0-1352-A1E47F5C7AF0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Src\StandardScripts\Controller3D.hpp" />
-    <ClInclude Include="Src\ExampleWorld\TerrainGen.hpp" />
+    <ClInclude Include="Src\ExampleWorld\TerrainGen.hpp">
+      <Filter>ExampleWorld</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\NoiseTesting.hpp" />
+    <ClInclude Include="Src\StandardScripts\Controller3D.hpp">
+      <Filter>StandardScripts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\OnCreate.cpp" />

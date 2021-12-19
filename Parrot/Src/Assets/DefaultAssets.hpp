@@ -7,12 +7,12 @@ namespace Parrot
 {
 	namespace Asset
 	{
-		extern MeshAsset quadMesh;
-		extern MeshAsset cubeMesh;
+		extern MeshAsset* g_QuadMesh;
+		extern MeshAsset* g_CubeMesh;
 
-		extern TexAsset whiteTex;
-		extern ShaderAsset standardShader;
+		extern TexAsset* g_DefaultTex;
+		extern ShaderAsset* g_DefaultShader;
 
-		void CreateStandardAssets();
+		void CreateDefaultAssets();
 	}
 }

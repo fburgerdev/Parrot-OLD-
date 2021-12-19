@@ -1,17 +1,21 @@
 #include "Ptpch.hpp"
 #include "ShaderAsset.hpp"
-
-#include "Debug/Internal_Log.hpp"
+#include "Debug/Debugstream.hpp"
 
 namespace Parrot
 {
 	namespace Asset
 	{
 		ShaderAsset::ShaderAsset(const Utils::Filepath& filepath)
-			: PtObj(PtObj::Type::ShaderAsset), filepath(filepath)
+			: PtObj(filepath.GetFilename().GetName())
 		{
 			std::ifstream stream(filepath.FullPath());
-			Internal_Log::LogAssert(stream.is_open(), "File \"%\" could not be opened. Either the file doesn't exist or it is already opened by another process.", filepath.FullPath());
+			if (PT_FUNC_GUARDS_ENABLED && !stream.is_open())
+			{
+				DebugOut << FileContextWarning << filepath.FullPath() << Debugstream::EndMsg;
+				stream.close();
+				return;
+			}			
 			std::stringstream ss[2];
 			std::string line;
 			int32_t index = -1;
@@ -35,15 +39,19 @@ namespace Parrot
 			}
 			vertexSrc = ss[0].str();
 			fragmentSrc = ss[1].str();
+			if (PT_FUNC_GUARDS_ENABLED)
+			{
+				if (vertexSrc.empty())
+					DebugOut << AssetSyntaxWarning << "Shader " << filepath << "has no vertex source. Use #vertex to declare the vertex shader section" << Debugstream::EndMsg;
+				if (fragmentSrc.empty())
+					DebugOut << AssetSyntaxWarning << "Shader " << filepath << "has no fragment source. Use #fragment or #pixel to declare the fragment shader section" << Debugstream::EndMsg;
+			}
 			stream.close();
 		}
-		ShaderAsset::ShaderAsset()
-			: PtObj(PtObj::Type::ShaderAsset)
-		{
+		ShaderAsset::ShaderAsset(const std::string& tag)
+			: PtObj(tag) {}
 
-		}
-
-		void ShaderAsset::SaveToFile()
+		void ShaderAsset::SaveToFile(const Utils::Filepath& filepath)
 		{
 			constexpr const char* vertexL = "#vertex\n";
 			constexpr const char* fragmentL = "#fragment\n";

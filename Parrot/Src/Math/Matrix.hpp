@@ -1,14 +1,14 @@
 #pragma once
-#include <iostream>
-#include <iomanip>
 #include "Constants.hpp"
+#include "Vector.hpp"
+
+#include <assert.h>
 
 namespace Parrot
 {
 	namespace Math
 	{
-		// column major square matrix template
-		template<class T, size_t Dim >
+		template<class T, size_t Dim>
 		class SqrMat
 		{
 		public:
@@ -69,6 +69,18 @@ namespace Parrot
 					m_Data[i] *= scalar;
 				return out;
 			}
+			void operator*=(double scalar)
+			{
+				for (size_t i = 0; i < Dim * Dim; ++i)
+					m_Data[i] *= scalar;
+			}
+			SqrMat<T, Dim> operator*(double scalar) const
+			{
+				SqrMat<T, Dim> out(m_Data);
+				for (size_t i = 0; i < Dim * Dim; ++i)
+					m_Data[i] *= scalar;
+				return out;
+			}
 			SqrMat<T, Dim> operator*(const SqrMat<T, Dim>& other) const
 			{
 				SqrMat<T, Dim> out;
@@ -87,32 +99,17 @@ namespace Parrot
 			Math::Vector3<T> operator*(const Math::Vector3<T>& vec) const
 			{
 				static_assert(Dim == 3, "You can only multiply a Vec3 with a Mat3");
-				return Math::Vector3<T>(	m_Data[0] * vec.x + m_Data[3] * vec.y + m_Data[6] * vec.z,
-									m_Data[1] * vec.x + m_Data[4] * vec.y + m_Data[7] * vec.z,
-									m_Data[2] * vec.x + m_Data[5] * vec.y + m_Data[8] * vec.z);
+				return Math::Vector3<T>(m_Data[0] * vec.x + m_Data[3] * vec.y + m_Data[6] * vec.z,
+										m_Data[1] * vec.x + m_Data[4] * vec.y + m_Data[7] * vec.z,
+										m_Data[2] * vec.x + m_Data[5] * vec.y + m_Data[8] * vec.z);
 			}
 			Math::Vector4<T> operator*(const Math::Vector4<T>& vec) const
 			{
 				static_assert(Dim == 4, "You can only multiply a Vec4 with a Mat4");
-				return Math::Vector4<T>(	m_Data[0] * vec.x + m_Data[4] * vec.y + m_Data[8] * vec.z + m_Data[12] * vec.w,
-									m_Data[1] * vec.x + m_Data[5] * vec.y + m_Data[9] * vec.z + m_Data[13] * vec.w,
-									m_Data[2] * vec.x + m_Data[6] * vec.y + m_Data[10] * vec.z + m_Data[14] * vec.w,
-									m_Data[3] * vec.x + m_Data[7] * vec.y + m_Data[11] * vec.z + m_Data[15] * vec.w);
-			}
-		private:
-			friend std::ostream& operator<<(std::ostream& stream, const SqrMat<T, Dim>& mat)
-			{
-				stream << "Mat" << Dim << ":\n" << std::setprecision(4);
-				for (size_t i = 0; i < Dim; ++i)
-				{
-					for (size_t j = 0; j < Dim; ++j)
-					{
-						stream << mat.Raw()[Dim * j + i] << '\t';
-					}
-					stream << "\n";
-				}
-				stream << std::fixed;
-				return stream;
+				return Math::Vector4<T>(m_Data[0] * vec.x + m_Data[4] * vec.y + m_Data[8] * vec.z + m_Data[12] * vec.w,
+										m_Data[1] * vec.x + m_Data[5] * vec.y + m_Data[9] * vec.z + m_Data[13] * vec.w,
+										m_Data[2] * vec.x + m_Data[6] * vec.y + m_Data[10] * vec.z + m_Data[14] * vec.w,
+										m_Data[3] * vec.x + m_Data[7] * vec.y + m_Data[11] * vec.z + m_Data[15] * vec.w);
 			}
 		private:
 			T m_Data[Dim * Dim];
@@ -177,12 +174,16 @@ namespace Parrot
 			return mat;
 		}
 		template<class T>
-		SqrMat<T, 4>& Rotate(SqrMat<T, 4>& mat, const Math::Vector3<T>& rot)
-		{				
+		SqrMat<T, 4>& Rotate(Math::SqrMat<T, 4>&mat, const Math::Vector3<T>& rot)
+		{
 			mat = RotationMat(rot) * mat;
 			return mat;
 		}
-
+		template<class T>
+		Math::Vector3<T> Rotate(const Math::Vector3<T>& vec, const Math::Vector3<T>& rot)
+		{				
+			return RotationMat(rot) * vec;
+		}
 		
 		typedef SqrMat<int32_t, 2> Mat2i;
 		typedef SqrMat<int32_t, 3> Mat3i;

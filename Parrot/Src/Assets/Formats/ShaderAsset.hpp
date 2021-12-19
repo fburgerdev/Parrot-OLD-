@@ -4,18 +4,18 @@
 
 namespace Parrot
 {
+	class Constructor;
 	namespace Asset
 	{
 		class ShaderAsset : public PtObj
 		{
-		public:
+		private:
 			ShaderAsset(const Utils::Filepath& filepath);
-			ShaderAsset();
-
-			void SaveToFile();
+			ShaderAsset(const std::string& tag);
+			friend Constructor;
 		public:
-			Utils::Filepath filepath;
-
+			void SaveToFile(const Utils::Filepath& filepath);
+		public:
 			std::string vertexSrc;
 			std::string fragmentSrc;
 		};
