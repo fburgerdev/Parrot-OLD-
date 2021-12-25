@@ -1,16 +1,10 @@
 Parrot is a GraphicsEngine for Windows.
-
-General structure:
-  - create at least one Window (MainWindow is bound to Application lifetime)
-  - attach a Scene to each Window
-  - when a Scene is attached to a Window, it gets updated each frame and also rendered to the Window
-  
-  - each Scene holds several SceneObjects
-  - each SceneObject holds several Components (Transform-Component is mandatory)
-  - SceneObjects can hold a scriptable Component that make them highly customizable
+This Project is a naive approach creating a GraphicsEngine that is similar to Unity, but in bad.
+This is an educational Project and therefore I'm not expecting this Engine to be performant or useful whatsoever.
 
 Supported Render API's:
   - OpenGL
-
+Supported Shader Languages:
+  - GLSL
 Supported Window API's:
   - GLFW
